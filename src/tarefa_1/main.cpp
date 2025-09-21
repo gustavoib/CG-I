@@ -5,27 +5,27 @@
 #include <cmath>
 
 // parametros da janela (em metros)
-const float wJanela = 2.0f;   // largura
-const float hJanela = 2.0f;   // altura
-const float dJanela = 1.0f;   // distância do olho até a janela
+const float w_janela = 2.0f;   
+const float h_janela = 2.0f;   
+const float d_janela = 1.0f;
 
 // olho do pintor
 const float olho[3] = {0.0f, 0.0f, 0.0f};
 
 // esfera
-const float rEsfera = 1.0f;             
-const float esfCentro[3] = {0.0f, 0.0f, -(dJanela + rEsfera)}; // centro no eixo z (atrás da janela)
-const unsigned char esfColor[3] = {255, 0, 0};  // vermelho
+const float raio_esfera = 1.0f;             
+const float centro_esfera[3] = {0.0f, 0.0f, -(d_janela + raio_esfera)};
 
-// background
-const unsigned char bgColor[3] = {100, 100, 100}; // cinza
+// cores
+const unsigned char cor_intersecao[3] = {255, 0, 0};  // vermelho
+const unsigned char cor_background[3] = {100, 100, 100}; // cinza
 
 // tamanho da tela de mosquito (em pixels)
-const int nCol = 600;
-const int nLin = 600;
+const int n_col = 800;
+const int n_lin = 800;
 
 // buffer de cores (canvas)
-std::vector<unsigned char> canvas(nCol * nLin * 3);
+std::vector<unsigned char> canvas(n_col * n_lin * 3);
 
 // callback para redimensionamento
 void framebuffer_size_callback(GLFWwindow* /*window*/, int width, int height) {
@@ -33,18 +33,16 @@ void framebuffer_size_callback(GLFWwindow* /*window*/, int width, int height) {
 }
 
 // produto escalar
-float dot(const float a[3], const float b[3]) {
+float produto_escalar(const float a[3], const float b[3]) {
     return a[0]*b[0] + a[1]*b[1] + a[2]*b[2];
 }
 
 float raio(const float origem[3], const float direcao[3]) {
-    float oc[3] = {origem[0] - esfCentro[0],
-                   origem[1] - esfCentro[1],
-                   origem[2] - esfCentro[2]};
+    float vetor_p_menos_c[3] = {origem[0] - centro_esfera[0], origem[1] - centro_esfera[1], origem[2] - centro_esfera[2]};
     
-    float a = dot(direcao, direcao);
-    float b = 2.0f * dot(oc, direcao);
-    float c = dot(oc, oc) - rEsfera*rEsfera;
+    float a = produto_escalar(direcao, direcao);
+    float b = 2.0f * produto_escalar(vetor_p_menos_c, direcao);
+    float c = produto_escalar(vetor_p_menos_c, vetor_p_menos_c) - raio_esfera*raio_esfera;
 
     float delta = b*b - 4*a*c;
 
@@ -58,30 +56,28 @@ float raio(const float origem[3], const float direcao[3]) {
 }
 
 // funcao para lançar os raios
-void renderScene() {
-    float Dx = wJanela / nCol;
-    float Dy = hJanela / nLin;
+void render() {
+    float delta_x = w_janela / n_col;
+    float delta_y = h_janela / n_lin;
 
-    float z = -dJanela;
-    for (int l = 0; l < nLin; l++) {
-        float y =  hJanela/2.0f - Dy/2.0f - l*Dy;
-        for (int c = 0; c < nCol; c++) {
-            float x = -wJanela/2.0f + Dx/2.0f + c*Dx;
+    float z = -d_janela;
+    for (int l = 0; l < n_lin; l++) {
+        float y =  h_janela/2.0f - delta_y/2.0f - l*delta_y;
+        for (int c = 0; c < n_col; c++) {
+            float x = -w_janela/2.0f + delta_x/2.0f + c*delta_x;
 
-            unsigned char* pixel = &canvas[(l*nCol + c) * 3];
+            unsigned char* pixel = &canvas[(l*n_col + c) * 3];
 
             float delta = raio(olho, (float[3]){x - olho[0], y - olho[1], z - olho[2]});
 
             if (delta >= 0) {
-                // Raio bateu na esfera
-                pixel[0] = esfColor[0];
-                pixel[1] = esfColor[1];
-                pixel[2] = esfColor[2];
+                pixel[0] = cor_intersecao[0];
+                pixel[1] = cor_intersecao[1];
+                pixel[2] = cor_intersecao[2];
             } else {
-                // Background
-                pixel[0] = bgColor[0];
-                pixel[1] = bgColor[1];
-                pixel[2] = bgColor[2];
+                pixel[0] = cor_background[0];
+                pixel[1] = cor_background[1];
+                pixel[2] = cor_background[2];
             }
         }
     }
@@ -97,7 +93,7 @@ int main() {
     glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 1);
     //glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 
-    GLFWwindow* window = glfwCreateWindow(nCol, nLin, "Ray Casting - Esfera", NULL, NULL);
+    GLFWwindow* window = glfwCreateWindow(n_col, n_lin, "Tarefa 1", NULL, NULL);
     if (!window) {
         std::cerr << "Erro ao criar janela GLFW\n";
         glfwTerminate();
@@ -112,12 +108,12 @@ int main() {
         return -1;
     }
 
-    renderScene();
+    render();
 
     while (!glfwWindowShouldClose(window)) {
         glClear(GL_COLOR_BUFFER_BIT);
 
-        glDrawPixels(nCol, nLin, GL_RGB, GL_UNSIGNED_BYTE, canvas.data());
+        glDrawPixels(n_col, n_lin, GL_RGB, GL_UNSIGNED_BYTE, canvas.data());
 
         glfwSwapBuffers(window);
         glfwPollEvents();
