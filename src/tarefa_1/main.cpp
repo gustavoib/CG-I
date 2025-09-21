@@ -14,20 +14,19 @@ const float olho[3] = {0.0f, 0.0f, 0.0f};
 
 // esfera
 const float rEsfera = 1.0f;             
-const float esfCentro[3] = {0.0f, 0.0f, -3.0f}; // centro no eixo z (atrás da janela)
+const float esfCentro[3] = {0.0f, 0.0f, -(dJanela + rEsfera)}; // centro no eixo z (atrás da janela)
 const unsigned char esfColor[3] = {255, 0, 0};  // vermelho
 
 // background
 const unsigned char bgColor[3] = {100, 100, 100}; // cinza
 
 // tamanho da tela de mosquito (em pixels)
-const int nCol = 800;
-const int nLin = 800;
+const int nCol = 600;
+const int nLin = 600;
 
 // buffer de cores (canvas)
 std::vector<unsigned char> canvas(nCol * nLin * 3);
 
-// =============================
 // callback para redimensionamento
 void framebuffer_size_callback(GLFWwindow* /*window*/, int width, int height) {
     glViewport(0, 0, width, height);
@@ -38,7 +37,26 @@ float dot(const float a[3], const float b[3]) {
     return a[0]*b[0] + a[1]*b[1] + a[2]*b[2];
 }
 
-// =============================
+float raio(const float origem[3], const float direcao[3]) {
+    float oc[3] = {origem[0] - esfCentro[0],
+                   origem[1] - esfCentro[1],
+                   origem[2] - esfCentro[2]};
+    
+    float a = dot(direcao, direcao);
+    float b = 2.0f * dot(oc, direcao);
+    float c = dot(oc, oc) - rEsfera*rEsfera;
+
+    float delta = b*b - 4*a*c;
+
+    if (delta < 0) {
+        float t = -1.0f;
+        return t;
+    } else {
+        float t = (-b - sqrt(delta)) / (2.0f * a);
+        return t;
+    }
+}
+
 // funcao para lançar os raios
 void renderScene() {
     float Dx = wJanela / nCol;
@@ -50,30 +68,17 @@ void renderScene() {
         for (int c = 0; c < nCol; c++) {
             float x = -wJanela/2.0f + Dx/2.0f + c*Dx;
 
-            // direcao do raio
-            float d[3] = {x - olho[0], y - olho[1], z - olho[2]};
-
-            // vetor entre olho e centro da esfera
-            float oc[3] = {olho[0] - esfCentro[0],
-                           olho[1] - esfCentro[1],
-                           olho[2] - esfCentro[2]};
-
-            // interseção raio-esfera
-            float a = dot(d, d);
-            float b = 2.0f * dot(oc, d);
-            float c_eq = dot(oc, oc) - rEsfera*rEsfera;
-
-            float delta = b*b - 4*a*c_eq;
-
             unsigned char* pixel = &canvas[(l*nCol + c) * 3];
 
+            float delta = raio(olho, (float[3]){x - olho[0], y - olho[1], z - olho[2]});
+
             if (delta >= 0) {
-                // raio bateu na esfera
+                // Raio bateu na esfera
                 pixel[0] = esfColor[0];
                 pixel[1] = esfColor[1];
                 pixel[2] = esfColor[2];
             } else {
-                // background
+                // Background
                 pixel[0] = bgColor[0];
                 pixel[1] = bgColor[1];
                 pixel[2] = bgColor[2];
@@ -82,7 +87,6 @@ void renderScene() {
     }
 }
 
-// =============================
 int main() {
     if (!glfwInit()) {
         std::cerr << "Erro ao inicializar GLFW\n";
@@ -108,13 +112,11 @@ int main() {
         return -1;
     }
 
-    // Renderiza a cena (só precisa uma vez)
     renderScene();
 
     while (!glfwWindowShouldClose(window)) {
         glClear(GL_COLOR_BUFFER_BIT);
 
-        // Desenha os pixels do canvas
         glDrawPixels(nCol, nLin, GL_RGB, GL_UNSIGNED_BYTE, canvas.data());
 
         glfwSwapBuffers(window);
