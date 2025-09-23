@@ -10,10 +10,10 @@ const float h_janela = 2.0f;
 const float d_janela = 1.0f;
 
 // olho do pintor
-const float olho[3] = {0.0f, 0.0f, 0.0f};
+const float olho[4] = {0.0f, 0.0f, 0.0f, 1.0f};
 
 // esfera
-const float raio_esfera = 1.0f;             
+const float raio_esfera = 0.5f;             
 const float centro_esfera[3] = {0.0f, 0.0f, -(d_janela + raio_esfera)};
 
 // cores
@@ -21,8 +21,8 @@ const unsigned char cor_intersecao[3] = {255, 0, 0};  // vermelho
 const unsigned char cor_background[3] = {100, 100, 100}; // cinza
 
 // tamanho da tela de mosquito (em pixels)
-const int n_col = 800;
-const int n_lin = 800;
+const int n_col = 500;
+const int n_lin = 500;
 
 // buffer de cores (canvas)
 std::vector<unsigned char> canvas(n_col * n_lin * 3);
@@ -50,8 +50,14 @@ float raio(const float origem[3], const float direcao[3]) {
         float t = -1.0f;
         return t;
     } else {
-        float t = (-b - sqrt(delta)) / (2.0f * a);
-        return t;
+        float t1 = (-b - sqrt(delta)) / (2.0f * a);
+        float t2 = (-b + sqrt(delta)) / (2.0f * a);
+
+        if (t1 < t2) {
+            return t1;
+        } else {
+            return t2;
+        }
     }
 }
 
@@ -69,7 +75,9 @@ void render() {
             unsigned char* pixel = &canvas[(l*n_col + c) * 3];
             
             float direcao[3] = {x - olho[0], y - olho[1], z - olho[2]};
-            float delta = raio(olho, direcao);
+            float direcao_normal = sqrt((direcao[0]*direcao[0]) + (direcao[1]*direcao[1]) + (direcao[2]*direcao[2]));
+            float d[3] = {direcao[0]/direcao_normal, direcao[1]/direcao_normal, direcao[2]/direcao_normal};
+            float delta = raio(olho, d);
 
             if (delta >= 0) {
                 pixel[0] = cor_intersecao[0];
