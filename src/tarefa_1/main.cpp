@@ -67,8 +67,9 @@ void render() {
             float x = -w_janela/2.0f + delta_x/2.0f + c*delta_x;
 
             unsigned char* pixel = &canvas[(l*n_col + c) * 3];
-
-            float delta = raio(olho, (float[3]){x - olho[0], y - olho[1], z - olho[2]});
+            
+            float direcao[3] = {x - olho[0], y - olho[1], z - olho[2]};
+            float delta = raio(olho, direcao);
 
             if (delta >= 0) {
                 pixel[0] = cor_intersecao[0];
