@@ -37,12 +37,12 @@ float produto_escalar(const float a[3], const float b[3]) {
     return a[0]*b[0] + a[1]*b[1] + a[2]*b[2];
 }
 
-float raio(const float origem[3], const float direcao[3]) {
-    float vetor_p_menos_c[3] = {origem[0] - centro_esfera[0], origem[1] - centro_esfera[1], origem[2] - centro_esfera[2]};
+float raio(const float origem[4], const float direcao[4]) {
+    float w[4] = {origem[0] - centro_esfera[0], origem[1] - centro_esfera[1], origem[2] - centro_esfera[2], origem[3] - centro_esfera[3]};
     
     float a = produto_escalar(direcao, direcao);
-    float b = 2.0f * produto_escalar(vetor_p_menos_c, direcao);
-    float c = produto_escalar(vetor_p_menos_c, vetor_p_menos_c) - raio_esfera*raio_esfera;
+    float b = 2.0f * produto_escalar(w, direcao);
+    float c = produto_escalar(w, w) - raio_esfera*raio_esfera;
 
     float delta = b*b - 4*a*c;
 
@@ -74,9 +74,9 @@ void render() {
 
             unsigned char* pixel = &canvas[(l*n_col + c) * 3];
             
-            float direcao[3] = {x - olho[0], y - olho[1], z - olho[2]};
+            float direcao[4] = {x - olho[0], y - olho[1], z - olho[2], 0.0f};
             float direcao_normal = sqrt((direcao[0]*direcao[0]) + (direcao[1]*direcao[1]) + (direcao[2]*direcao[2]));
-            float d[3] = {direcao[0]/direcao_normal, direcao[1]/direcao_normal, direcao[2]/direcao_normal};
+            float d[4] = {direcao[0]/direcao_normal, direcao[1]/direcao_normal, direcao[2]/direcao_normal, 0.0f};
             float delta = raio(olho, d);
 
             if (delta >= 0) {
