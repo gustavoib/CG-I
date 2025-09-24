@@ -3,6 +3,7 @@
 #include <iostream>
 #include <vector>
 #include <cmath>
+#include <fstream>
 
 // parametros da janela (em metros)
 const float w_janela = 2.0f;   
@@ -91,43 +92,60 @@ void render() {
         }
     }
 }
+ 
+void salvarPPM(const std::string& nome_arquivo, int largura, int altura, const std::vector<unsigned char>& buffer) {
+    std::ofstream arquivo(nome_arquivo, std::ios::binary);
+    
+    if (!arquivo) {
+        std::cerr << "Erro ao abrir arquivo " << nome_arquivo << " para escrita.\n";
+        return;
+    }
+
+    arquivo << "P6\n" << largura << " " << altura << "\n255\n";
+
+    arquivo.write(reinterpret_cast<const char*>(buffer.data()), buffer.size());
+
+    arquivo.close();
+}
 
 int main() {
-    if (!glfwInit()) {
-        std::cerr << "Erro ao inicializar GLFW\n";
-        return -1;
-    }
+    // if (!glfwInit()) {
+    //     std::cerr << "Erro ao inicializar GLFW\n";
+    //     return -1;
+    // }
 
-    glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 2);
-    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 1);
-    //glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
+    // glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 2);
+    // glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 1);
+    // //glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 
-    GLFWwindow* window = glfwCreateWindow(n_col, n_lin, "Tarefa 1", NULL, NULL);
-    if (!window) {
-        std::cerr << "Erro ao criar janela GLFW\n";
-        glfwTerminate();
-        return -1;
-    }
+    // GLFWwindow* window = glfwCreateWindow(n_col, n_lin, "Tarefa 1", NULL, NULL);
+    // if (!window) {
+    //     std::cerr << "Erro ao criar janela GLFW\n";
+    //     glfwTerminate();
+    //     return -1;
+    // }
 
-    glfwMakeContextCurrent(window);
-    glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
+    // glfwMakeContextCurrent(window);
+    // glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
 
-    if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress)) {
-        std::cerr << "Erro ao inicializar GLAD\n";
-        return -1;
-    }
+    // if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress)) {
+    //     std::cerr << "Erro ao inicializar GLAD\n";
+    //     return -1;
+    // }
 
     render();
 
-    while (!glfwWindowShouldClose(window)) {
-        glClear(GL_COLOR_BUFFER_BIT);
+    salvarPPM("tarefa_1.ppm", n_col, n_lin, canvas);
 
-        glDrawPixels(n_col, n_lin, GL_RGB, GL_UNSIGNED_BYTE, canvas.data());
+    // while (!glfwWindowShouldClose(window)) {
+    //     glClear(GL_COLOR_BUFFER_BIT);
 
-        glfwSwapBuffers(window);
-        glfwPollEvents();
-    }
+    //     glDrawPixels(n_col, n_lin, GL_RGB, GL_UNSIGNED_BYTE, canvas.data());
 
-    glfwTerminate();
+    //     glfwSwapBuffers(window);
+    //     glfwPollEvents();
+    // }
+
+    // glfwTerminate();
     return 0;
 }
