@@ -24,7 +24,7 @@ int main() {
     Cor ke_esfera(0.7f, 0.2f, 0.2f);
     Cor kd_esfera(0.7f, 0.2f, 0.2f);
     Cor ka_esfera(0.7f, 0.2f, 0.2f);
-    float m_esfera = 20.0f;
+    float m_esfera = 10.0f;
     
     Esfera* esfera = new Esfera(raio_esfera, centro_esfera, ke_esfera, kd_esfera, ka_esfera, m_esfera);
     cenario.adicionarObjeto(esfera);
