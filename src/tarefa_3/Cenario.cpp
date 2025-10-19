@@ -14,7 +14,7 @@ void Cenario::adicionarObjeto(ObjetoAbstrato* obj) {
 void Cenario::render() {
     float delta_x = janela.w_janela/n_col;
     float delta_y = janela.h_janela/n_lin;
-    float z = janela.menosDJanela();
+    float z = janela.d_janela;
 
     for (int lin = 0; lin < n_lin; lin++) {
         float y = janela.h_janela/2.0f - delta_y/2.0f - lin * delta_y;
@@ -22,9 +22,7 @@ void Cenario::render() {
         for (int col = 0; col < n_col; col++) {
             float x = -janela.w_janela/2.0f + delta_x/2.0f + col * delta_x;
             
-            //unsigned char* pixel = &canvas[(lin * n_col + col) * 3];
-
-            unsigned char* pixel = &canvas[((n_lin - 1 - lin) * n_col + col) * 3];
+            unsigned char* pixel = &canvas[(lin * n_col + col) * 3];
             
             Ponto xyz_janela(x, y, z);
             Vetor direcao = xyz_janela.subPonto(olho);
@@ -44,7 +42,28 @@ void Cenario::render() {
             
             if (objeto_mais_proximo != nullptr) {
                 Ponto Pi = raio.equacaoRaio(t_min);
-                Cor cor = objeto_mais_proximo->calcularIluminacao(Pi, d, fonte);
+                Vetor d = raio.direcao;
+
+                Vetor l = fonte.P_F.subPonto(Pi).normalizado();
+                Raio raio_sombra(Pi, l);
+                bool em_sombra = false;
+                float distancia_luz = fonte.P_F.subPonto(Pi).norma();
+
+                for (ObjetoAbstrato* obj : objetos) {
+                    if (obj == objeto_mais_proximo) continue;
+                    float t_sombra;
+                    if (obj->intersecao(raio_sombra, t_sombra) && t_sombra < distancia_luz) {
+                        em_sombra = true;
+                        break;
+                    }
+                }
+
+                Cor cor(0,0,0);
+                if (em_sombra) {
+                    cor = fonte.I_A.multiComponente(objeto_mais_proximo->Ka);
+                } else {
+                    cor = objeto_mais_proximo->calcularIluminacao(Pi, d, fonte);
+                }
                 cor.escreverNoBuffer(pixel);
             } else {
                 cor_background.escreverNoBuffer(pixel);

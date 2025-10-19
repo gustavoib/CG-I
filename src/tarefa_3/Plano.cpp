@@ -15,8 +15,8 @@ bool Plano::intersecao(Raio& raio, float& t) {
         return false;
     }
     
-    Vetor w = P_pi.subPonto(raio.origem);
-    t = -(w.produtoEscalar(n)) / denominador;
+    Vetor w = raio.origem.subPonto(P_pi);
+    t = -w.produtoEscalar(n) / denominador;
 
     if (t > 0) {
         return true;

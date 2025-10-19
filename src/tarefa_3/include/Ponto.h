@@ -11,6 +11,7 @@ class Ponto {
         Ponto(float x, float y, float z);
 
         Vetor subPonto(Ponto& p); 
+        Ponto somarVetor(const Vetor& v);
     };
 
 #endif
