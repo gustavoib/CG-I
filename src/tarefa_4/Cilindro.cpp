@@ -41,18 +41,22 @@ bool Cilindro::intersecao(Raio& raio, float& t) {
         float ttopo = -(wT.produtoEscalar(u)/du);
         float tbase = -(wB.produtoEscalar(u)/du);
 
-        Ponto Pibase = raio.equacaoRaio(tbase);
-        float distBase = (Pibase.subPonto(B)).norma();
-        if (distBase <= R) {
-            temIntersecao = true;
-            tEscolhido = min(tEscolhido, tbase);
+        if (tbase > 0.0001f) {
+            Ponto Pibase = raio.equacaoRaio(tbase);
+            float distBase = (Pibase.subPonto(B)).norma();
+            if (distBase <= R) {
+                temIntersecao = true;
+                tEscolhido = min(tEscolhido, tbase);
+            }
         }
 
-        Ponto Pitopo = raio.equacaoRaio(ttopo);
-        float distTopo = (Pitopo.subPonto(T)).norma();
-        if (distTopo <= R) {
-            temIntersecao = true;
-            tEscolhido = min(tEscolhido, ttopo);
+        if (ttopo > 0.0001f) {
+            Ponto Pitopo = raio.equacaoRaio(ttopo);
+            float distTopo = (Pitopo.subPonto(T)).norma();
+            if (distTopo <= R) {
+                temIntersecao = true;
+                tEscolhido = min(tEscolhido, ttopo);
+            }
         }
 
         if (temIntersecao) {
@@ -70,7 +74,7 @@ bool Cilindro::intersecao(Raio& raio, float& t) {
         float t2 = (-b + sqrt(delta))/(2.0f*a);
 
         for (float ti : {t1, t2}) {
-            if (ti > 0) {
+            if (ti > 0.0001f) {
                 Ponto p = raio.equacaoRaio(ti);
                 float PmenosBdotu = (p.subPonto(B)).produtoEscalar(u);
 
@@ -84,13 +88,13 @@ bool Cilindro::intersecao(Raio& raio, float& t) {
 
     // aqui vai ser o caso geral (precisa?)
     if (du != 0) {
-        Vetor wB2 = B.subPonto(raio.origem);
-        Vetor wT2 = T.subPonto(raio.origem);
+        Vetor wB2 = raio.origem.subPonto(B);
+        Vetor wT2 = raio.origem.subPonto(T);
 
-        float ttopo2 = wT2.produtoEscalar(u)/du;
-        float tbase2 = wB2.produtoEscalar(u)/du;
+        float ttopo2 = -(wT2.produtoEscalar(u)/du);
+        float tbase2 = -(wB2.produtoEscalar(u)/du);
         
-        if (tbase2 > 0) {
+        if (tbase2 > 0.0001f) {
             Ponto p_base = raio.equacaoRaio(tbase2);
             Vetor v_base = p_base.subPonto(B);
             float dist_base = v_base.norma();
@@ -101,7 +105,7 @@ bool Cilindro::intersecao(Raio& raio, float& t) {
             }
         }
         
-        if (ttopo2 > 0) {
+        if (ttopo2 > 0.0001f) {
             Ponto p_topo = raio.equacaoRaio(ttopo2);
             Vetor v_topo = p_topo.subPonto(T);
             float dist_topo = v_topo.norma();
