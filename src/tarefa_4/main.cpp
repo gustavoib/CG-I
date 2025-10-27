@@ -78,7 +78,7 @@ int main() {
     Cor kd_cone(0.8f, 0.3f, 0.2f);
     Cor ke_cone(0.8f, 0.3f, 0.2f);
     Cor ka_cone(0.8f, 0.3f, 0.2f);
-    float theta = 30.0f * (M_PI/180.0f); // em radianos
+    float theta = atan(raio_base_cone/H_cone);
     Ponto ponto_p_cone = Cb;
 
     Cone* cone = new Cone(ponto_p_cone, Cb, d_cone, theta, H_cone, raio_base_cone, ke_cone, kd_cone, ka_cone, 10);
