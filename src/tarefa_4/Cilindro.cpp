@@ -20,7 +20,7 @@ bool Cilindro::intersecao(Raio& raio, float& t) {
     Vetor w = raio.direcao.subVetor(duu);
 
     float a = w.produtoEscalar(w);
-    float b = 2*(v.produtoEscalar(w));
+    float b = (v.produtoEscalar(w));
     float c = v.produtoEscalar(v) - R*R;
 
     float tEscolhido = FLT_MAX;
@@ -67,11 +67,11 @@ bool Cilindro::intersecao(Raio& raio, float& t) {
         return false;
     }
 
-    float delta = b*b - 4*a*c;
+    float delta = b*b - a*c;
 
     if (delta >= 0) {
-        float t1 = (-b - sqrt(delta))/(2.0f*a);
-        float t2 = (-b + sqrt(delta))/(2.0f*a);
+        float t1 = (-b - sqrt(delta))/(a);
+        float t2 = (-b + sqrt(delta))/(a);
 
         for (float ti : {t1, t2}) {
             if (ti > 0.0001f) {
@@ -127,13 +127,25 @@ bool Cilindro::intersecao(Raio& raio, float& t) {
 
 Cor Cilindro::calcularIluminacao(Ponto& Pi, Vetor& direcao_raio, FonteIluminacao& fonte) {
     Vetor Pi_B = Pi.subPonto(B);                
-    float proj = Pi_B.produtoEscalar(u);        
-    Vetor P_proj = u.multiEscalar(proj);        
-    Vetor n = Pi_B.subVetor(P_proj).normalizado(); 
+    float proj = Pi_B.produtoEscalar(u);
+    
+    Vetor n;
+    // ponto na base
+    if (proj < 0.0001f) {
+        n = u.vetorNegativo();
+    } 
+    // ponto no topo
+    else if (proj > H - 0.0001f) {
+        n = u;
+    } 
+    // ponto na lateral
+    else {
+        Vetor P_proj = u.multiEscalar(proj);        
+        n = Pi_B.subVetor(P_proj).normalizado();
+    }
 
     Vetor P_F_minus_Pi = fonte.P_F.subPonto(Pi);
     Vetor l = P_F_minus_Pi.normalizado();
-
     Vetor v = direcao_raio.vetorNegativo();
 
     float produto_nl = n.produtoEscalar(l);

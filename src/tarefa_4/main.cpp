@@ -6,7 +6,10 @@
 #include "Ponto.h"
 #include "Vetor.h"
 #include "Cilindro.h"
+#include "Cone.h"
 #include <cmath>
+
+#define M_PI 3.14159265358979323846
 
 int main() {
     Ponto olho(0.0f, 0.0f, 0.0f);
@@ -67,11 +70,29 @@ int main() {
     Cilindro* cilindro = new Cilindro(ponto_p, centro_base, dc, H_cilindro, raio_base, ke_c, kd_c, ka_c, 10);
     cenario.adicionarObjeto(cilindro);
 
+    // cone
+    Ponto Cb = centro_base.somarVetor(dc.multiEscalar(H_cilindro)); // centro da base do cone
+    float raio_base_cone = 1.5f * raio_esfera;
+    float H_cone = (1.0f/3.0f) * raio_base_cone;
+    Vetor d_cone(-1/sqrt(3), 1/sqrt(3), -1/sqrt(3));
+    Cor kd_cone(0.8f, 0.3f, 0.2f);
+    Cor ke_cone(0.8f, 0.3f, 0.2f);
+    Cor ka_cone(0.8f, 0.3f, 0.2f);
+    float theta = 30.0f * (M_PI/180.0f); // em radianos
+    Ponto ponto_p_cone = Cb;
+
+    Cone* cone = new Cone(ponto_p_cone, Cb, d_cone, theta, H_cone, raio_base_cone, ke_cone, kd_cone, ka_cone, 10);
+    cenario.adicionarObjeto(cone);
+
     cenario.render();
     cenario.salvarPPM("tarefa_4.ppm");
     
     // Liberar memória
     delete esfera;
+    delete plano_fundo;
+    delete plano_chao;
+    delete cilindro;
+    delete cone;
     
     return 0;
 }
