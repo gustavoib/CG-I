@@ -6,8 +6,8 @@
 
 using namespace std;
 
-Cone::Cone(Ponto& P, Ponto& Cb, Vetor& n, float theta, float H, float R, Cor& ke, Cor& kd, Cor& ka, float m)
-:ObjetoAbstrato(ke, kd, ka, m), P(P), Cb(Cb), n(n), theta(theta), H(H), R(R) {};
+Cone::Cone(Ponto& P, Ponto& Cb, Vetor& n, float theta, float H, float R, bool temBase, Cor& ke, Cor& kd, Cor& ka, float m)
+:ObjetoAbstrato(ke, kd, ka, m), P(P), Cb(Cb), n(n), theta(theta), H(H), R(R), temBase(temBase) {};
 
 bool Cone::intersecao(Raio& raio, float& t) {
     Ponto V = Cb.somarVetor(n.multiEscalar(H)); // vértice do cone
@@ -61,7 +61,7 @@ bool Cone::intersecao(Raio& raio, float& t) {
         }
     }
 
-    if (dn != 0) {
+    if (temBase && dn != 0) {
         Vetor v_base = raio.origem.subPonto(Cb);
         float t_base = -(v_base.produtoEscalar(n)/ dn);
         
@@ -109,6 +109,10 @@ Cor Cone::calcularIluminacao(Ponto& Pi, Vetor& direcao_raio, FonteIluminacao& fo
             
             Vetor termo = n.multiEscalar(PiV_dot_n / cos_theta_sq);
             normal = Pi_V.subVetor(termo).normalizado();
+
+            if (!temBase && normal.produtoEscalar(direcao_raio) > 0) {
+                normal = normal.vetorNegativo();
+            }
         }
     }
 

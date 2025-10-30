@@ -6,8 +6,8 @@
 
 using namespace std;
 
-Cilindro::Cilindro(Ponto& P, Ponto& B, Vetor& u, float H, float R, Cor& ke, Cor& kd, Cor& ka, float m)
-: ObjetoAbstrato(ke, kd, ka, m), P(P), B(B), u(u), H(H), R(R) {};
+Cilindro::Cilindro(Ponto& P, Ponto& B, Vetor& u, float H, float R, bool temBase, bool temTopo, Cor& ke, Cor& kd, Cor& ka, float m)
+: ObjetoAbstrato(ke, kd, ka, m), P(P), B(B), u(u), H(H), R(R), temBase(temBase), temTopo(temTopo) {};
 
 bool Cilindro::intersecao(Raio& raio, float& t) {
     Vetor PmenosB = raio.origem.subPonto(B);
@@ -41,7 +41,7 @@ bool Cilindro::intersecao(Raio& raio, float& t) {
         float ttopo = -(wT.produtoEscalar(u)/du);
         float tbase = -(wB.produtoEscalar(u)/du);
 
-        if (tbase > 0.0001f) {
+        if (temBase && tbase > 0.0001f) {
             Ponto Pibase = raio.equacaoRaio(tbase);
             float distBase = (Pibase.subPonto(B)).norma();
             if (distBase <= R) {
@@ -50,7 +50,7 @@ bool Cilindro::intersecao(Raio& raio, float& t) {
             }
         }
 
-        if (ttopo > 0.0001f) {
+        if (temTopo && ttopo > 0.0001f) {
             Ponto Pitopo = raio.equacaoRaio(ttopo);
             float distTopo = (Pitopo.subPonto(T)).norma();
             if (distTopo <= R) {
@@ -94,7 +94,7 @@ bool Cilindro::intersecao(Raio& raio, float& t) {
         float ttopo2 = -(wT2.produtoEscalar(u)/du);
         float tbase2 = -(wB2.produtoEscalar(u)/du);
         
-        if (tbase2 > 0.0001f) {
+        if (temBase && tbase2 > 0.0001f) {
             Ponto p_base = raio.equacaoRaio(tbase2);
             Vetor v_base = p_base.subPonto(B);
             float dist_base = v_base.norma();
@@ -105,7 +105,7 @@ bool Cilindro::intersecao(Raio& raio, float& t) {
             }
         }
         
-        if (ttopo2 > 0.0001f) {
+        if (temTopo && ttopo2 > 0.0001f) {
             Ponto p_topo = raio.equacaoRaio(ttopo2);
             Vetor v_topo = p_topo.subPonto(T);
             float dist_topo = v_topo.norma();
@@ -142,6 +142,10 @@ Cor Cilindro::calcularIluminacao(Ponto& Pi, Vetor& direcao_raio, FonteIluminacao
     else {
         Vetor P_proj = u.multiEscalar(proj);        
         n = Pi_B.subVetor(P_proj).normalizado();
+    }
+
+    if ((!temBase || !temTopo) && n.produtoEscalar(direcao_raio) > 0) {
+        n = n.vetorNegativo();
     }
 
     Vetor P_F_minus_Pi = fonte.P_F.subPonto(Pi);

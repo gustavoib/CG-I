@@ -67,7 +67,7 @@ int main() {
     Cor ka_c(0.2, 0.3f, 0.8f);
 
     // (Ponto& P, Ponto& B, Vetor& u, float H, float R, Cor& ke, Cor& kd, Cor& ka, float m)
-    Cilindro* cilindro = new Cilindro(ponto_p, centro_base, dc, H_cilindro, raio_base, ke_c, kd_c, ka_c, 10);
+    Cilindro* cilindro = new Cilindro(ponto_p, centro_base, dc, H_cilindro, raio_base, true, true, ke_c, kd_c, ka_c, 10);
     cenario.adicionarObjeto(cilindro);
 
     // cone
@@ -81,7 +81,7 @@ int main() {
     float theta = atan(raio_base_cone/H_cone);
     Ponto ponto_p_cone = Cb;
 
-    Cone* cone = new Cone(ponto_p_cone, Cb, d_cone, theta, H_cone, raio_base_cone, ke_cone, kd_cone, ka_cone, 10);
+    Cone* cone = new Cone(ponto_p_cone, Cb, d_cone, theta, H_cone, raio_base_cone, true, ke_cone, kd_cone, ka_cone, 10);
     cenario.adicionarObjeto(cone);
 
     cenario.render();

@@ -12,8 +12,10 @@ class Cilindro: public ObjetoAbstrato {
         Vetor u; // vetor unitário que define direção e o sentido do eixo do cilindro
         float H; // altura
         float R; // raio
+        bool temBase;
+        bool temTopo;
 
-        Cilindro(Ponto& P, Ponto& B, Vetor& u, float H, float R, Cor& ke, Cor& kd, Cor& ka, float m);
+        Cilindro(Ponto& P, Ponto& B, Vetor& u, float H, float R, bool temBase, bool temTopo, Cor& ke, Cor& kd, Cor& ka, float m);
         
         bool intersecao(Raio& raio, float& t) override;
         Cor calcularIluminacao(Ponto& Pi, Vetor& direcao_raio, FonteIluminacao& fonte) override;
