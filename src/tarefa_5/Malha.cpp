@@ -28,31 +28,62 @@ bool Malha::intersecao(Raio& raio, float& t) {
         
         int idAresta1 = face.idAresta1;
         int idAresta2 = face.idAresta2;
+        int idAresta3 = face.idAresta3;
 
-        int idVertice11 = arestas[idAresta1].idVertice1;
-        int idVertice12 = arestas[idAresta1].idVertice2;
-
-        int idVertice21 = arestas[idAresta2].idVertice1;
-        int idVertice22 = arestas[idAresta2].idVertice2;
-
-        float v1, v2, v3;
-
-        float n1 = ((float)idVertice11 * (float)idVertice12);
-        float n = n1/(float)idVertice21;
-
-        if (n == ((float)idVertice11) || n == ((float)idVertice12)) {
-            v1 = (float)idVertice21;
-            v2 = (float)idVertice22;
-            v3 = n;
-        } else {
-            v1 = idVertice22;
-            v2 = idVertice21;
-            v3 = n1/v1;
+        int idV1 = arestas[idAresta1].idVertice1;
+        int idV2 = arestas[idAresta1].idVertice2;
+        int idV3 = -1;
+        
+        // o terceiro vertice é aquele que não está na aresta1
+        int v21 = arestas[idAresta2].idVertice1;
+        int v22 = arestas[idAresta2].idVertice2;
+        
+        if (v21 != idV1 && v21 != idV2) {
+            idV3 = v21;
+        } else if (v22 != idV1 && v22 != idV2) {
+            idV3 = v22;
         }
+        
+        // se não encontrou na aresta2, procura na aresta3
+        if (idV3 == -1) {
+            int v31 = arestas[idAresta3].idVertice1;
+            int v32 = arestas[idAresta3].idVertice2;
+            
+            if (v31 != idV1 && v31 != idV2) {
+                idV3 = v31;
+            } else if (v32 != idV1 && v32 != idV2) {
+                idV3 = v32;
+            }
+        }
+        
+        // o pdf ensina desse jeito abaixo, mas algumas faces ficam incorretas, então mudei para o jeito acima
+        // int idAresta1 = face.idAresta1;
+        // int idAresta2 = face.idAresta2;
 
-        Ponto p1 = vertices[v1].v;
-        Ponto p2 = vertices[v2].v;
-        Ponto p3 = vertices[v3].v;
+        // int idVertice11 = arestas[idAresta1].idVertice1;
+        // int idVertice12 = arestas[idAresta1].idVertice2;
+
+        // int idVertice21 = arestas[idAresta2].idVertice1;
+        // int idVertice22 = arestas[idAresta2].idVertice2;
+
+        // float v1, v2, v3;
+
+        // float n1 = ((float)idVertice11 * (float)idVertice12);
+        // float n = n1/(float)idVertice21;
+
+        // if (n == ((float)idVertice11) || n == ((float)idVertice12)) {
+        //     v1 = (float)idVertice21;
+        //     v2 = (float)idVertice22;
+        //     v3 = n;
+        // } else {
+        //     v1 = idVertice22;
+        //     v2 = idVertice21;
+        //     v3 = n1/v1;
+        // }
+
+        Ponto p1 = vertices[idV1].v;
+        Ponto p2 = vertices[idV2].v;
+        Ponto p3 = vertices[idV3].v;
 
         Vetor r1 = p2.subPonto(p1);
         Vetor r2 = p3.subPonto(p1);
@@ -106,7 +137,8 @@ bool Malha::intersecao(Raio& raio, float& t) {
 
 Cor Malha::calcularIluminacao(Ponto& Pi, Vetor& direcao_raio, FonteIluminacao& fonte) {
     Vetor normal = normalIntersecao;
-    
+
+    // teste que o monitor ensinou
     if (normal.produtoEscalar(direcao_raio) > 0) {
         normal = normal.vetorNegativo();
     }
