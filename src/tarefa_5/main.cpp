@@ -7,12 +7,14 @@
 #include "Vetor.h"
 #include "Cilindro.h"
 #include "Cone.h"
+#include "Cubo.h"
 #include <cmath>
+#include <iostream>
 
 #define M_PI 3.14159265358979323846
 
 int main() {
-    Ponto olho(0.0f, 0.0f, 0.0f);
+    Ponto olho(0.0f, 0.0f, -5.0f);
     Janela janela(60.0f, 60.0f, -30.0f); 
     Cor I_F(0.7f, 0.7f, 0.7f);
     Cor I_A(0.3f, 0.3f, 0.3f);
@@ -116,6 +118,18 @@ int main() {
     Cone* cone = new Cone(ponto_p_cone, Cb, d_cone, theta, H_cone, raio_base_cone, false, ke_cone, kd_cone, ka_cone, 10);
     cenario.adicionarObjeto(cone);
 
+    // cubo
+    float aresta_cubo = 40.0f;
+    Ponto centro_cubo(0.0f, -150.0f, -165.0f);
+    Cor kd_cubo(1.0f, 0.078f, 0.576f);
+    Cor ke_cubo(1.0f, 0.078f, 0.576f);
+    Cor ka_cubo(1.0f, 0.078f, 0.576f);
+    float m_cubo = 10.0f;
+
+    Cubo cubo;
+    Malha* malha = new Malha(cubo.criarCubo(centro_cubo, aresta_cubo, ke_cubo, kd_cubo, ka_cubo, m_cubo));
+    cenario.adicionarObjeto(malha);
+
     cenario.render();
     cenario.salvarPPM("tarefa_5.ppm");
     
@@ -125,6 +139,7 @@ int main() {
     delete plano_chao;
     delete cilindro;
     delete cone;
+    delete malha;
     
     return 0;
 }
