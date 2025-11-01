@@ -14,6 +14,7 @@ public:
     Cor Ka;
     float m;
     
+    ObjetoAbstrato() {};
     ObjetoAbstrato(Cor& ke, Cor& kd, Cor& ka, float m) : Ke(ke), Kd(kd), Ka(ka), m(m)  {}
     virtual ~ObjetoAbstrato() {}
     

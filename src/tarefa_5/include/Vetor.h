@@ -19,6 +19,7 @@ class Vetor {
         float norma();
         Vetor normalizado();
         Vetor multiComponente(Vetor& v);
+        Vetor produtoVetorial(Vetor& v);
 };
 
 #endif

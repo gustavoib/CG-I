@@ -7,6 +7,7 @@ class Cor {
         float g; 
         float b;
 
+        Cor() {};
         Cor(float r, float g, float b);
 
         Cor somarCor(Cor& c);

@@ -1,4 +1,4 @@
-#include "Vetor.h"
+#include "../include/Vetor.h"
 #include <cmath>
 
 
@@ -28,6 +28,14 @@ Vetor Vetor::vetorNegativo() {
 
 float Vetor::produtoEscalar(Vetor& v) {
     return x * v.x + y * v.y + z * v.z;
+}
+
+Vetor Vetor::produtoVetorial(Vetor& v) {
+    return Vetor(
+        y * v.z - z * v.y,
+        z * v.x - x * v.z,
+        x * v.y - y * v.x
+    );
 }
 
 float Vetor::norma() {
