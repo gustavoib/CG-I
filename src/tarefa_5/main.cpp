@@ -8,8 +8,10 @@
 #include "Cilindro.h"
 #include "Cone.h"
 #include "Cubo.h"
+#include "Textura.h"
 #include <cmath>
 #include <iostream>
+#include <memory>
 
 #define M_PI 3.14159265358979323846
 
@@ -26,6 +28,13 @@ int main() {
     
     Cenario cenario(olho, janela, fonte, cor_background, 500, 500);
     
+    //textura
+    auto texturaMadeira = std::make_shared<Textura>();
+if (!texturaMadeira->carregarImagem("madeira.jpg")) {
+    std::cerr << "Falha ao carregar textura, usando textura procedural como fallback" << std::endl;
+    texturaMadeira->gerarTexturaMadeira(512, 512);
+}
+
     // esfera
     Ponto centro_esfera(0.0f, 95.0f, -200.0f);
     Cor ke_esfera(0.854f, 0.647f, 0.125f);
@@ -63,9 +72,6 @@ int main() {
     // plano do chão
     Ponto P_pic(0.0f, -150.0f, 0.0f);
     Vetor n_barc(0.0f, 1.0f, 0.0f); 
-    Cor kd_planoc(0.2, 0.7f, 0.2f);
-    Cor ke_planoc(0.0f, 0.0f, 0.0f);
-    Cor ka_planoc(0.2f, 0.7f, 0.2f);
     float m_planoc = 10.0f;
 
     // plano do teto
@@ -79,7 +85,7 @@ int main() {
     Plano* plano_frontal = new Plano(n_barf, P_pif, ke_planof, kd_planof, ka_planof, m_planof);
     cenario.adicionarObjeto(plano_frontal);
 
-    Plano* plano_chao = new Plano(n_barc, P_pic, ke_planoc, kd_planoc, ka_planoc, m_planoc);
+    Plano* plano_chao = new Plano(n_barc, P_pic, texturaMadeira, 1.0f, 1.0f, m_planoc);
     cenario.adicionarObjeto(plano_chao);
 
     Plano* plano_direita = new Plano(n_bard, P_pid, ke_planod, kd_planod, ka_planod, m_planod);
@@ -130,6 +136,7 @@ int main() {
     Malha* malha = new Malha(cubo.criarCubo(centro_cubo, aresta_cubo, ke_cubo, kd_cubo, ka_cubo, m_cubo));
     cenario.adicionarObjeto(malha);
 
+    std::cout << "Renderizando cena com textura de madeira..." << std::endl;
     cenario.render();
     cenario.salvarPPM("tarefa_5.ppm");
     
@@ -137,6 +144,9 @@ int main() {
     delete esfera;
     delete plano_frontal;
     delete plano_chao;
+    delete plano_direita;
+    delete plano_esquerda;
+    delete plano_teto;
     delete cilindro;
     delete cone;
     delete malha;
