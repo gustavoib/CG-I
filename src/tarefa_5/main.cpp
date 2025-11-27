@@ -1,14 +1,14 @@
-#include "Cenario.h"
-#include "Esfera.h"
-#include "Plano.h"
-#include "FonteIluminacao.h"
-#include "Janela.h"
-#include "Ponto.h"
-#include "Vetor.h"
-#include "Cilindro.h"
-#include "Cone.h"
-#include "Cubo.h"
-#include "Textura.h"
+#include "../tarefa_5/include/Cenario.h"
+#include "../tarefa_5/include/Esfera.h"
+#include "../tarefa_5/include/Plano.h"
+#include "../tarefa_5/include/FonteIluminacao.h"
+#include "../tarefa_5/include/Janela.h"
+#include "../tarefa_5/include/Ponto.h"
+#include "../tarefa_5/include/Vetor.h"
+#include "../tarefa_5/include/Cilindro.h"
+#include "../tarefa_5/include/Cone.h"
+#include "../tarefa_5/include/Cubo.h"
+#include "../tarefa_5/include/Textura.h"
 #include <cmath>
 #include <iostream>
 #include <memory>
@@ -30,10 +30,10 @@ int main() {
     
     //textura
     auto texturaMadeira = std::make_shared<Textura>();
-if (!texturaMadeira->carregarImagem("madeira.jpg")) {
-    std::cerr << "Falha ao carregar textura, usando textura procedural como fallback" << std::endl;
-    texturaMadeira->gerarTexturaMadeira(512, 512);
-}
+    if (!texturaMadeira->carregarImagem("textura.jpg")) {
+        std::cerr << "Falha ao carregar textura, usando textura procedural como fallback" << std::endl;
+        texturaMadeira->gerarTexturaMadeira(500, 500);
+    }
 
     // esfera
     Ponto centro_esfera(0.0f, 95.0f, -200.0f);
@@ -85,7 +85,7 @@ if (!texturaMadeira->carregarImagem("madeira.jpg")) {
     Plano* plano_frontal = new Plano(n_barf, P_pif, ke_planof, kd_planof, ka_planof, m_planof);
     cenario.adicionarObjeto(plano_frontal);
 
-    Plano* plano_chao = new Plano(n_barc, P_pic, texturaMadeira, 1.0f, 1.0f, m_planoc);
+    Plano* plano_chao = new Plano(n_barc, P_pic, texturaMadeira, 0.2f, 0.2f, m_planoc);
     cenario.adicionarObjeto(plano_chao);
 
     Plano* plano_direita = new Plano(n_bard, P_pid, ke_planod, kd_planod, ka_planod, m_planod);

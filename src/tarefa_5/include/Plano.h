@@ -3,7 +3,7 @@
 
 #include "Objetoabstrato.h"
 #include "Ponto.h"
-#include "vetor.h"
+#include "Vetor.h"
 #include "Textura.h"
 #include <vector>
 #include <memory>
@@ -20,8 +20,7 @@ public:
 
     Plano(Vetor& n, Ponto& p, Cor& ke, Cor& kd, Cor& ka, float m);
     
-    Plano(Vetor& n, Ponto& p, std::shared_ptr<Textura> tex,
-          float escalaU = 1.0f, float escalaV = 1.0f, float m = 10.0f);
+    Plano(Vetor& n, Ponto& p, std::shared_ptr<Textura> tex, float escalaU, float escalaV, float m);
 
     bool intersecao(Raio& raio, float& t) override;
     Cor calcularIluminacao(Ponto& Pi, Vetor& direcao_raio, FonteIluminacao& fonte) override;

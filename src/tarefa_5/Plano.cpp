@@ -1,6 +1,8 @@
-#include "Plano.h"
+#include "../tarefa_5/include/Plano.h"
+#include "../tarefa_5/include/Textura.h"
 #include <cmath>
 #include <algorithm>
+#include <memory>
 
 using namespace std;
 
@@ -10,14 +12,15 @@ static Cor cor_padrao_kd(1, 1, 1);
 static Cor cor_padrao_ka(1, 1, 1);
 
 Plano::Plano(Vetor& n, Ponto& p, Cor& ke, Cor& kd, Cor& ka, float m) 
-    : ObjetoAbstrato(ke, kd, ka, m), n(n.normalizado()), P_pi(p) {
-    usarTextura = false;
-    escalaU = 1.0f;
-    escalaV = 1.0f;
+    : ObjetoAbstrato(ke, kd, ka, m), 
+      n(n.normalizado()), 
+      P_pi(p),
+      usarTextura(false),
+      escalaU(1.0f),
+      escalaV(1.0f) {
 }
 
-Plano::Plano(Vetor& n, Ponto& p, std::shared_ptr<Textura> tex,
-             float escU, float escV, float m)
+Plano::Plano(Vetor& n, Ponto& p, std::shared_ptr<Textura> tex, float escU, float escV, float m)
     : ObjetoAbstrato(cor_padrao_ke, cor_padrao_kd, cor_padrao_ka, m), 
       n(n.normalizado()), P_pi(p) {
     textura = tex;
