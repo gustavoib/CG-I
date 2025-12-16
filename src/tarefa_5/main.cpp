@@ -30,11 +30,8 @@ int main() {
     
     //textura
     auto texturaMadeira = std::make_shared<Textura>();
-    if (!texturaMadeira->carregarImagem("textura.jpg")) {
-        std::cerr << "Falha ao carregar textura, usando textura procedural como fallback" << std::endl;
-        texturaMadeira->gerarTexturaMadeira(500, 500);
-    }
-
+    texturaMadeira->carregarImagem("textura.jpg");
+    
     // esfera
     Ponto centro_esfera(0.0f, 95.0f, -200.0f);
     Cor ke_esfera(0.854f, 0.647f, 0.125f);
@@ -136,7 +133,6 @@ int main() {
     Malha* malha = new Malha(cubo.criarCubo(centro_cubo, aresta_cubo, ke_cubo, kd_cubo, ka_cubo, m_cubo));
     cenario.adicionarObjeto(malha);
 
-    std::cout << "Renderizando cena com textura de madeira..." << std::endl;
     cenario.render();
     cenario.salvarPPM("tarefa_5.ppm");
     

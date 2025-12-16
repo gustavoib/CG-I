@@ -89,46 +89,6 @@ bool Textura::carregarPPM(const std::string& arquivo) {
     return true;
 }
 
-void Textura::gerarTexturaMadeira(int w, int h) {
-    largura = w;
-    altura = h;
-    pixels.resize(altura, std::vector<Cor>(largura));
-
-    Cor madeira_escura(0.4f, 0.2f, 0.1f);
-    Cor madeira_clara(0.6f, 0.4f, 0.2f);
-    
-    for (int i = 0; i < altura; i++) {
-        for (int j = 0; j < largura; j++) {
-            float x = j / (float)largura;
-            float y = i / (float)altura;
-            
-            float distancia = std::sqrt((x - 0.5f) * (x - 0.5f) + 
-                                       (y - 0.5f) * (y - 0.5f) * 4.0f);
-            
-            float ruido = std::sin(x * 50.0f) * 0.05f + 
-                         std::sin(y * 30.0f) * 0.03f;
-            
-            float padrao = std::sin((distancia + ruido) * 20.0f) * 0.5f + 0.5f;
-            
-            float t = padrao;
-            pixels[i][j] = Cor(
-                madeira_escura.r * (1 - t) + madeira_clara.r * t,
-                madeira_escura.g * (1 - t) + madeira_clara.g * t,
-                madeira_escura.b * (1 - t) + madeira_clara.b * t
-            );
-            
-            float variacao = (std::sin(x * 100.0f + y * 100.0f) * 0.1f + 1.0f);
-            pixels[i][j].r *= variacao;
-            pixels[i][j].g *= variacao;
-            pixels[i][j].b *= variacao;
-            
-            pixels[i][j].r = std::max(0.0f, std::min(1.0f, pixels[i][j].r));
-            pixels[i][j].g = std::max(0.0f, std::min(1.0f, pixels[i][j].g));
-            pixels[i][j].b = std::max(0.0f, std::min(1.0f, pixels[i][j].b));
-        }
-    }
-}
-
 Cor Textura::obterCor(float u, float v) const {
     if (pixels.empty()) {
         return Cor(1, 1, 1);
