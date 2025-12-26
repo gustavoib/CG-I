@@ -15,6 +15,22 @@ class Esfera : public ObjetoAbstrato {
         
         bool intersecao(Raio& raio, float& t) override;
         Cor calcularIluminacao(Ponto& Pi, Vetor& direcao_raio, FonteIluminacao& fonte) override;
+        
+        // lidando com as transformações
+        void aplicarTransformacao(const Matriz& transformacao);
+        void transladar(float tx, float ty, float tz);
+        void escalar(float fator);
+        void escalar(float sx, float sy, float sz);
+        void rotacionarX(float angulo);
+        void rotacionarY(float angulo);
+        void rotacionarZ(float angulo);
+        void rotacionarEixo(Vetor eixo, float angulo);
+        void espelharXY();
+        void espelharXZ();
+        void espelharYZ();
+        void cisalharXY(float shx, float shy);
+        void cisalharXZ(float shx, float shz);
+        void cisalharYZ(float shy, float shz);
 };
 
 #endif

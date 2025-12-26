@@ -1,6 +1,10 @@
 #include "../include/Malha.h"
+#include "../include/Matriz.h"
 #include <cfloat>
 #include <cmath>
+#include <iostream>
+
+using namespace std;
 
 Malha::Malha(vector<Vertice>& vertices, vector<Aresta>& arestas, vector<Face>& faces, Cor& ke, Cor& kd, Cor& ka, float m)
     : ObjetoAbstrato(ke, kd, ka, m), vertices(vertices), arestas(arestas), faces(faces) {}
@@ -163,4 +167,79 @@ Cor Malha::calcularIluminacao(Ponto& Pi, Vetor& direcao_raio, FonteIluminacao& f
     IE.limitar();
 
     return IE;
+}
+
+void Malha::aplicarTransformacao(const Matriz& m_pontos, const Matriz& m_normais) {
+    for (auto& vertice : vertices) {
+        vertice.v = vertice.v.aplicarTransformacao(m_pontos);
+        vertice.normal = vertice.normal.aplicarTransformacao(m_normais).normalizado();
+    }
+}
+
+void Malha::escalar(float sx, float sy, float sz) {
+    Matriz S = Matriz::escala(sx, sy, sz);
+    Matriz N = Matriz::transposta(Matriz::inversa(S));
+    aplicarTransformacao(S, N);
+}
+
+void Malha::transladar(float tx, float ty, float tz) {
+    Matriz T = Matriz::translacao(tx, ty, tz);
+    Matriz I = Matriz::identidade();
+    aplicarTransformacao(T, I);
+}
+
+void Malha::rotacionarX(float angulo) {
+    Matriz R = Matriz::rotacaoX(angulo);
+    aplicarTransformacao(R, R);
+}
+
+void Malha::rotacionarY(float angulo) {
+    Matriz R = Matriz::rotacaoY(angulo);
+    aplicarTransformacao(R, R);
+}
+
+void Malha::rotacionarZ(float angulo) {
+    Matriz R = Matriz::rotacaoZ(angulo);
+    aplicarTransformacao(R, R);
+}
+
+void Malha::rotacionarArbitrario(const Vetor& eixo, float angulo) {
+    Matriz R = Matriz::rotacaoArbitraria(eixo, angulo);
+    aplicarTransformacao(R, R);
+}
+
+void Malha::espelharXY() {
+    Matriz M = Matriz::espelhamentoXY();
+    Matriz N = Matriz::inversa(Matriz::transposta(M));
+    aplicarTransformacao(M, N);
+}
+
+void Malha::espelharXZ() {
+    Matriz M = Matriz::espelhamentoXZ();
+    Matriz N = Matriz::inversa(Matriz::transposta(M));
+    aplicarTransformacao(M, N);
+}
+
+void Malha::espelharYZ() {
+    Matriz M = Matriz::espelhamentoYZ();
+    Matriz N = Matriz::inversa(Matriz::transposta(M));
+    aplicarTransformacao(M, N);
+}
+
+void Malha::cisalharXY(float shx, float shy) {
+    Matriz Sh = Matriz::cisalhamentoXY(shx, shy);
+    Matriz N = Matriz::inversa(Matriz::transposta(Sh));
+    aplicarTransformacao(Sh, N);
+}
+
+void Malha::cisalharXZ(float shx, float shz) {
+    Matriz Sh = Matriz::cisalhamentoXZ(shx, shz);
+    Matriz N = Matriz::inversa(Matriz::transposta(Sh));
+    aplicarTransformacao(Sh, N);
+}
+
+void Malha::cisalharYZ(float shy, float shz) {
+    Matriz Sh = Matriz::cisalhamentoYZ(shy, shz);
+    Matriz N = Matriz::inversa(Matriz::transposta(Sh));
+    aplicarTransformacao(Sh, N);
 }

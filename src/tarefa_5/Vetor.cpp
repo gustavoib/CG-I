@@ -1,4 +1,5 @@
 #include "../tarefa_5/include/Vetor.h"
+#include "../tarefa_5/include/Matriz.h"
 #include <cmath>
 
 
@@ -49,4 +50,8 @@ Vetor Vetor::normalizado() {
 
 Vetor Vetor::multiComponente(Vetor& v) {
     return Vetor(x * v.x, y * v.y, z * v.z);
+}
+
+Vetor Vetor::aplicarTransformacao(const Matriz& m) {
+    return m.multiplicarVetor(*this);
 }

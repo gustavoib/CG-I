@@ -140,3 +140,95 @@ Cor Cone::calcularIluminacao(Ponto& Pi, Vetor& direcao_raio, FonteIluminacao& fo
 
     return IE;
 }
+
+// Métodos de transformação
+
+void Cone::aplicarTransformacao(const Matriz& transformacao) {
+    // Transformar os pontos
+    P = P.aplicarTransformacao(transformacao);
+    Cb = Cb.aplicarTransformacao(transformacao);
+    
+    // Transformar o vetor direção (usar matriz inversa transposta)
+    Matriz normal_transform = Matriz::transposta(Matriz::inversa(transformacao));
+    n = n.aplicarTransformacao(normal_transform).normalizado();
+}
+
+void Cone::transladar(float tx, float ty, float tz) {
+    Matriz T = Matriz::translacao(tx, ty, tz);
+    P = P.aplicarTransformacao(T);
+    Cb = Cb.aplicarTransformacao(T);
+}
+
+void Cone::escalar(float fator) {
+    escalar(fator, fator, fator);
+}
+
+void Cone::escalar(float sx, float sy, float sz) {
+    Matriz S = Matriz::escala(sx, sy, sz);
+    
+    // Transformar pontos
+    P = P.aplicarTransformacao(S);
+    Cb = Cb.aplicarTransformacao(S);
+    
+    // Escalar dimensões
+    float escala_raio = (sx + sz) / 2.0f;
+    R *= escala_raio;
+    H *= sy;
+    
+    // Recalcular theta após escala
+    theta = atan(R / H);
+    
+    // Transformar vetor direção
+    Matriz N = Matriz::transposta(Matriz::inversa(S));
+    n = n.aplicarTransformacao(N).normalizado();
+}
+
+void Cone::rotacionarX(float angulo) {
+    Matriz R = Matriz::rotacaoX(angulo);
+    aplicarTransformacao(R);
+}
+
+void Cone::rotacionarY(float angulo) {
+    Matriz R = Matriz::rotacaoY(angulo);
+    aplicarTransformacao(R);
+}
+
+void Cone::rotacionarZ(float angulo) {
+    Matriz R = Matriz::rotacaoZ(angulo);
+    aplicarTransformacao(R);
+}
+
+void Cone::rotacionarEixo(Vetor eixo, float angulo) {
+    Matriz R = Matriz::rotacaoArbitraria(eixo, angulo);
+    aplicarTransformacao(R);
+}
+
+void Cone::espelharXY() {
+    Matriz E = Matriz::espelhamentoXY();
+    aplicarTransformacao(E);
+}
+
+void Cone::espelharXZ() {
+    Matriz E = Matriz::espelhamentoXZ();
+    aplicarTransformacao(E);
+}
+
+void Cone::espelharYZ() {
+    Matriz E = Matriz::espelhamentoYZ();
+    aplicarTransformacao(E);
+}
+
+void Cone::cisalharXY(float shx, float shy) {
+    Matriz C = Matriz::cisalhamentoXY(shx, shy);
+    aplicarTransformacao(C);
+}
+
+void Cone::cisalharXZ(float shx, float shz) {
+    Matriz C = Matriz::cisalhamentoXZ(shx, shz);
+    aplicarTransformacao(C);
+}
+
+void Cone::cisalharYZ(float shy, float shz) {
+    Matriz C = Matriz::cisalhamentoYZ(shy, shz);
+    aplicarTransformacao(C);
+}

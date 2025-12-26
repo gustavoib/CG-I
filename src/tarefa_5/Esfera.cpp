@@ -1,4 +1,5 @@
 #include "Esfera.h"
+#include "Matriz.h"
 #include <cmath>
 #include <algorithm>
 #include <iostream>
@@ -58,4 +59,71 @@ Cor Esfera::calcularIluminacao(Ponto& Pi, Vetor& direcao_raio, FonteIluminacao& 
 
     return IE;
 
+}
+
+void Esfera::transladar(float tx, float ty, float tz) {
+    Matriz trans = Matriz::translacao(tx, ty, tz);
+    centro_esfera = trans.multiplicarPonto(centro_esfera);
+}
+
+void Esfera::escalar(float fator) {
+    raio_esfera *= fator;
+}
+
+void Esfera::escalar(float sx, float sy, float sz) {
+    Matriz esc = Matriz::escala(sx, sy, sz);
+    centro_esfera = esc.multiplicarPonto(centro_esfera);
+    // escala não uniforme -> maior escala para o raio
+    float maior_escala = max({sx, sy, sz});
+    raio_esfera *= maior_escala;
+}
+
+void Esfera::rotacionarX(float angulo) {
+    Matriz rot = Matriz::rotacaoX(angulo);
+    centro_esfera = rot.multiplicarPonto(centro_esfera);
+}
+
+void Esfera::rotacionarY(float angulo) {
+    Matriz rot = Matriz::rotacaoY(angulo);
+    centro_esfera = rot.multiplicarPonto(centro_esfera);
+}
+
+void Esfera::rotacionarZ(float angulo) {
+    Matriz rot = Matriz::rotacaoZ(angulo);
+    centro_esfera = rot.multiplicarPonto(centro_esfera);
+}
+
+void Esfera::rotacionarEixo(Vetor eixo, float angulo) {
+    Matriz rot = Matriz::rotacaoArbitraria(eixo, angulo);
+    centro_esfera = rot.multiplicarPonto(centro_esfera);
+}
+
+void Esfera::espelharXY() {
+    Matriz esp = Matriz::espelhamentoXY();
+    centro_esfera = esp.multiplicarPonto(centro_esfera);
+}
+
+void Esfera::espelharXZ() {
+    Matriz esp = Matriz::espelhamentoXZ();
+    centro_esfera = esp.multiplicarPonto(centro_esfera);
+}
+
+void Esfera::espelharYZ() {
+    Matriz esp = Matriz::espelhamentoYZ();
+    centro_esfera = esp.multiplicarPonto(centro_esfera);
+}
+
+void Esfera::cisalharXY(float shx, float shy) {
+    Matriz cis = Matriz::cisalhamentoXY(shx, shy);
+    centro_esfera = cis.multiplicarPonto(centro_esfera);
+}
+
+void Esfera::cisalharXZ(float shx, float shz) {
+    Matriz cis = Matriz::cisalhamentoXZ(shx, shz);
+    centro_esfera = cis.multiplicarPonto(centro_esfera);
+}
+
+void Esfera::cisalharYZ(float shy, float shz) {
+    Matriz cis = Matriz::cisalhamentoYZ(shy, shz);
+    centro_esfera = cis.multiplicarPonto(centro_esfera);
 }

@@ -9,6 +9,8 @@
 
 using namespace std;
 
+class Matriz;
+
 class Malha : public ObjetoAbstrato {
     public:
         vector<Vertice> vertices;
@@ -21,6 +23,21 @@ class Malha : public ObjetoAbstrato {
         void adicionarVertice(Vertice& v);
         void adicionarAresta(Aresta& a);
         void adicionarFace(Face& f);
+
+        void aplicarTransformacao(const Matriz& m_pontos, const Matriz& m_normais);
+
+        void escalar(float sx, float sy, float sz);
+        void transladar(float tx, float ty, float tz);
+        void rotacionarX(float angulo);
+        void rotacionarY(float angulo);
+        void rotacionarZ(float angulo);
+        void rotacionarArbitrario(const Vetor& eixo, float angulo);
+        void espelharXY();
+        void espelharXZ();
+        void espelharYZ();
+        void cisalharXY(float shx, float shy);
+        void cisalharXZ(float shx, float shz);
+        void cisalharYZ(float shy, float shz);
 
         bool intersecao(Raio& raio, float& t) override;
         Cor calcularIluminacao(Ponto& Pi, Vetor& direcao_raio, FonteIluminacao& fonte) override;

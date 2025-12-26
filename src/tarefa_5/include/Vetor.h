@@ -1,6 +1,8 @@
 #ifndef VETOR_H
 #define VETOR_H
 
+class Matriz;
+
 class Vetor {
     public:
         float x, y, z;
@@ -20,6 +22,8 @@ class Vetor {
         Vetor normalizado();
         Vetor multiComponente(Vetor& v);
         Vetor produtoVetorial(Vetor& v);
+
+        Vetor aplicarTransformacao(const Matriz& m);
 };
 
 #endif

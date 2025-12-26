@@ -172,3 +172,93 @@ Cor Cilindro::calcularIluminacao(Ponto& Pi, Vetor& direcao_raio, FonteIluminacao
 
     return IE;
 }
+
+void Cilindro::aplicarTransformacao(const Matriz& transformacao) {
+    // Transformar os pontos
+    P = P.aplicarTransformacao(transformacao);
+    B = B.aplicarTransformacao(transformacao);
+    
+    // Transformar o vetor direção (usar matriz inversa transposta para vetores normais)
+    Matriz normal_transform = Matriz::transposta(Matriz::inversa(transformacao));
+    u = u.aplicarTransformacao(normal_transform).normalizado();
+}
+
+void Cilindro::transladar(float tx, float ty, float tz) {
+    Matriz T = Matriz::translacao(tx, ty, tz);
+    
+    // Para translação, apenas os pontos mudam
+    P = P.aplicarTransformacao(T);
+    B = B.aplicarTransformacao(T);
+    // u não muda (vetores de direção não são afetados por translação)
+}
+
+void Cilindro::escalar(float fator) {
+    escalar(fator, fator, fator);
+}
+
+void Cilindro::escalar(float sx, float sy, float sz) {
+    Matriz S = Matriz::escala(sx, sy, sz);
+    
+    // Transformar pontos
+    P = P.aplicarTransformacao(S);
+    B = B.aplicarTransformacao(S);
+    
+    // Escalar raio e altura proporcionalmente
+    // Assumindo que o cilindro está alinhado com o eixo Y
+    R *= sx; // ou sy, dependendo da orientação
+    H *= sy; // ou sz
+    
+    // Transformar vetor direção
+    Matriz N = Matriz::transposta(Matriz::inversa(S));
+    u = u.aplicarTransformacao(N).normalizado();
+}
+
+void Cilindro::rotacionarX(float angulo) {
+    Matriz R = Matriz::rotacaoX(angulo);
+    aplicarTransformacao(R);
+}
+
+void Cilindro::rotacionarY(float angulo) {
+    Matriz R = Matriz::rotacaoY(angulo);
+    aplicarTransformacao(R);
+}
+
+void Cilindro::rotacionarZ(float angulo) {
+    Matriz R = Matriz::rotacaoZ(angulo);
+    aplicarTransformacao(R);
+}
+
+void Cilindro::rotacionarEixo(Vetor eixo, float angulo) {
+    Matriz R = Matriz::rotacaoArbitraria(eixo, angulo);
+    aplicarTransformacao(R);
+}
+
+void Cilindro::espelharXY() {
+    Matriz E = Matriz::espelhamentoXY();
+    aplicarTransformacao(E);
+}
+
+void Cilindro::espelharXZ() {
+    Matriz E = Matriz::espelhamentoXZ();
+    aplicarTransformacao(E);
+}
+
+void Cilindro::espelharYZ() {
+    Matriz E = Matriz::espelhamentoYZ();
+    aplicarTransformacao(E);
+}
+
+void Cilindro::cisalharXY(float shx, float shy) {
+    Matriz C = Matriz::cisalhamentoXY(shx, shy);
+    aplicarTransformacao(C);
+}
+
+void Cilindro::cisalharXZ(float shx, float shz) {
+    Matriz C = Matriz::cisalhamentoXZ(shx, shz);
+    aplicarTransformacao(C);
+}
+
+void Cilindro::cisalharYZ(float shy, float shz) {
+    Matriz C = Matriz::cisalhamentoYZ(shy, shz);
+    aplicarTransformacao(C);
+}

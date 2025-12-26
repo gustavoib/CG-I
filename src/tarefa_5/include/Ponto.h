@@ -3,6 +3,8 @@
 
 #include "Vetor.h"
 
+class Matriz;
+
 class Ponto {
     public:
         float x, y, z, tipo;
@@ -12,6 +14,8 @@ class Ponto {
 
         Vetor subPonto(Ponto& p); 
         Ponto somarVetor(const Vetor& v);
+
+        Ponto aplicarTransformacao(const Matriz& m);
     };
 
 #endif
