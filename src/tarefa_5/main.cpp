@@ -9,6 +9,7 @@
 #include "../tarefa_5/include/Cone.h"
 #include "../tarefa_5/include/Cubo.h"
 #include "../tarefa_5/include/Textura.h"
+#include "../tarefa_5/include/Matriz.h"
 #include <cmath>
 #include <iostream>
 #include <memory>
@@ -135,6 +136,7 @@ int main() {
 
     cenario.render();
     cenario.salvarPPM("tarefa_5.ppm");
+
     
     // Liberar memória
     delete esfera;
