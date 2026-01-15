@@ -1,4 +1,4 @@
-#include "Cilindro.h"
+#include "../trabalho_final/include/Cilindro.h"
 #include <cmath>
 #include <algorithm>
 #include <iostream>
@@ -86,7 +86,6 @@ bool Cilindro::intersecao(Raio& raio, float& t) {
         }
     }
 
-    // aqui vai ser o caso geral (precisa?)
     if (du != 0) {
         Vetor wB2 = raio.origem.subPonto(B);
         Vetor wT2 = raio.origem.subPonto(T);
@@ -174,11 +173,9 @@ Cor Cilindro::calcularIluminacao(Ponto& Pi, Vetor& direcao_raio, FonteIluminacao
 }
 
 void Cilindro::aplicarTransformacao(const Matriz& transformacao) {
-    // Transformar os pontos
     P = P.aplicarTransformacao(transformacao);
     B = B.aplicarTransformacao(transformacao);
-    
-    // Transformar o vetor direção (usar matriz inversa transposta para vetores normais)
+
     Matriz normal_transform = Matriz::transposta(Matriz::inversa(transformacao));
     u = u.aplicarTransformacao(normal_transform).normalizado();
 }
@@ -186,79 +183,114 @@ void Cilindro::aplicarTransformacao(const Matriz& transformacao) {
 void Cilindro::transladar(float tx, float ty, float tz) {
     Matriz T = Matriz::translacao(tx, ty, tz);
     
-    // Para translação, apenas os pontos mudam
     P = P.aplicarTransformacao(T);
     B = B.aplicarTransformacao(T);
-    // u não muda (vetores de direção não são afetados por translação)
 }
 
-void Cilindro::escalar(float fator) {
-    escalar(fator, fator, fator);
+Ponto Cilindro::calcularCentro() {
+    Vetor uH = u.multiEscalar(H/2.0f);
+    return B.somarVetor(uH);
 }
 
 void Cilindro::escalar(float sx, float sy, float sz) {
+    Ponto centro = calcularCentro();
+    transladar(-centro.x, -centro.y, -centro.z);
+    
     Matriz S = Matriz::escala(sx, sy, sz);
     
-    // Transformar pontos
     P = P.aplicarTransformacao(S);
     B = B.aplicarTransformacao(S);
-    
-    // Escalar raio e altura proporcionalmente
-    // Assumindo que o cilindro está alinhado com o eixo Y
-    R *= sx; // ou sy, dependendo da orientação
-    H *= sy; // ou sz
-    
-    // Transformar vetor direção
+
+    R *= sx;
+    H *= sy;
+
     Matriz N = Matriz::transposta(Matriz::inversa(S));
     u = u.aplicarTransformacao(N).normalizado();
+    
+    transladar(centro.x, centro.y, centro.z);
 }
 
 void Cilindro::rotacionarX(float angulo) {
+    Ponto centro = calcularCentro();
+    transladar(-centro.x, -centro.y, -centro.z);
+    
     Matriz R = Matriz::rotacaoX(angulo);
     aplicarTransformacao(R);
+    
+    transladar(centro.x, centro.y, centro.z);
 }
 
 void Cilindro::rotacionarY(float angulo) {
+    Ponto centro = calcularCentro();
+    transladar(-centro.x, -centro.y, -centro.z);
+    
     Matriz R = Matriz::rotacaoY(angulo);
     aplicarTransformacao(R);
+    
+    transladar(centro.x, centro.y, centro.z);
 }
 
 void Cilindro::rotacionarZ(float angulo) {
+    Ponto centro = calcularCentro();
+    transladar(-centro.x, -centro.y, -centro.z);
+    
     Matriz R = Matriz::rotacaoZ(angulo);
     aplicarTransformacao(R);
+    
+    transladar(centro.x, centro.y, centro.z);
 }
 
 void Cilindro::rotacionarEixo(Vetor eixo, float angulo) {
+    Ponto centro = calcularCentro();
+    transladar(-centro.x, -centro.y, -centro.z);
+    
     Matriz R = Matriz::rotacaoArbitraria(eixo, angulo);
     aplicarTransformacao(R);
-}
-
-void Cilindro::espelharXY() {
-    Matriz E = Matriz::espelhamentoXY();
-    aplicarTransformacao(E);
-}
-
-void Cilindro::espelharXZ() {
-    Matriz E = Matriz::espelhamentoXZ();
-    aplicarTransformacao(E);
-}
-
-void Cilindro::espelharYZ() {
-    Matriz E = Matriz::espelhamentoYZ();
-    aplicarTransformacao(E);
+    
+    transladar(centro.x, centro.y, centro.z);
 }
 
 void Cilindro::cisalharXY(float shx, float shy) {
+    Ponto centro = calcularCentro();
+    transladar(-centro.x, -centro.y, -centro.z);
+    
     Matriz C = Matriz::cisalhamentoXY(shx, shy);
     aplicarTransformacao(C);
+    
+    transladar(centro.x, centro.y, centro.z);
 }
 
 void Cilindro::cisalharXZ(float shx, float shz) {
+    Ponto centro = calcularCentro();
+    transladar(-centro.x, -centro.y, -centro.z);
+    
     Matriz C = Matriz::cisalhamentoXZ(shx, shz);
     aplicarTransformacao(C);
+    
+    transladar(centro.x, centro.y, centro.z);
 }
 
 void Cilindro::cisalharYZ(float shy, float shz) {
+    Ponto centro = calcularCentro();
+    transladar(-centro.x, -centro.y, -centro.z);
+    
     Matriz C = Matriz::cisalhamentoYZ(shy, shz);
     aplicarTransformacao(C);
+    
+    transladar(centro.x, centro.y, centro.z);
 }
+
+// void Cilindro::espelharXY() {
+//     Matriz E = Matriz::espelhamentoXY();
+//     aplicarTransformacao(E);
+// }
+
+// void Cilindro::espelharXZ() {
+//     Matriz E = Matriz::espelhamentoXZ();
+//     aplicarTransformacao(E);
+// }
+
+// void Cilindro::espelharYZ() {
+//     Matriz E = Matriz::espelhamentoYZ();
+//     aplicarTransformacao(E);
+// }

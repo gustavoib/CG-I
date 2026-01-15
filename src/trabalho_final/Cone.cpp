@@ -1,4 +1,4 @@
-#include "Cone.h"
+#include "../trabalho_final/include/Cone.h"
 #include <cmath>
 #include <algorithm>
 #include <iostream>
@@ -12,7 +12,6 @@ Cone::Cone(Ponto& P, Ponto& Cb, Vetor& n, float theta, float H, float R, bool te
 bool Cone::intersecao(Raio& raio, float& t) {
     Ponto V = Cb.somarVetor(n.multiEscalar(H)); // vértice do cone
     Vetor VmenosP = V.subPonto(raio.origem);
-    // Removida a linha: float VPdotn = VmenosP.produtoEscalar(n);
 
     float dn = raio.direcao.produtoEscalar(n);
     float vd = VmenosP.produtoEscalar(raio.direcao);
@@ -141,10 +140,7 @@ Cor Cone::calcularIluminacao(Ponto& Pi, Vetor& direcao_raio, FonteIluminacao& fo
     return IE;
 }
 
-// Métodos de transformação
-
 void Cone::aplicarTransformacao(const Matriz& transformacao) {
-    // Transformar os pontos
     P = P.aplicarTransformacao(transformacao);
     Cb = Cb.aplicarTransformacao(transformacao);
     
@@ -153,82 +149,119 @@ void Cone::aplicarTransformacao(const Matriz& transformacao) {
     n = n.aplicarTransformacao(normal_transform).normalizado();
 }
 
+Ponto Cone::calcularCentro() {
+    Vetor nH = n.multiEscalar(H/2.0f);
+    return Cb.somarVetor(nH);
+}
+
 void Cone::transladar(float tx, float ty, float tz) {
     Matriz T = Matriz::translacao(tx, ty, tz);
     P = P.aplicarTransformacao(T);
     Cb = Cb.aplicarTransformacao(T);
 }
 
-void Cone::escalar(float fator) {
-    escalar(fator, fator, fator);
-}
-
 void Cone::escalar(float sx, float sy, float sz) {
+    Ponto centro = calcularCentro();
+    transladar(-centro.x, -centro.y, -centro.z);
+    
     Matriz S = Matriz::escala(sx, sy, sz);
     
-    // Transformar pontos
     P = P.aplicarTransformacao(S);
     Cb = Cb.aplicarTransformacao(S);
     
-    // Escalar dimensões
-    float escala_raio = (sx + sz) / 2.0f;
+    float escala_raio = (sx + sz)/2.0f;
     R *= escala_raio;
     H *= sy;
     
-    // Recalcular theta após escala
-    theta = atan(R / H);
+    theta = atan(R/H);
     
-    // Transformar vetor direção
     Matriz N = Matriz::transposta(Matriz::inversa(S));
     n = n.aplicarTransformacao(N).normalizado();
+    
+    transladar(centro.x, centro.y, centro.z);
 }
 
 void Cone::rotacionarX(float angulo) {
+    Ponto centro = calcularCentro();
+    transladar(-centro.x, -centro.y, -centro.z);
+    
     Matriz R = Matriz::rotacaoX(angulo);
     aplicarTransformacao(R);
+    
+    transladar(centro.x, centro.y, centro.z);
 }
 
 void Cone::rotacionarY(float angulo) {
+    Ponto centro = calcularCentro();
+    transladar(-centro.x, -centro.y, -centro.z);
+    
     Matriz R = Matriz::rotacaoY(angulo);
     aplicarTransformacao(R);
+    
+    transladar(centro.x, centro.y, centro.z);
 }
 
 void Cone::rotacionarZ(float angulo) {
+    Ponto centro = calcularCentro();
+    transladar(-centro.x, -centro.y, -centro.z);
+    
     Matriz R = Matriz::rotacaoZ(angulo);
     aplicarTransformacao(R);
+    
+    transladar(centro.x, centro.y, centro.z);
 }
 
 void Cone::rotacionarEixo(Vetor eixo, float angulo) {
+    Ponto centro = calcularCentro();
+    transladar(-centro.x, -centro.y, -centro.z);
+    
     Matriz R = Matriz::rotacaoArbitraria(eixo, angulo);
     aplicarTransformacao(R);
-}
-
-void Cone::espelharXY() {
-    Matriz E = Matriz::espelhamentoXY();
-    aplicarTransformacao(E);
-}
-
-void Cone::espelharXZ() {
-    Matriz E = Matriz::espelhamentoXZ();
-    aplicarTransformacao(E);
-}
-
-void Cone::espelharYZ() {
-    Matriz E = Matriz::espelhamentoYZ();
-    aplicarTransformacao(E);
+    
+    transladar(centro.x, centro.y, centro.z);
 }
 
 void Cone::cisalharXY(float shx, float shy) {
+    Ponto centro = calcularCentro();
+    transladar(-centro.x, -centro.y, -centro.z);
+    
     Matriz C = Matriz::cisalhamentoXY(shx, shy);
     aplicarTransformacao(C);
+    
+    transladar(centro.x, centro.y, centro.z);
 }
 
 void Cone::cisalharXZ(float shx, float shz) {
+    Ponto centro = calcularCentro();
+    transladar(-centro.x, -centro.y, -centro.z);
+    
     Matriz C = Matriz::cisalhamentoXZ(shx, shz);
     aplicarTransformacao(C);
+    
+    transladar(centro.x, centro.y, centro.z);
 }
 
 void Cone::cisalharYZ(float shy, float shz) {
+    Ponto centro = calcularCentro();
+    transladar(-centro.x, -centro.y, -centro.z);
+    
     Matriz C = Matriz::cisalhamentoYZ(shy, shz);
     aplicarTransformacao(C);
+    
+    transladar(centro.x, centro.y, centro.z);
 }
+
+// void Cone::espelharXY() {
+//     Matriz E = Matriz::espelhamentoXY();
+//     aplicarTransformacao(E);
+// }
+
+// void Cone::espelharXZ() {
+//     Matriz E = Matriz::espelhamentoXZ();
+//     aplicarTransformacao(E);
+// }
+
+// void Cone::espelharYZ() {
+//     Matriz E = Matriz::espelhamentoYZ();
+//     aplicarTransformacao(E);
+// }

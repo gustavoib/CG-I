@@ -25,7 +25,7 @@ class Malha : public ObjetoAbstrato {
         void adicionarFace(Face& f);
 
         void aplicarTransformacao(const Matriz& m_pontos, const Matriz& m_normais);
-
+        Ponto calcularCentro();
         void escalar(float sx, float sy, float sz);
         void transladar(float tx, float ty, float tz);
         void rotacionarX(float angulo);
