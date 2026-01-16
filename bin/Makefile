@@ -9,7 +9,7 @@ SRC_DIR := ../src
 all: trabalho_final
 
 # Trabalho final
-trabalho_final: $(SRC_DIR)/trabalho_final/main.cpp $(SRC_DIR)/trabalho_final/Cenario.cpp $(SRC_DIR)/trabalho_final/Cor.cpp $(SRC_DIR)/trabalho_final/Esfera.cpp $(SRC_DIR)/trabalho_final/Plano.cpp $(SRC_DIR)/trabalho_final/FonteIluminacao.cpp $(SRC_DIR)/trabalho_final/Janela.cpp $(SRC_DIR)/trabalho_final/Ponto.cpp $(SRC_DIR)/trabalho_final/Vetor.cpp $(SRC_DIR)/trabalho_final/Cilindro.cpp $(SRC_DIR)/trabalho_final/Cone.cpp $(SRC_DIR)/trabalho_final/Cubo.cpp $(SRC_DIR)/trabalho_final/Textura.cpp $(SRC_DIR)/trabalho_final/Malha.cpp $(SRC_DIR)/trabalho_final/Matriz.cpp $(SRC_DIR)/trabalho_final/Aresta.cpp $(SRC_DIR)/trabalho_final/Face.cpp $(SRC_DIR)/trabalho_final/Vertice.cpp $(SRC_DIR)/trabalho_final/Raio.cpp $(GLAD_SRC)
+trabalho_final: $(SRC_DIR)/trabalho_final/main.cpp $(SRC_DIR)/trabalho_final/Cenario.cpp $(SRC_DIR)/trabalho_final/Camera.cpp $(SRC_DIR)/trabalho_final/Cor.cpp $(SRC_DIR)/trabalho_final/Esfera.cpp $(SRC_DIR)/trabalho_final/Plano.cpp $(SRC_DIR)/trabalho_final/FonteIluminacao.cpp $(SRC_DIR)/trabalho_final/Janela.cpp $(SRC_DIR)/trabalho_final/Ponto.cpp $(SRC_DIR)/trabalho_final/Vetor.cpp $(SRC_DIR)/trabalho_final/Cilindro.cpp $(SRC_DIR)/trabalho_final/Cone.cpp $(SRC_DIR)/trabalho_final/Cubo.cpp $(SRC_DIR)/trabalho_final/Textura.cpp $(SRC_DIR)/trabalho_final/Malha.cpp $(SRC_DIR)/trabalho_final/Matriz.cpp $(SRC_DIR)/trabalho_final/Aresta.cpp $(SRC_DIR)/trabalho_final/Face.cpp $(SRC_DIR)/trabalho_final/Vertice.cpp $(SRC_DIR)/trabalho_final/Raio.cpp $(GLAD_SRC)
 	@echo "Compilando Trabalho Final..."
 	$(CXX) $(CXXFLAGS) -I../src/trabalho_final/include $^ $(LDFLAGS) -o trabalho_final
 
