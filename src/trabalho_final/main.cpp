@@ -33,19 +33,27 @@ std::string loadShaderSource(const std::string& filepath) {
 #define M_PI 3.14159265358979323846
 
 int main() {   
-    // sistema antigo
-    // Ponto olho(0.0f, 0.0f, -5.0f);
-    // Janela janela(60.0f, 60.0f, -30.0f); 
-    
-    // testes com câmera
-    Ponto eye(0.0f, 0.0f, -5.0f);
-    Ponto at(0.0f, 0.0f, -100.0f);
+    // vista padrão
+    Ponto eye(200.0f, 400.0f, 600.0f);
+    Ponto at(200.0f, 200.0f, 200.0f);
     Vetor up(0.0f, 1.0f, 0.0f);
-    Camera* camera = new Camera(eye, at, up, 30.0f, -30.0f, 30.0f, -30.0f, 30.0f);
-    
+    Camera* camera = new Camera(eye, at, up, 400.0f, -200.0f, 200.0f, -200.0f, 200.0f);
+
+    // vista de cima da cena
+    // Ponto eye(200.0f, 800.0f, 300.0f);
+    // Ponto at(200.0f, 0.0f, 300.0f);
+    // Vetor up(0.0f, 0.0f, -1.0f);
+    // Camera* camera = new Camera(eye, at, up, 400.0f, -200.0f, 200.0f, -200.0f, 200.0f);
+
+    // vista lateral
+    // Ponto eye(800.0f, 200.0f, 200.0f);
+    // Ponto at(0.0f, 200.0f, 200.0f);
+    // Vetor up(0.0f, 1.0f, 0.0f);
+    // Camera* camera = new Camera(eye, at, up, 400.0f, -200.0f, 200.0f, -200.0f, 200.0f);
+
     Cor I_F(0.7f, 0.7f, 0.7f);
     Cor I_A(0.3f, 0.3f, 0.3f);
-    Ponto P_F(0.0f, 140.0f, -100.0f);
+    Ponto P_F(200.0f, 500.0f, 300.0f);
     FonteIluminacao fonte(I_F, P_F, I_A);
     
     Cor cor_background(100.0f/255.0f, 100.0f/255.0f, 100.0f/255.0f);
@@ -60,42 +68,50 @@ int main() {
     auto texturaMadeira = std::make_shared<Textura>();
     texturaMadeira->carregarImagem("../src/trabalho_final/img/textura.jpg");
 
-    // plano de frontal
-    Ponto P_pif(200.0f, 150.0f, -400.0f);
-    Vetor n_barf(0.0f, 0.0f, 1.0f);  // Normal apontando para cima
+    // plano de frontal (z = 0) - normal apontando para frente
+    Ponto P_pif(200.0f, 200.0f, 0.0f);
+    Vetor n_barf(0.0f, 0.0f, 1.0f);
     Cor kd_planof(0.686f, 0.933f, 0.933f);
     Cor ke_planof(0.686f, 0.933f, 0.933f);
     Cor ka_planof(0.686f, 0.933f, 0.933f);
     float m_planof = 50.0f;
 
-    // lateral direita
-    Ponto P_pid(200.0f, -150.0f, 0.0f);
-    Vetor n_bard(-1.0f, 0.0f, 0.0f);  // Normal apontando para cima
+    // lateral direita (x = 400) - normal apontando para dentro
+    Ponto P_pid(400.0f, 200.0f, 200.0f);
+    Vetor n_bard(-1.0f, 0.0f, 0.0f);
     Cor kd_planod(0.686f, 0.933f, 0.933f);
     Cor ke_planod(0.686f, 0.933f, 0.933f);
     Cor ka_planod(0.686f, 0.933f, 0.933f);
     float m_planod = 50.0f;
 
-    // lateral esquerda
-    Ponto P_pie(-200.0f, -150.0f, 0.0f);
-    Vetor n_bare(1.0f, 0.0f, 0.0f);  // Normal apontando para cima
+    // lateral esquerda (x = 0) - normal apontando para dentro
+    Ponto P_pie(0.0f, 200.0f, 200.0f);
+    Vetor n_bare(1.0f, 0.0f, 0.0f);
     Cor kd_planoe(0.686f, 0.933f, 0.933f);
     Cor ke_planoe(0.686f, 0.933f, 0.933f);
     Cor ka_planoe(0.686f, 0.933f, 0.933f);
     float m_planoe = 50.0f;
 
-    // plano do chão
-    Ponto P_pic(0.0f, -150.0f, 0.0f);
+    // plano do chão (y = 0) - normal apontando para cima
+    Ponto P_pic(200.0f, 0.0f, 200.0f);
     Vetor n_barc(0.0f, 1.0f, 0.0f); 
     float m_planoc = 50.0f;
 
-    // plano do teto
-    Ponto P_pit(0.0f, 150.0f, 0.0f);
-    Vetor n_bart(0.0f, -1.0f, 0.0f); 
-    Cor kd_planot(0.933f, 0.933f, 0.933f);
-    Cor ke_planot(0.933f, 0.933f, 0.933f);
-    Cor ka_planot(0.933f, 0.933f, 0.933f);
-    float m_planot = 50.0f;
+    // plano do teto (y = 400) - normal apontando para baixo
+    // Ponto P_pit(200.0f, 400.0f, 200.0f);
+    // Vetor n_bart(0.0f, -1.0f, 0.0f); 
+    // Cor kd_planot(0.933f, 0.933f, 0.933f);
+    // Cor ke_planot(0.933f, 0.933f, 0.933f);
+    // Cor ka_planot(0.933f, 0.933f, 0.933f);
+    // float m_planot = 50.0f;
+
+    // plano de entrada (z = 400) - normal apontando para frente
+    Ponto P_pient(200.0f, 200.0f, 600.0f);
+    Vetor n_barent(0.0f, 0.0f, -1.0f);
+    Cor kd_planoent(0.686f, 0.933f, 0.933f);
+    Cor ke_planoent(0.686f, 0.933f, 0.933f);
+    Cor ka_planoent(0.686f, 0.933f, 0.933f);
+    float m_planoent = 50.0f;
 
     Plano* plano_frontal = new Plano(n_barf, P_pif, ke_planof, kd_planof, ka_planof, m_planof);
     cenario.adicionarObjeto(plano_frontal);
@@ -109,14 +125,29 @@ int main() {
     Plano* plano_esquerda = new Plano(n_bare, P_pie, ke_planoe, kd_planoe, ka_planoe, m_planoe);
     cenario.adicionarObjeto(plano_esquerda);
 
-    Plano* plano_teto = new Plano(n_bart, P_pit, ke_planot, kd_planot, ka_planot, m_planot);
-    cenario.adicionarObjeto(plano_teto);
+    // Plano* plano_teto = new Plano(n_bart, P_pit, ke_planot, kd_planot, ka_planot, m_planot);
+    // cenario.adicionarObjeto(plano_teto);
+
+    Plano* plano_entrada = new Plano(n_barent, P_pient, ke_planoent, kd_planoent, ka_planoent, m_planoent);
+    cenario.adicionarObjeto(plano_entrada);
 
     // mockup do cenário imaginado
 
+    // porta de entrada (cubo)
+    float aresta_porta = 80.0f;
+    Ponto centro_porta(200.0f, 40.0f, 590.0f);
+    Cor kd_porta(0.545f, 0.271f, 0.075f);
+    Cor ke_porta(0.545f, 0.271f, 0.075f);
+    Cor ka_porta(0.545f, 0.271f, 0.075f);
+    float m_porta = 10.0f;
+    Cubo cubo_porta;
+    Malha* malha_porta = new Malha(cubo_porta.criarCubo(centro_porta, aresta_porta, ke_porta, kd_porta, ka_porta, m_porta));
+    malha_porta->escalar(1.0f, 2.5f, 0.1f); // para criar a porta
+    cenario.adicionarObjeto(malha_porta);
+
     // cama
-    float aresta_cubo = 100.0f;
-    Ponto centro_cubo(0.0f, -160.0f, -320.0f);
+    float aresta_cubo = 80.0f;
+    Ponto centro_cubo(200.0f, 5.0f, 100.0f);
     Cor kd_cubo(1.0f, 0.0f, 0.0f);
     Cor ke_cubo(1.0f, 0.0f, 0.0f);
     Cor ka_cubo(1.0f, 0.0f, 0.0f);
@@ -124,12 +155,12 @@ int main() {
 
     Cubo cubo;
     Malha* malha = new Malha(cubo.criarCubo(centro_cubo, aresta_cubo, ke_cubo, kd_cubo, ka_cubo, m_cubo));
-    malha->escalar(1.0f, 0.3f, 1.5f); // para criar a cama
+    malha->escalar(1.0f, 0.4f, 2.0f); // para criar a cama
     cenario.adicionarObjeto(malha);
 
     // travesseiro
     float aresta_travesseiro = 30.0f;
-    Ponto centro_travesseiro(0.0f, -105.0f, -380.0f);
+    Ponto centro_travesseiro(200.0f, 52.0f, 40.0f);
     Cor kd_travesseiro(1.0f, 1.0f, 1.0f);
     Cor ke_travesseiro(1.0f, 1.0f, 1.0f);
     Cor ka_travesseiro(1.0f, 1.0f, 1.0f);
@@ -141,10 +172,10 @@ int main() {
     cenario.adicionarObjeto(malha_travesseiro);
 
     // pé 1 - cama
-    Ponto cb_pe1(40.0f, -157.5f, -250.0f);
+    Ponto cb_pe1(170.0f, 0.0f, 20.0f);
     Ponto p1 = cb_pe1;
     float rb_pe1 = 5.0f;
-    float H_cilindro = 30.0f;
+    float H_cilindro = 40.0f;
     Vetor dc(0.0f, 1.0f, 0.0f);
     Cor kd_c(0.396f, 0.263f, 0.129f);
     Cor ke_c(0.396f, 0.263f, 0.129f);
@@ -154,32 +185,30 @@ int main() {
     cenario.adicionarObjeto(pe1);
 
     // pé 2 - cama
-    Ponto cb_pe2(-40.0f, -157.5f, -250.0f);
+    Ponto cb_pe2(230.0f, 0.0f, 20.0f);
     Ponto p2 = cb_pe2;
-    float raio_base = 5.0f;
-
-    Cilindro* pe2 = new Cilindro(p2, cb_pe2, dc, H_cilindro, raio_base, false, false, ke_c, kd_c, ka_c, 10);
+    float rb_pe2 = 5.0f;
+    Cilindro* pe2 = new Cilindro(p2, cb_pe2, dc, H_cilindro, rb_pe2, false, false, ke_c, kd_c, ka_c, 10);
     cenario.adicionarObjeto(pe2);
 
     // pé 3 - cama
-    Ponto cb_pe3(40.0f, -157.5f, -390.0f);
+    Ponto cb_pe3(170.0f, 0.0f, 175.0f);
     Ponto p3 = cb_pe3;
-    float raio_base3 = 5.0f;
-
-    Cilindro* pe3 = new Cilindro(p3, cb_pe3, dc, H_cilindro, raio_base3, false, false, ke_c, kd_c, ka_c, 10);
+    float rb_pe3 = 5.0f;
+    Cilindro* pe3 = new Cilindro(p3, cb_pe3, dc, H_cilindro, rb_pe3, false, false, ke_c, kd_c, ka_c, 10);
     cenario.adicionarObjeto(pe3);
 
     // pé 4 - cama
-    Ponto cb_pe4(-40.0f, -157.5f, -390.0f);
+    Ponto cb_pe4(230.0f, 0.0f, 175.0f);
     Ponto p4 = cb_pe4;
-    float raio_base4 = 5.0f;
-
-    Cilindro* pe4 = new Cilindro(p4, cb_pe4, dc, H_cilindro, raio_base4, false, false, ke_c, kd_c, ka_c, 10);
+    float rb_pe4 = 5.0f;
+    Cilindro* pe4 = new Cilindro(p4, cb_pe4, dc, H_cilindro, rb_pe4, false, false, ke_c, kd_c, ka_c, 10);
     cenario.adicionarObjeto(pe4);
 
+
     // mesa de cabeceira
-    float aresta_mesa = 10.0f;
-    Ponto centro_mesa(120.0f, -90.0f, -300.0f);
+    float aresta_mesa = 30.0f;
+    Ponto centro_mesa(350.0f, 50.0f, 65.0f);
     Cor kd_mesa(0.396f, 0.263f, 0.129f);
     Cor ke_mesa(0.396f, 0.263f, 0.129f);
     Cor ka_mesa(0.396f, 0.263f, 0.129f);
@@ -187,12 +216,12 @@ int main() {
 
     Cubo cubo_mesa;
     Malha* malha_mesa = new Malha(cubo_mesa.criarCubo(centro_mesa, aresta_mesa, ke_mesa, kd_mesa, ka_mesa, m_mesa));
-    malha_mesa->escalar(10.0f, 1.0f, 10.0f);
+    malha_mesa->escalar(3.0f, 0.3f, 3.0f);
     cenario.adicionarObjeto(malha_mesa);
 
     // pé 1 - mesa de cabeceira
     float H_pe_mesa = 60.0f;
-    Ponto cb_pe_mesa1(80.0f, -150.0f, -260.0f);
+    Ponto cb_pe_mesa1(310.0f, 0.0f, 95.0f);
     Ponto p_pe_mesa1 = cb_pe_mesa1;
     float rb_pe_mesa = 5.0f;
     
@@ -200,33 +229,30 @@ int main() {
     cenario.adicionarObjeto(pe_mesa1);
 
     // pé 2 - mesa de cabeceira
-    Ponto cb_pe_mesa2(160.0f, -150.0f, -260.0f);
+    Ponto cb_pe_mesa2(390.0f, 0.0f, 95.0f);
     Ponto p_pe_mesa2 = cb_pe_mesa2;
-
     Cilindro* pe_mesa2 = new Cilindro(p_pe_mesa2, cb_pe_mesa2, dc, H_pe_mesa, rb_pe_mesa, false, false, ke_c, kd_c, ka_c, 10);
     cenario.adicionarObjeto(pe_mesa2);
 
     // pé 3 - mesa de cabeceira
-    Ponto cb_pe_mesa3(80.0f, -150.0f, -340.0f);
+    Ponto cb_pe_mesa3(310.0f, 0.0f, 35.0f);
     Ponto p_pe_mesa3 = cb_pe_mesa3;
-
     Cilindro* pe_mesa3 = new Cilindro(p_pe_mesa3, cb_pe_mesa3, dc, H_pe_mesa, rb_pe_mesa, false, false, ke_c, kd_c, ka_c, 10);
     cenario.adicionarObjeto(pe_mesa3);
 
     // pé 4 - mesa de cabeceira
-    Ponto cb_pe_mesa4(160.0f, -150.0f, -340.0f);
+    Ponto cb_pe_mesa4(390.0f, 0.0f, 35.0f);
     Ponto p_pe_mesa4 = cb_pe_mesa4;
-
     Cilindro* pe_mesa4 = new Cilindro(p_pe_mesa4, cb_pe_mesa4, dc, H_pe_mesa, rb_pe_mesa, false, false, ke_c, kd_c, ka_c, 10);
     cenario.adicionarObjeto(pe_mesa4);
-
+    
     // arvore na mesa
 
     // jarro (cilindro)
-    Ponto cb_jarro(120.0f, -80.0f, -300.0f);
+    Ponto cb_jarro(350.0f, 54.5f, 65.0f);
     Ponto p_jarro = cb_jarro;
     float rb_jarro = 8.0f;
-    float H_jarro_cilindro = 20.0f;
+    float H_jarro_cilindro = 35.0f;
     Cor kd_jarro(0.650f, 0.200f, 0.200f);
     Cor ke_jarro(0.650f, 0.200f, 0.200f);
     Cor ka_jarro(0.650f, 0.200f, 0.200f);
@@ -235,7 +261,7 @@ int main() {
     cenario.adicionarObjeto(jarro_base);
 
     // caule (cilindro)
-    Ponto cb_caule(120.0f, -70.0f, -300.0f);
+    Ponto cb_caule(350.0f, 74.5f, 65.0f);
     Ponto p_caule = cb_caule;
     float rb_caule = 3.0f;
     float H_caule = 30.0f;
@@ -247,7 +273,7 @@ int main() {
     cenario.adicionarObjeto(abajur_caule);
 
     // folhas (cone)
-    Ponto Cb_folhas(120.0f, -50.0f, -300.0f); // centro da base do cone
+    Ponto Cb_folhas(350.0f, 104.5f, 65.0f); // centro da base do cone
     float raio_base_cone = 15.0f;
     float H_cone = 35.0f;
     Vetor d_cone(0.0f, 1.0f, 0.0f);
@@ -262,7 +288,7 @@ int main() {
 
     // estante na parede
     float aresta_estante = 50.0f;
-    Ponto centro_estante(0.0f, 0.0f, -390.0f);
+    Ponto centro_estante(200.0f, 160.0f, 20.0f);
     Cor kd_estante(0.396f, 0.263f, 0.129f);
     Cor ke_estante(0.396f, 0.263f, 0.129f);
     Cor ka_estante(0.396f, 0.263f, 0.129f);
@@ -274,26 +300,34 @@ int main() {
     cenario.adicionarObjeto(malha_estante);
 
     // esferas decorativas na estante
-    float raio_esfera_decorativa = 7.0f;
-    Ponto centro_esfera_decorativa1(-50.0f, 33.0f, -390.0f);
-    Ponto centro_esfera_decorativa2(0.0f, 33.0f, -390.0f);
-    Ponto centro_esfera_decorativa3(50.0f, 33.0f, -390.0f);
-    Cor ke_esfera_decorativa(0.125f, 0.498f, 1.0f);
-    Cor kd_esfera_decorativa(0.125f, 0.498f, 1.0f);
-    Cor ka_esfera_decorativa(0.125f, 0.498f, 1.0f);
-    float m_esfera_decorativa = 10.0f;
+    float raio_esfera = 7.0f;
+    Ponto centro_esfera1(200.0f, 195.0f, 20.0f);
+    Cor ke_esfera1(0.0f, 0.0f, 1.0f);
+    Cor kd_esfera1(0.0f, 0.0f, 1.0f);
+    Cor ka_esfera1(0.0f, 0.0f, 1.0f);
+    float m_esfera1 = 10.0f;
+    Esfera* esfera1 = new Esfera(raio_esfera, centro_esfera1, ke_esfera1, kd_esfera1, ka_esfera1, m_esfera1);
+    cenario.adicionarObjeto(esfera1);
 
-    Esfera* esfera_decorativa1 = new Esfera(raio_esfera_decorativa, centro_esfera_decorativa1, ke_esfera_decorativa, kd_esfera_decorativa, ka_esfera_decorativa, m_esfera_decorativa);
-    cenario.adicionarObjeto(esfera_decorativa1);
+    Ponto centro_esfera2(150.0f, 195.0f, 20.0f);
+    Cor ke_esfera2(1.0f, 1.0f, 0.0f);
+    Cor kd_esfera2(1.0f, 1.0f, 0.0f);
+    Cor ka_esfera2(1.0f, 1.0f, 0.0f);
+    float m_esfera2 = 10.0f;
+    Esfera* esfera2 = new Esfera(raio_esfera, centro_esfera2, ke_esfera2, kd_esfera2, ka_esfera2, m_esfera2);
+    cenario.adicionarObjeto(esfera2);
 
-    Esfera* esfera_decorativa2 = new Esfera(raio_esfera_decorativa, centro_esfera_decorativa2, ke_esfera_decorativa, kd_esfera_decorativa, ka_esfera_decorativa, m_esfera_decorativa);
-    cenario.adicionarObjeto(esfera_decorativa2);
-    
-    Esfera* esfera_decorativa3 = new Esfera(raio_esfera_decorativa, centro_esfera_decorativa3, ke_esfera_decorativa, kd_esfera_decorativa, ka_esfera_decorativa, m_esfera_decorativa);
-    cenario.adicionarObjeto(esfera_decorativa3);
+    Ponto centro_esfera3(250.0f, 195.0f, 20.0f);
+    Cor ke_esfera3(0.0f, 1.0f, 0.0f);
+    Cor kd_esfera3(0.0f, 1.0f, 0.0f);
+    Cor ka_esfera3(0.0f, 1.0f, 0.0f);
+    float m_esfera3 = 10.0f;
+    Esfera* esfera3 = new Esfera(raio_esfera, centro_esfera3, ke_esfera3, kd_esfera3, ka_esfera3, m_esfera3);
+    cenario.adicionarObjeto(esfera3);
+
 
     // lixeira do outro lado da cama (cilindro)
-    Ponto cb_lixeira( -150.0f, -150.0f, -380.0f);
+    Ponto cb_lixeira(20.0f, 1.0f, 20.0f);
     Ponto p_lixeira = cb_lixeira;
     float rb_lixeira = 20.0f;
     float H_lixeira = 40.0f;
@@ -304,6 +338,7 @@ int main() {
     Cilindro* lixeira = new Cilindro(p_lixeira, cb_lixeira, dc, H_lixeira, rb_lixeira, true, false, ke_lixeira, kd_lixeira, ka_lixeira, 10);
     cenario.adicionarObjeto(lixeira);
 
+    /*
     // esfera
     // float raio_esfera = 5.0f;
     // Ponto centro_esfera(0.0f, 95.0f, -200.0f);
@@ -352,7 +387,7 @@ int main() {
 
     // Cubo cubo;
     // Malha* malha = new Malha(cubo.criarCubo(centro_cubo, aresta_cubo, ke_cubo, kd_cubo, ka_cubo, m_cubo));
-    // cenario.adicionarObjeto(malha);
+    // cenario.adicionarObjeto(malha);*/
 
     // renderizar a cena (preenche o canvas)
     cenario.render();
@@ -458,12 +493,13 @@ int main() {
     // delete esfera;
     delete plano_frontal;
     delete plano_chao;
+    delete plano_entrada;
     delete plano_direita;
     delete plano_esquerda;
-    delete plano_teto;
+    // delete plano_teto;
     // delete cilindro;
     // delete cone;
-    delete malha;
+    // delete malha;
     delete camera; // quando não usar, apagar daqui
    
     return 0;
