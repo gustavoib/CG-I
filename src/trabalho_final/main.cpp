@@ -34,20 +34,26 @@ std::string loadShaderSource(const std::string& filepath) {
 
 int main() {   
     // vista padrão
-    Ponto eye(200.0f, 400.0f, 600.0f);
-    Ponto at(200.0f, 200.0f, 200.0f);
-    Vetor up(0.0f, 1.0f, 0.0f);
-    Camera* camera = new Camera(eye, at, up, 400.0f, -200.0f, 200.0f, -200.0f, 200.0f);
-
-    // vista de cima da cena
-    // Ponto eye(200.0f, 800.0f, 300.0f);
-    // Ponto at(200.0f, 0.0f, 300.0f);
-    // Vetor up(0.0f, 0.0f, -1.0f);
+    // Ponto eye(200.0f, 100.0f, 550.0f);
+    // Ponto at(200.0f, 100.0f, 200.0f);
+    // Vetor up(0.0f, 1.0f, 0.0f);
     // Camera* camera = new Camera(eye, at, up, 400.0f, -200.0f, 200.0f, -200.0f, 200.0f);
 
-    // vista lateral
-    // Ponto eye(800.0f, 200.0f, 200.0f);
-    // Ponto at(0.0f, 200.0f, 200.0f);
+    // vista de cima da cena
+    Ponto eye(200.0f, 800.0f, 400.0f);
+    Ponto at(200.0f, 0.0f, 300.0f);
+    Vetor up(0.0f, 0.0f, -1.0f);
+    Camera* camera = new Camera(eye, at, up, 400.0f, -200.0f, 200.0f, -200.0f, 200.0f);
+
+    // vista olhando para a TV
+    // Ponto eye(350.0f, 130.0f, 400.0f);
+    // Ponto at(50.0f, 110.0f, 400.0f);
+    // Vetor up(0.0f, 1.0f, 0.0f);
+    // Camera* camera = new Camera(eye, at, up, 400.0f, -200.0f, 200.0f, -200.0f, 200.0f);
+
+    // olhar para a porta (entrada)
+    // Ponto eye(200.0f, 200.0f, 200.0f);
+    // Ponto at(200.0f, 80.0f, 598.0f);
     // Vetor up(0.0f, 1.0f, 0.0f);
     // Camera* camera = new Camera(eye, at, up, 400.0f, -200.0f, 200.0f, -200.0f, 200.0f);
 
@@ -135,15 +141,25 @@ int main() {
 
     // porta de entrada (cubo)
     float aresta_porta = 80.0f;
-    Ponto centro_porta(200.0f, 40.0f, 590.0f);
+    Ponto centro_porta(200.0f, 40.0f, 598.0f);
     Cor kd_porta(0.545f, 0.271f, 0.075f);
     Cor ke_porta(0.545f, 0.271f, 0.075f);
     Cor ka_porta(0.545f, 0.271f, 0.075f);
     float m_porta = 10.0f;
     Cubo cubo_porta;
     Malha* malha_porta = new Malha(cubo_porta.criarCubo(centro_porta, aresta_porta, ke_porta, kd_porta, ka_porta, m_porta));
-    malha_porta->escalar(1.0f, 2.5f, 0.1f); // para criar a porta
+    malha_porta->escalar(1.5f, 5.0f, 0.1f); // para criar a porta
     cenario.adicionarObjeto(malha_porta);
+
+    // maçaneta da porta (esfera)
+    float raio_macaneta = 5.0f;
+    Ponto centro_macaneta(240.0f, 120.0f, 594.0f);
+    Cor ke_macaneta(0.85f, 0.65f, 0.13f);
+    Cor kd_macaneta(0.85f, 0.65f, 0.13f);
+    Cor ka_macaneta(0.85f, 0.65f, 0.13f);
+    float m_macaneta = 50.0f;
+    Esfera* macaneta = new Esfera(raio_macaneta, centro_macaneta, ke_macaneta, kd_macaneta, ka_macaneta, m_macaneta);
+    cenario.adicionarObjeto(macaneta);
 
     // cama
     float aresta_cubo = 80.0f;
@@ -152,27 +168,25 @@ int main() {
     Cor ke_cubo(1.0f, 0.0f, 0.0f);
     Cor ka_cubo(1.0f, 0.0f, 0.0f);
     float m_cubo = 10.0f;
-
     Cubo cubo;
     Malha* malha = new Malha(cubo.criarCubo(centro_cubo, aresta_cubo, ke_cubo, kd_cubo, ka_cubo, m_cubo));
-    malha->escalar(1.0f, 0.4f, 2.0f); // para criar a cama
+    malha->escalar(1.3f, 0.4f, 2.5f);
     cenario.adicionarObjeto(malha);
 
     // travesseiro
     float aresta_travesseiro = 30.0f;
-    Ponto centro_travesseiro(200.0f, 52.0f, 40.0f);
+    Ponto centro_travesseiro(200.0f, 52.0f, 25.0f);
     Cor kd_travesseiro(1.0f, 1.0f, 1.0f);
     Cor ke_travesseiro(1.0f, 1.0f, 1.0f);
     Cor ka_travesseiro(1.0f, 1.0f, 1.0f);
     float m_travesseiro = 10.0f;
-
     Cubo cubo_travesseiro;
     Malha* malha_travesseiro = new Malha(cubo_travesseiro.criarCubo(centro_travesseiro, aresta_travesseiro, ke_travesseiro, kd_travesseiro, ka_travesseiro, m_travesseiro));
     malha_travesseiro->escalar(2.0f, 0.3f, 1.0f); // para criar o travesseiro
     cenario.adicionarObjeto(malha_travesseiro);
 
     // pé 1 - cama
-    Ponto cb_pe1(170.0f, 0.0f, 20.0f);
+    Ponto cb_pe1(158.0f, 0.0f, 10.0f);
     Ponto p1 = cb_pe1;
     float rb_pe1 = 5.0f;
     float H_cilindro = 40.0f;
@@ -180,31 +194,29 @@ int main() {
     Cor kd_c(0.396f, 0.263f, 0.129f);
     Cor ke_c(0.396f, 0.263f, 0.129f);
     Cor ka_c(0.396f, 0.263f, 0.129f);
-
     Cilindro* pe1 = new Cilindro(p1, cb_pe1, dc, H_cilindro, rb_pe1, false, false, ke_c, kd_c, ka_c, 10);
     cenario.adicionarObjeto(pe1);
 
     // pé 2 - cama
-    Ponto cb_pe2(230.0f, 0.0f, 20.0f);
+    Ponto cb_pe2(242.0f, 0.0f, 10.0f);
     Ponto p2 = cb_pe2;
     float rb_pe2 = 5.0f;
     Cilindro* pe2 = new Cilindro(p2, cb_pe2, dc, H_cilindro, rb_pe2, false, false, ke_c, kd_c, ka_c, 10);
     cenario.adicionarObjeto(pe2);
 
     // pé 3 - cama
-    Ponto cb_pe3(170.0f, 0.0f, 175.0f);
+    Ponto cb_pe3(158.0f, 0.0f, 190.0f);
     Ponto p3 = cb_pe3;
     float rb_pe3 = 5.0f;
     Cilindro* pe3 = new Cilindro(p3, cb_pe3, dc, H_cilindro, rb_pe3, false, false, ke_c, kd_c, ka_c, 10);
     cenario.adicionarObjeto(pe3);
 
     // pé 4 - cama
-    Ponto cb_pe4(230.0f, 0.0f, 175.0f);
+    Ponto cb_pe4(242.0f, 0.0f, 190.0f);
     Ponto p4 = cb_pe4;
     float rb_pe4 = 5.0f;
     Cilindro* pe4 = new Cilindro(p4, cb_pe4, dc, H_cilindro, rb_pe4, false, false, ke_c, kd_c, ka_c, 10);
     cenario.adicionarObjeto(pe4);
-
 
     // mesa de cabeceira
     float aresta_mesa = 30.0f;
@@ -213,7 +225,6 @@ int main() {
     Cor ke_mesa(0.396f, 0.263f, 0.129f);
     Cor ka_mesa(0.396f, 0.263f, 0.129f);
     float m_mesa = 10.0f;
-
     Cubo cubo_mesa;
     Malha* malha_mesa = new Malha(cubo_mesa.criarCubo(centro_mesa, aresta_mesa, ke_mesa, kd_mesa, ka_mesa, m_mesa));
     malha_mesa->escalar(3.0f, 0.3f, 3.0f);
@@ -224,7 +235,6 @@ int main() {
     Ponto cb_pe_mesa1(310.0f, 0.0f, 95.0f);
     Ponto p_pe_mesa1 = cb_pe_mesa1;
     float rb_pe_mesa = 5.0f;
-    
     Cilindro* pe_mesa1 = new Cilindro(p_pe_mesa1, cb_pe_mesa1, dc, H_pe_mesa, rb_pe_mesa, false, false, ke_c, kd_c, ka_c, 10);
     cenario.adicionarObjeto(pe_mesa1);
 
@@ -249,14 +259,13 @@ int main() {
     // arvore na mesa
 
     // jarro (cilindro)
-    Ponto cb_jarro(350.0f, 54.5f, 65.0f);
+    Ponto cb_jarro(350.0f, 60.0f, 65.0f);
     Ponto p_jarro = cb_jarro;
     float rb_jarro = 8.0f;
-    float H_jarro_cilindro = 35.0f;
+    float H_jarro_cilindro = 30.0f;
     Cor kd_jarro(0.650f, 0.200f, 0.200f);
     Cor ke_jarro(0.650f, 0.200f, 0.200f);
     Cor ka_jarro(0.650f, 0.200f, 0.200f);
-    
     Cilindro* jarro_base = new Cilindro(p_jarro, cb_jarro, dc, H_jarro_cilindro, rb_jarro, true, true, ke_jarro, kd_jarro, ka_jarro, 10);
     cenario.adicionarObjeto(jarro_base);
 
@@ -268,7 +277,6 @@ int main() {
     Cor kd_caule(0.396f, 0.263f, 0.129f);
     Cor ke_caule(0.396f, 0.263f, 0.129f);
     Cor ka_caule(0.396f, 0.263f, 0.129f);
-
     Cilindro* abajur_caule = new Cilindro(p_caule, cb_caule, dc, H_caule, rb_caule, false, false, ke_caule, kd_caule, ka_caule, 10);
     cenario.adicionarObjeto(abajur_caule);
 
@@ -282,7 +290,6 @@ int main() {
     Cor ka_cone(0.0f, 0.800f, 0.200f);
     float theta = atan(raio_base_cone/H_cone);
     Ponto ponto_p_cone = Cb_folhas;
-    
     Cone* folhas = new Cone(ponto_p_cone, Cb_folhas, d_cone, theta, H_cone, raio_base_cone, true, ke_cone, kd_cone, ka_cone, 10);
     cenario.adicionarObjeto(folhas);
 
@@ -293,7 +300,6 @@ int main() {
     Cor ke_estante(0.396f, 0.263f, 0.129f);
     Cor ka_estante(0.396f, 0.263f, 0.129f);
     float m_estante = 10.0f;
-
     Cubo cubo_estante;
     Malha* malha_estante = new Malha(cubo_estante.criarCubo(centro_estante, aresta_estante, ke_estante, kd_estante, ka_estante, m_estante));
     malha_estante->escalar(3.0f, 0.1f, 1.0f); // para criar a estante
@@ -325,7 +331,6 @@ int main() {
     Esfera* esfera3 = new Esfera(raio_esfera, centro_esfera3, ke_esfera3, kd_esfera3, ka_esfera3, m_esfera3);
     cenario.adicionarObjeto(esfera3);
 
-
     // lixeira do outro lado da cama (cilindro)
     Ponto cb_lixeira(20.0f, 1.0f, 20.0f);
     Ponto p_lixeira = cb_lixeira;
@@ -334,9 +339,136 @@ int main() {
     Cor kd_lixeira(0.5f, 0.5f, 0.5f);
     Cor ke_lixeira(0.5f, 0.5f, 0.5f);
     Cor ka_lixeira(0.5f, 0.5f, 0.5f);
-
     Cilindro* lixeira = new Cilindro(p_lixeira, cb_lixeira, dc, H_lixeira, rb_lixeira, true, false, ke_lixeira, kd_lixeira, ka_lixeira, 10);
     cenario.adicionarObjeto(lixeira);
+
+    // poltrona na parede direita
+     
+    // braço 1
+    float aresta_braco = 40.0f;
+    Ponto centro_braco1(352.0f, 15.0f, 300.0f);
+    Cor kd_braco(0.7f, 0.3f, 0.4f);
+    Cor ke_braco(0.7f, 0.3f, 0.4f);
+    Cor ka_braco(0.7f, 0.3f, 0.4f);
+    float m_braco = 10.0f;
+    Cubo cubo_braco1;
+    Malha* malha_braco1 = new Malha(cubo_braco1.criarCubo(centro_braco1, aresta_braco, ke_braco, kd_braco, ka_braco, m_braco));
+    malha_braco1->escalar(2.4f, 3.0f, 1.0f);
+    cenario.adicionarObjeto(malha_braco1);
+    
+    // braço 2
+    Ponto centro_braco2(352.0f, 15.0f, 500.0f);
+    Cubo cubo_braco2;
+    Malha* malha_braco2 = new Malha(cubo_braco2.criarCubo(centro_braco2, aresta_braco, ke_braco, kd_braco, ka_braco, m_braco));
+    malha_braco2->escalar(2.4f, 3.0f, 1.0f);
+    cenario.adicionarObjeto(malha_braco2);
+    
+    // assento
+    Ponto centro_assento(400.0f, 10.0f, 400.0f);
+    float aresta_assento = 60.0f;
+    Cubo cubo_assento;
+    Malha* malha_assento = new Malha(cubo_assento.criarCubo(centro_assento, aresta_assento, ke_braco, kd_braco, ka_braco, m_braco));
+    malha_assento->escalar(3.0f, 0.5f, 3.0f);
+    cenario.adicionarObjeto(malha_assento);
+
+    // encosto
+    Ponto centro_encosto(400.0f, 10.0f, 400.0f);
+    float aresta_encosto = 60.0f;
+    Cubo cubo_encosto;
+    Malha* malha_encosto = new Malha(cubo_encosto.criarCubo(centro_encosto, aresta_encosto, ke_braco, kd_braco, ka_braco, m_braco));
+    malha_encosto->escalar(0.7f, 3.0f, 3.0f);
+    cenario.adicionarObjeto(malha_encosto);
+
+    // mesa na parede oposta ao sofá
+    float aresta_mesa_parede = 40.0f;
+    Ponto centro_mesa_parede(50.0f, 80.0f, 400.0f);
+    Cor kd_mesa_parede(0.396f, 0.263f, 0.129f);
+    Cor ke_mesa_parede(0.396f, 0.263f, 0.129f);
+    Cor ka_mesa_parede(0.396f, 0.263f, 0.129f);
+    float m_mesa_parede = 10.0f;
+    Cubo cubo_mesa_parede;
+    Malha* malha_mesa_parede = new Malha(cubo_mesa_parede.criarCubo(centro_mesa_parede, aresta_mesa_parede, ke_mesa_parede, kd_mesa_parede, ka_mesa_parede, m_mesa_parede));
+    malha_mesa_parede->escalar(3.0f, 0.5f, 5.0f);
+    cenario.adicionarObjeto(malha_mesa_parede);
+
+    // suporte 1 pra mesa oposta ao sofá
+    Ponto cb_suporte1(30.0f, 0.0f, 380.0f);
+    Ponto p_suporte1 = cb_suporte1;
+    float rb_suporte = 5.0f;
+    float H_suporte = 90.0f;
+    Cilindro* suporte1 = new Cilindro(p_suporte1, cb_suporte1, dc, H_suporte, rb_suporte, false, false, ke_c, kd_c, ka_c, 10);
+    cenario.adicionarObjeto(suporte1);
+
+    // suporte 2 pra mesa oposta ao sofá
+    Ponto cb_suporte2(70.0f, 0.0f, 380.0f);
+    Ponto p_suporte2 = cb_suporte2;
+    Cilindro* suporte2 = new Cilindro(p_suporte2, cb_suporte2, dc, H_suporte, rb_suporte, false, false, ke_c, kd_c, ka_c, 10);
+    cenario.adicionarObjeto(suporte2);
+    
+    // suporte 3 pra mesa oposta ao sofá
+    Ponto cb_suporte3(30.0f, 0.0f, 420.0f);
+    Ponto p_suporte3 = cb_suporte3;
+    Cilindro* suporte3 = new Cilindro(p_suporte3, cb_suporte3, dc, H_suporte, rb_suporte, false, false, ke_c, kd_c, ka_c, 10);
+    cenario.adicionarObjeto(suporte3);
+    
+    // suporte 4 pra mesa oposta ao sofá
+    Ponto cb_suporte4(70.0f, 0.0f, 420.0f);
+    Ponto p_suporte4 = cb_suporte4;
+    Cilindro* suporte4 = new Cilindro(p_suporte4, cb_suporte4, dc, H_suporte, rb_suporte, false, false, ke_c, kd_c, ka_c, 10);
+    cenario.adicionarObjeto(suporte4);
+
+    // tv em cima da mesa
+    float aresta_tv = 40.0f;
+    Ponto centro_tv(40.0f, 110.0f, 400.0f);
+    Cor kd_tv(0.8f, 0.8f, 0.8f);
+    Cor ke_tv(0.8f, 0.8f, 0.8f);
+    Cor ka_tv(0.8f, 0.8f, 0.8f);
+    float m_tv = 10.0f;
+    Cubo cubo_tv;
+    Malha* malha_tv = new Malha(cubo_tv.criarCubo(centro_tv, aresta_tv, ke_tv, kd_tv, ka_tv, m_tv));
+    malha_tv->escalar(1.0f, 1.5f, 1.5f);
+    cenario.adicionarObjeto(malha_tv);
+
+    float aresta_tv2 = 40.0f;
+    Ponto centro_tv2(50.0f, 110.0f, 400.0f);
+    Cor kd_tv2(0.8f, 0.8f, 0.8f);
+    Cor ke_tv2(0.8f, 0.8f, 0.8f);
+    Cor ka_tv2(0.8f, 0.8f, 0.8f);
+    float m_tv2 = 10.0f;
+    Cubo cubo_tv2;
+    Malha* malha_tv2 = new Malha(cubo_tv2.criarCubo(centro_tv2, aresta_tv2, ke_tv2, kd_tv2, ka_tv2, m_tv2));
+    malha_tv2->escalar(1.0f, 2.0f, 2.0f);
+    cenario.adicionarObjeto(malha_tv2);
+
+    // tela da tv
+    float aresta_tela = 40.0f;
+    Ponto centro_tela(69.0f, 120.0f, 400.0f);
+    Cor kd_tela(0.1f, 0.3f, 0.6f);
+    Cor ke_tela(0.1f, 0.3f, 0.6f);
+    Cor ka_tela(0.1f, 0.3f, 0.6f);
+    float m_tela = 10.0f;
+    Cubo cubo_tela;
+    Malha* malha_tela = new Malha(cubo_tela.criarCubo(centro_tela, aresta_tela, ke_tela, kd_tela, ka_tela, m_tela));
+    malha_tela->escalar(0.1f, 1.0f, 1.5f);
+    cenario.adicionarObjeto(malha_tela);
+
+    // antenas da tv
+    Ponto cb_antena1(58.0f, 155.0f, 395.0f);
+    Ponto p_antena1 = cb_antena1;
+    float rb_antena = 2.0f;
+    float H_antena = 50.0f;
+    Cor kd_ant(0.3f, 0.3f, 0.3f);
+    Cor ke_ant(0.3f, 0.3f, 0.3f);
+    Cor ka_ant(0.3f, 0.3f, 0.3f);
+    Cilindro* antena1 = new Cilindro(p_antena1, cb_antena1, dc, H_antena, rb_antena, false, false, ke_ant, kd_ant, ka_ant, 10);
+    antena1->rotacionarX(-30.0f);
+    cenario.adicionarObjeto(antena1);
+
+    Ponto cb_antena2(58.0f, 155.0f, 405.0f);
+    Ponto p_antena2 = cb_antena2;
+    Cilindro* antena2 = new Cilindro(p_antena2, cb_antena2, dc, H_antena, rb_antena, false, false, ke_ant, kd_ant, ka_ant, 10);
+    antena2->rotacionarX(30.0f);
+    cenario.adicionarObjeto(antena2);
 
     /*
     // esfera
