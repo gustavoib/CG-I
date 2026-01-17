@@ -30,3 +30,15 @@ Vetor Camera::gerarDirecaoRaio(float x, float y) const {
     
     return direcao.normalizado();
 }
+
+Vetor Camera::worldToCamera(Ponto ponto) const {
+    // translação do ponto do mundo em relação ao olho
+    Vetor p = ponto.subPonto(const_cast<Ponto&>(eye));
+    
+    // projeção (Rotação) - usando produto escalar para obter coordenadas na base da câmera
+    float x = p.produtoEscalar(const_cast<Vetor&>(u));
+    float y = p.produtoEscalar(const_cast<Vetor&>(v));
+    float z = p.produtoEscalar(const_cast<Vetor&>(n));
+    
+    return Vetor(x, y, z);
+}

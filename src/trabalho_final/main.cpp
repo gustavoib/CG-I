@@ -34,20 +34,20 @@ std::string loadShaderSource(const std::string& filepath) {
 
 int main() {   
     // vista padrão
-    Ponto eye(200.0f, 600.0f, 580.0f);
-    Ponto at(200.0f, 100.0f, 300.0f);
-    Vetor up(0.0f, 1.0f, 0.0f);
-    Camera* camera = new Camera(eye, at, up, 400.0f, -200.0f, 200.0f, -200.0f, 200.0f);
+    // Ponto eye(200.0f, 600.0f, 580.0f);
+    // Ponto at(200.0f, 100.0f, 300.0f);
+    // Vetor up(0.0f, 1.0f, 0.0f);
+    // Camera* camera = new Camera(eye, at, up, 400.0f, -200.0f, 200.0f, -200.0f, 200.0f);
 
     // vista de cima da cena
-    // Ponto eye(200.0f, 800.0f, 400.0f);
-    // Ponto at(200.0f, 0.0f, 300.0f);
-    // Vetor up(0.0f, 0.0f, -1.0f);
-    // Camera* camera = new Camera(eye, at, up, 300.0f, -200.0f, 200.0f, -200.0f, 200.0f);
+    Ponto eye(200.0f, 800.0f, 400.0f);
+    Ponto at(200.0f, 0.0f, 300.0f);
+    Vetor up(0.0f, 0.0f, -1.0f);
+    Camera* camera = new Camera(eye, at, up, 300.0f, -200.0f, 200.0f, -200.0f, 200.0f);
 
     // vista olhando para a TV
-    // Ponto eye(350.0f, 130.0f, 400.0f);
-    // Ponto at(50.0f, 110.0f, 400.0f);
+    // Ponto eye(350.0f, 130.0f, 330.0f);
+    // Ponto at(50.0f, 110.0f, 330.0f);
     // Vetor up(0.0f, 1.0f, 0.0f);
     // Camera* camera = new Camera(eye, at, up, 400.0f, -200.0f, 200.0f, -200.0f, 200.0f);
 
@@ -469,6 +469,29 @@ int main() {
     Cilindro* antena2 = new Cilindro(p_antena2, cb_antena2, dc, H_antena, rb_antena, false, false, ke_ant, kd_ant, ka_ant, 10);
     antena2->rotacionarX(30.0f);
     cenario.adicionarObjeto(antena2);
+
+    // frigobar ao lado da mesa de parede
+    float aresta_frigobar = 50.0f;
+    Ponto centro_frigobar(33.0f, 0.0f, 250.0f);
+    Cor kd_frigobar(0.915f, 0.915f, 0.915f);
+    Cor ke_frigobar(0.915f, 0.915f, 0.915f);
+    Cor ka_frigobar(0.915f, 0.915f, 0.915f);
+    float m_frigobar = 10.0f;
+    Cubo cubo_frigobar;
+    Malha* malha_frigobar = new Malha(cubo_frigobar.criarCubo(centro_frigobar, aresta_frigobar, ke_frigobar, kd_frigobar, ka_frigobar, m_frigobar));
+    malha_frigobar->escalar(2.0f, 4.0f, 1.5f);
+    cenario.adicionarObjeto(malha_frigobar);
+
+    // puxador da porta do frigobar (cilindro)
+    Ponto cb_puxador(85.0f, 65.0f, 270.0f);
+    Ponto p_puxador = cb_puxador;
+    float rb_puxador = 3.0f;
+    float H_puxador = 20.0f;
+    Cor kd_puxador(0.0f, 0.0f, 0.0f);
+    Cor ke_puxador(0.0f, 0.0f, 0.0f);
+    Cor ka_puxador(0.0f, 0.0f, 0.0f);
+    Cilindro* puxador = new Cilindro(p_puxador, cb_puxador, dc, H_puxador, rb_puxador, true, true, ke_puxador, kd_puxador, ka_puxador, 10);
+    cenario.adicionarObjeto(puxador);
 
     /*
     // esfera
