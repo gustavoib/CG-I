@@ -34,16 +34,16 @@ std::string loadShaderSource(const std::string& filepath) {
 
 int main() {   
     // vista padrão
-    // Ponto eye(200.0f, 100.0f, 550.0f);
-    // Ponto at(200.0f, 100.0f, 200.0f);
-    // Vetor up(0.0f, 1.0f, 0.0f);
-    // Camera* camera = new Camera(eye, at, up, 400.0f, -200.0f, 200.0f, -200.0f, 200.0f);
+    Ponto eye(200.0f, 600.0f, 580.0f);
+    Ponto at(200.0f, 100.0f, 300.0f);
+    Vetor up(0.0f, 1.0f, 0.0f);
+    Camera* camera = new Camera(eye, at, up, 400.0f, -200.0f, 200.0f, -200.0f, 200.0f);
 
     // vista de cima da cena
-    Ponto eye(200.0f, 800.0f, 400.0f);
-    Ponto at(200.0f, 0.0f, 300.0f);
-    Vetor up(0.0f, 0.0f, -1.0f);
-    Camera* camera = new Camera(eye, at, up, 400.0f, -200.0f, 200.0f, -200.0f, 200.0f);
+    // Ponto eye(200.0f, 800.0f, 400.0f);
+    // Ponto at(200.0f, 0.0f, 300.0f);
+    // Vetor up(0.0f, 0.0f, -1.0f);
+    // Camera* camera = new Camera(eye, at, up, 300.0f, -200.0f, 200.0f, -200.0f, 200.0f);
 
     // vista olhando para a TV
     // Ponto eye(350.0f, 130.0f, 400.0f);
@@ -57,9 +57,9 @@ int main() {
     // Vetor up(0.0f, 1.0f, 0.0f);
     // Camera* camera = new Camera(eye, at, up, 400.0f, -200.0f, 200.0f, -200.0f, 200.0f);
 
-    Cor I_F(0.7f, 0.7f, 0.7f);
+    Cor I_F(0.65f, 0.65f, 0.65f);
     Cor I_A(0.3f, 0.3f, 0.3f);
-    Ponto P_F(200.0f, 500.0f, 300.0f);
+    Ponto P_F(200.0f, 500.0f, 250.0f);
     FonteIluminacao fonte(I_F, P_F, I_A);
     
     Cor cor_background(100.0f/255.0f, 100.0f/255.0f, 100.0f/255.0f);
@@ -101,7 +101,7 @@ int main() {
     // plano do chão (y = 0) - normal apontando para cima
     Ponto P_pic(200.0f, 0.0f, 200.0f);
     Vetor n_barc(0.0f, 1.0f, 0.0f); 
-    float m_planoc = 50.0f;
+    float m_planoc = 100.0f;
 
     // plano do teto (y = 400) - normal apontando para baixo
     // Ponto P_pit(200.0f, 400.0f, 200.0f);
@@ -122,7 +122,7 @@ int main() {
     Plano* plano_frontal = new Plano(n_barf, P_pif, ke_planof, kd_planof, ka_planof, m_planof);
     cenario.adicionarObjeto(plano_frontal);
 
-    Plano* plano_chao = new Plano(n_barc, P_pic, texturaMadeira, 0.2f, 0.2f, m_planoc);
+    Plano* plano_chao = new Plano(n_barc, P_pic, texturaMadeira, 1.8f, 1.0f, m_planoc);
     cenario.adicionarObjeto(plano_chao);
 
     Plano* plano_direita = new Plano(n_bard, P_pid, ke_planod, kd_planod, ka_planod, m_planod);
@@ -175,7 +175,7 @@ int main() {
 
     // travesseiro
     float aresta_travesseiro = 30.0f;
-    Ponto centro_travesseiro(200.0f, 52.0f, 25.0f);
+    Ponto centro_travesseiro(200.0f, 50.0f, 25.0f);
     Cor kd_travesseiro(1.0f, 1.0f, 1.0f);
     Cor ke_travesseiro(1.0f, 1.0f, 1.0f);
     Cor ka_travesseiro(1.0f, 1.0f, 1.0f);
@@ -353,14 +353,14 @@ int main() {
     float m_braco = 10.0f;
     Cubo cubo_braco1;
     Malha* malha_braco1 = new Malha(cubo_braco1.criarCubo(centro_braco1, aresta_braco, ke_braco, kd_braco, ka_braco, m_braco));
-    malha_braco1->escalar(2.4f, 3.0f, 1.0f);
+    malha_braco1->escalar(2.4f, 3.0f, 0.8f);
     cenario.adicionarObjeto(malha_braco1);
     
     // braço 2
     Ponto centro_braco2(352.0f, 15.0f, 500.0f);
     Cubo cubo_braco2;
     Malha* malha_braco2 = new Malha(cubo_braco2.criarCubo(centro_braco2, aresta_braco, ke_braco, kd_braco, ka_braco, m_braco));
-    malha_braco2->escalar(2.4f, 3.0f, 1.0f);
+    malha_braco2->escalar(2.4f, 3.0f, 0.8f);
     cenario.adicionarObjeto(malha_braco2);
     
     // assento
@@ -453,7 +453,7 @@ int main() {
     cenario.adicionarObjeto(malha_tela);
 
     // antenas da tv
-    Ponto cb_antena1(58.0f, 155.0f, 395.0f);
+    Ponto cb_antena1(50.0f, 155.0f, 395.0f);
     Ponto p_antena1 = cb_antena1;
     float rb_antena = 2.0f;
     float H_antena = 50.0f;
@@ -464,7 +464,7 @@ int main() {
     antena1->rotacionarX(-30.0f);
     cenario.adicionarObjeto(antena1);
 
-    Ponto cb_antena2(58.0f, 155.0f, 405.0f);
+    Ponto cb_antena2(50.0f, 155.0f, 405.0f);
     Ponto p_antena2 = cb_antena2;
     Cilindro* antena2 = new Cilindro(p_antena2, cb_antena2, dc, H_antena, rb_antena, false, false, ke_ant, kd_ant, ka_ant, 10);
     antena2->rotacionarX(30.0f);
