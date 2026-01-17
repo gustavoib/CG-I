@@ -25,6 +25,9 @@ public:
 
     // gerar um raio a partir das coordenadas da janela
     Vetor gerarDirecaoRaio(float x, float y) const;
+
+    // transformar um ponto do mundo para espaço de câmera
+    Vetor worldToCamera(Ponto ponto) const;
 };
 
 #endif
