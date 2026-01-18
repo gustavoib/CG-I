@@ -20,6 +20,8 @@ class Cenario {
         Cor cor_background;
         int n_col, n_lin;
         std::vector<unsigned char> canvas;
+        ObjetoAbstrato* objetoSelecionado;
+        Ponto pontoSelecionado;
 
         // Construtor original (mantém compatibilidade)
         Cenario(Ponto& olho, Janela& janela, FonteIluminacao& fonte, Cor& background, int n_col, int n_lin);
@@ -30,6 +32,11 @@ class Cenario {
         void adicionarObjeto(ObjetoAbstrato* obj);
         void render();
         void salvarPPM(const std::string& filename);
+
+        bool pick(int mouseX, int mouseY, ObjetoAbstrato*& selecionado, Ponto& pontoImpacto, float& tHit);
+        ObjetoAbstrato* getObjetoSelecionado() const;
+        Ponto getPontoSelecionado() const;
+        void limparSelecao();
 };
 
 #endif

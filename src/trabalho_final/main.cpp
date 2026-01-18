@@ -18,6 +18,24 @@
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
 
+static void mouse_button_callback(GLFWwindow* window, int button, int action, int mods) {
+    if (button == GLFW_MOUSE_BUTTON_LEFT && action == GLFW_PRESS) {
+        double xpos = 0.0, ypos = 0.0;
+        glfwGetCursorPos(window, &xpos, &ypos);
+        Cenario* c = static_cast<Cenario*>(glfwGetWindowUserPointer(window));
+        if (c) {
+            ObjetoAbstrato* obj = nullptr;
+            Ponto Pi(0.0f, 0.0f, 0.0f);
+            float t = 0.0f;
+            if (c->pick(static_cast<int>(xpos), static_cast<int>(ypos), obj, Pi, t)) {
+                std::cout << "Objeto selecionado: " << obj << std::endl;
+            } else {
+                std::cout << "Nenhum objeto selecionado" << std::endl;
+            }
+        }
+    }
+}
+
 // Função para carregar código do shader de arquivo
 std::string loadShaderSource(const std::string& filepath) {
     std::ifstream file(filepath);
@@ -34,10 +52,10 @@ std::string loadShaderSource(const std::string& filepath) {
 
 int main() {   
     // vista padrão
-    // Ponto eye(200.0f, 600.0f, 580.0f);
-    // Ponto at(200.0f, 100.0f, 300.0f);
-    // Vetor up(0.0f, 1.0f, 0.0f);
-    // Camera* camera = new Camera(eye, at, up, 400.0f, -200.0f, 200.0f, -200.0f, 200.0f);
+    Ponto eye(200.0f, 600.0f, 580.0f);
+    Ponto at(200.0f, 100.0f, 300.0f);
+    Vetor up(0.0f, 1.0f, 0.0f);
+    Camera* camera = new Camera(eye, at, up, 400.0f, -200.0f, 200.0f, -200.0f, 200.0f);
 
     // vista de cima da cena
     // Ponto eye(200.0f, 800.0f, 400.0f);
@@ -46,10 +64,10 @@ int main() {
     // Camera* camera = new Camera(eye, at, up, 300.0f, -200.0f, 200.0f, -200.0f, 200.0f);
 
     // vista olhando para a TV
-    Ponto eye(350.0f, 130.0f, 330.0f);
-    Ponto at(50.0f, 110.0f, 330.0f);
-    Vetor up(0.0f, 1.0f, 0.0f);
-    Camera* camera = new Camera(eye, at, up, 400.0f, -200.0f, 200.0f, -200.0f, 200.0f);
+    // Ponto eye(350.0f, 130.0f, 330.0f);
+    // Ponto at(50.0f, 110.0f, 330.0f);
+    // Vetor up(0.0f, 1.0f, 0.0f);
+    // Camera* camera = new Camera(eye, at, up, 400.0f, -200.0f, 200.0f, -200.0f, 200.0f);
 
     // olhar para a porta (entrada)
     // Ponto eye(200.0f, 200.0f, 200.0f);
@@ -493,57 +511,6 @@ int main() {
     Cilindro* puxador = new Cilindro(p_puxador, cb_puxador, dc, H_puxador, rb_puxador, true, true, ke_puxador, kd_puxador, ka_puxador, 10);
     cenario.adicionarObjeto(puxador);
 
-    /*
-    // esfera
-    // float raio_esfera = 5.0f;
-    // Ponto centro_esfera(0.0f, 95.0f, -200.0f);
-    // Cor ke_esfera(0.854f, 0.647f, 0.125f);
-    // Cor kd_esfera(0.854f, 0.647f, 0.125f);
-    // Cor ka_esfera(0.854f, 0.647f, 0.125f);
-    // float m_esfera = 10.0f;
-    
-    // Esfera* esfera = new Esfera(raio_esfera, centro_esfera, ke_esfera, kd_esfera, ka_esfera, m_esfera);
-    // cenario.adicionarObjeto(esfera);
-
-    // cilindro
-    // Ponto centro_base(0.0f, -150.0f, -200.0f);
-    // Ponto ponto_p = centro_base;
-    // float raio_base = 5.0f;
-    // float H_cilindro = 90.0f;
-    // Vetor dc(0.0f, 1.0f, 0.0f);
-    // Cor kd_c(0.824f, 0.706f, 0.549f);
-    // Cor ke_c(0.824f, 0.706f, 0.549f);
-    // Cor ka_c(0.824f, 0.706f, 0.549f);
-
-    // Cilindro* cilindro = new Cilindro(ponto_p, centro_base, dc, H_cilindro, raio_base, false, false, ke_c, kd_c, ka_c, 10);
-    // cenario.adicionarObjeto(cilindro);
-
-    // cone
-    // Ponto Cb(0.0f, -60.0f, -200.0f); // centro da base do cone
-    // float raio_base_cone = 90.0f;
-    // float H_cone = 150.0f;
-    // Vetor d_cone(0.0f, 1.0f, 0.0f);
-    // Cor kd_cone(0.0f, 1.0f, 0.498f);
-    // Cor ke_cone(0.0f, 1.0f, 0.498f);
-    // Cor ka_cone(0.0f, 1.0f, 0.498f);
-    // float theta = atan(raio_base_cone/H_cone);
-    // Ponto ponto_p_cone = Cb;
-
-    // Cone* cone = new Cone(ponto_p_cone, Cb, d_cone, theta, H_cone, raio_base_cone, false, ke_cone, kd_cone, ka_cone, 10);
-    // cenario.adicionarObjeto(cone);
-
-    // cubo
-    // float aresta_cubo = 40.0f;
-    // Ponto centro_cubo(0.0f, -150.0f, -165.0f);
-    // Cor kd_cubo(1.0f, 0.078f, 0.576f);
-    // Cor ke_cubo(1.0f, 0.078f, 0.576f);
-    // Cor ka_cubo(1.0f, 0.078f, 0.576f);
-    // float m_cubo = 10.0f;
-
-    // Cubo cubo;
-    // Malha* malha = new Malha(cubo.criarCubo(centro_cubo, aresta_cubo, ke_cubo, kd_cubo, ka_cubo, m_cubo));
-    // cenario.adicionarObjeto(malha);*/
-
     // renderizar a cena (preenche o canvas)
     cenario.render();
 
@@ -562,6 +529,8 @@ int main() {
         return -1;
     }
     glfwMakeContextCurrent(window);
+    glfwSetWindowUserPointer(window, &cenario);
+    glfwSetMouseButtonCallback(window, mouse_button_callback);
 
     // inicializar GLAD
     if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress)) {

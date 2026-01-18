@@ -10,7 +10,7 @@ Cenario::Cenario(Ponto& olho, Janela& janela, FonteIluminacao& fonte, Cor& backg
 
 // construtor para câmera
 Cenario::Cenario(Camera* camera, FonteIluminacao& fonte, Cor& background, int n_col, int n_lin)
-    : olho(camera->eye), janela(0, 0, camera->d), camera(camera), fonte(fonte), cor_background(background), n_col(n_col), n_lin(n_lin), canvas(n_col * n_lin * 3) {}
+    : olho(camera->eye), janela(0, 0, camera->d), camera(camera), fonte(fonte), cor_background(background), n_col(n_col), n_lin(n_lin), canvas(n_col * n_lin * 3), objetoSelecionado(nullptr), pontoSelecionado(0.0f, 0.0f, 0.0f) {}
 
 void Cenario::adicionarObjeto(ObjetoAbstrato* obj) {
     objetos.push_back(obj);
@@ -138,4 +138,51 @@ void Cenario::render() {
             }
         }
     }
+}
+
+bool Cenario::pick(int mouseX, int mouseY, ObjetoAbstrato*& selecionado, Ponto& pontoImpacto, float& tHit) {
+    selecionado = nullptr;
+    tHit = std::numeric_limits<float>::max();
+
+    if (camera == nullptr) {
+        return false;
+    }
+
+    float delta_x = (camera->xmax - camera->xmin) / n_col;
+    float delta_y = (camera->ymax - camera->ymin) / n_lin;
+
+    float x = camera->xmin + delta_x / 2.0f + static_cast<float>(mouseX) * delta_x;
+    float y = camera->ymax - delta_y / 2.0f - static_cast<float>(mouseY) * delta_y;
+
+    Vetor d = camera->gerarDirecaoRaio(x, y);
+    Raio raio(camera->eye, d);
+
+    for (ObjetoAbstrato* obj : objetos) {
+        float t;
+        if (obj->intersecao(raio, t) && t > 0.0f && t < tHit) {
+            tHit = t;
+            selecionado = obj;
+        }
+    }
+
+    if (selecionado != nullptr) {
+        pontoImpacto = raio.equacaoRaio(tHit);
+        objetoSelecionado = selecionado;
+        pontoSelecionado = pontoImpacto;
+        return true;
+    }
+    return false;
+}
+
+ObjetoAbstrato* Cenario::getObjetoSelecionado() const {
+    return objetoSelecionado;
+}
+
+Ponto Cenario::getPontoSelecionado() const {
+    return pontoSelecionado;
+}
+
+void Cenario::limparSelecao() {
+    objetoSelecionado = nullptr;
+    pontoSelecionado = Ponto(0.0f, 0.0f, 0.0f);
 }

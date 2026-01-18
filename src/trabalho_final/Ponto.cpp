@@ -1,5 +1,7 @@
-#include "Ponto.h"
-#include "Matriz.h"
+#include "../trabalho_final/include/Ponto.h"
+#include "../trabalho_final/include/Matriz.h"
+
+Ponto::Ponto() : x(0.0f), y(0.0f), z(0.0f) {}
 
 Ponto::Ponto(float x, float y, float z) : x(x), y(y), z(z) {}
 
