@@ -31,6 +31,7 @@ Vetor Camera::gerarDirecaoRaio(float x, float y) const {
     return direcao.normalizado();
 }
 
+// foi, bia
 Vetor Camera::worldToCamera(Ponto ponto) const {
     // translação do ponto do mundo em relação ao olho
     Vetor p = ponto.subPonto(const_cast<Ponto&>(eye));
