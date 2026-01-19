@@ -23,13 +23,13 @@ public:
     Plano(Vetor& n, Ponto& p, std::shared_ptr<Textura> tex, float escalaU, float escalaV, float m);
 
     bool intersecao(Raio& raio, float& t) override;
-    Cor calcularIluminacao(Ponto& Pi, Vetor& direcao_raio, FonteIluminacao& fonte) override;
+    Vetor calcularNormal(Ponto& Pi, Vetor& direcao_raio) override;
+    Cor obterCorDifusa(Ponto& pontoIntersecao) override;
     
     void setTextura(std::shared_ptr<Textura> tex, float escU = 1.0f, float escV = 1.0f);
     
 private:
     void calcularUV(Ponto& p, float& u, float& v);
-    Cor obterCorDifusa(Ponto& pontoIntersecao);
 };
 
 #endif

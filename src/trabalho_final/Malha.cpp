@@ -139,34 +139,15 @@ bool Malha::intersecao(Raio& raio, float& t) {
     return temIntersecao;
 }
 
-Cor Malha::calcularIluminacao(Ponto& Pi, Vetor& direcao_raio, FonteIluminacao& fonte) {
+Vetor Malha::calcularNormal(Ponto& /*Pi*/, Vetor& direcao_raio) {
     Vetor normal = normalIntersecao;
 
     // teste que o monitor ensinou
     if (normal.produtoEscalar(direcao_raio) > 0) {
         normal = normal.vetorNegativo();
     }
-
-    // Vetor da luz e do observador
-    Vetor l = fonte.P_F.subPonto(Pi).normalizado();
-    Vetor v = direcao_raio.vetorNegativo();
-
-    float produto_nl = max(0.0f, normal.produtoEscalar(l));
-    Vetor r = normal.multiEscalar(2.0f * produto_nl).subVetor(l).normalizado();
-
-    Cor IFKd = fonte.I_F.multiComponente(Kd);
-    Cor IFKe = fonte.I_F.multiComponente(Ke);
-
-    Cor I_d = IFKd.multiEscalar(produto_nl);
-    float produto_vr = max(0.0f, v.produtoEscalar(r));
-    Cor I_e = IFKe.multiEscalar(pow(produto_vr, m));
-
-    Cor I_a = fonte.I_A.multiComponente(Ka);
-
-    Cor IE = I_d.somarCor(I_e).somarCor(I_a);
-    IE.limitar();
-
-    return IE;
+    
+    return normal;
 }
 
 void Malha::aplicarTransformacao(const Matriz& m_pontos, const Matriz& m_normais) {

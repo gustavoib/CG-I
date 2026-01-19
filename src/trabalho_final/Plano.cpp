@@ -1,5 +1,5 @@
-#include "../tarefa_5/include/Plano.h"
-#include "../tarefa_5/include/Textura.h"
+#include "../trabalho_final/include/Plano.h"
+#include "../trabalho_final/include/Textura.h"
 #include <cmath>
 #include <algorithm>
 #include <memory>
@@ -71,33 +71,8 @@ Cor Plano::obterCorDifusa(Ponto& pontoIntersecao) {
     return Kd;
 }
 
-Cor Plano::calcularIluminacao(Ponto& Pi, Vetor& direcao_raio, FonteIluminacao& fonte) {
-    Vetor vetor_n = n;
-    
-    Vetor v = direcao_raio.vetorNegativo();
-    
-    Vetor l = fonte.P_F.subPonto(Pi).normalizado();
-    
-    float produto_nl_limitado = max(0.0f, vetor_n.produtoEscalar(l));
-    Vetor r = vetor_n.multiEscalar(2.0f * produto_nl_limitado).subVetor(l);
-    
-    Cor corDifusa = obterCorDifusa(Pi);
-    
-    Cor IFKd = fonte.I_F.multiComponente(corDifusa);
-    Cor I_d = IFKd.multiEscalar(produto_nl_limitado);
-
-    Cor IFKe = fonte.I_F.multiComponente(Ke);    
-    float produto_vr = max(0.0f, v.produtoEscalar(r));
-    Cor I_e = IFKe.multiEscalar(pow(produto_vr, this->m));
-
-    Cor I_a = fonte.I_A.multiComponente(Ka);
-    
-    Cor IdIe = I_d.somarCor(I_e);
-    Cor IE = IdIe.somarCor(I_a);
-    
-    IE.limitar();
-    
-    return IE;
+Vetor Plano::calcularNormal(Ponto& /*Pi*/, Vetor& /*direcao_raio*/) {
+    return n;
 }
 
 void Plano::setTextura(std::shared_ptr<Textura> tex, float escU, float escV) {

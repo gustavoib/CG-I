@@ -124,7 +124,7 @@ bool Cilindro::intersecao(Raio& raio, float& t) {
     return false;
 }
 
-Cor Cilindro::calcularIluminacao(Ponto& Pi, Vetor& direcao_raio, FonteIluminacao& fonte) {
+Vetor Cilindro::calcularNormal(Ponto& Pi, Vetor& direcao_raio) {
     Vetor Pi_B = Pi.subPonto(B);                
     float proj = Pi_B.produtoEscalar(u);
     
@@ -146,30 +146,8 @@ Cor Cilindro::calcularIluminacao(Ponto& Pi, Vetor& direcao_raio, FonteIluminacao
     if ((!temBase || !temTopo) && n.produtoEscalar(direcao_raio) > 0) {
         n = n.vetorNegativo();
     }
-
-    Vetor P_F_minus_Pi = fonte.P_F.subPonto(Pi);
-    Vetor l = P_F_minus_Pi.normalizado();
-    Vetor v = direcao_raio.vetorNegativo();
-
-    float produto_nl = n.produtoEscalar(l);
-    Vetor r = n.multiEscalar(2.0f * produto_nl).subVetor(l);
-
-    Cor IFKd = fonte.I_F.multiComponente(Kd);
-    Cor IFKe = fonte.I_F.multiComponente(Ke);
-    Cor I_a = fonte.I_A.multiComponente(Ka);
-
-    float produto_nl_limitado = max(0.0f, produto_nl);
-    Cor I_d = IFKd.multiEscalar(produto_nl_limitado);
-
-    float produto_vr_limitado = max(0.0f, v.produtoEscalar(r));
-    float vrm = pow(produto_vr_limitado, this->m);
-    Cor I_e = IFKe.multiEscalar(vrm);
-
-    Cor IdIe = I_d.somarCor(I_e);
-    Cor IE = IdIe.somarCor(I_a);
-    IE.limitar();
-
-    return IE;
+    
+    return n;
 }
 
 void Cilindro::aplicarTransformacao(const Matriz& transformacao) {

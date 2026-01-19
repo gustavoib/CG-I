@@ -40,7 +40,7 @@ class Malha : public ObjetoAbstrato {
         void cisalharYZ(float shy, float shz);
 
         bool intersecao(Raio& raio, float& t) override;
-        Cor calcularIluminacao(Ponto& Pi, Vetor& direcao_raio, FonteIluminacao& fonte) override;
+        Vetor calcularNormal(Ponto& Pi, Vetor& direcao_raio) override;
 };
 
 #endif

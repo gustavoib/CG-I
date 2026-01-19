@@ -19,7 +19,7 @@ class Cone: public ObjetoAbstrato {
         Cone(Ponto& P, Ponto& Cb, Vetor& n, float theta, float H, float R, bool temBase, Cor& ke, Cor& kd, Cor& ka, float m);
         
         bool intersecao(Raio& raio, float& t) override;
-        Cor calcularIluminacao(Ponto& Pi, Vetor& direcao_raio, FonteIluminacao& fonte) override;
+        Vetor calcularNormal(Ponto& Pi, Vetor& direcao_raio) override;
 
         Ponto calcularCentro();
         void aplicarTransformacao(const Matriz& transformacao);

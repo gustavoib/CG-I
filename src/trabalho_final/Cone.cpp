@@ -84,7 +84,7 @@ bool Cone::intersecao(Raio& raio, float& t) {
     return false;
 }
 
-Cor Cone::calcularIluminacao(Ponto& Pi, Vetor& direcao_raio, FonteIluminacao& fonte) {
+Vetor Cone::calcularNormal(Ponto& Pi, Vetor& direcao_raio) {
     Ponto vertice = Cb.somarVetor(n.multiEscalar(H));
     Vetor Pi_Cb = Pi.subPonto(Cb);
     float proj = Pi_Cb.produtoEscalar(n);
@@ -114,37 +114,15 @@ Cor Cone::calcularIluminacao(Ponto& Pi, Vetor& direcao_raio, FonteIluminacao& fo
             }
         }
     }
-
-    Vetor P_F_minus_Pi = fonte.P_F.subPonto(Pi);
-    Vetor l = P_F_minus_Pi.normalizado();
-    Vetor v = direcao_raio.vetorNegativo();
-
-    float produto_nl = normal.produtoEscalar(l);
-    Vetor r = normal.multiEscalar(2.0f * produto_nl).subVetor(l);
-
-    Cor IFKd = fonte.I_F.multiComponente(Kd);
-    Cor IFKe = fonte.I_F.multiComponente(Ke);
-    Cor I_a = fonte.I_A.multiComponente(Ka);
-
-    float produto_nl_limitado = max(0.0f, produto_nl);
-    Cor I_d = IFKd.multiEscalar(produto_nl_limitado);
-
-    float produto_vr_limitado = max(0.0f, v.produtoEscalar(r));
-    float vrm = pow(produto_vr_limitado, this->m);
-    Cor I_e = IFKe.multiEscalar(vrm);
-
-    Cor IdIe = I_d.somarCor(I_e);
-    Cor IE = IdIe.somarCor(I_a);
-    IE.limitar();
-
-    return IE;
+    
+    return normal;
 }
 
 void Cone::aplicarTransformacao(const Matriz& transformacao) {
     P = P.aplicarTransformacao(transformacao);
     Cb = Cb.aplicarTransformacao(transformacao);
     
-    // Transformar o vetor direção (usar matriz inversa transposta)
+    // transformar o vetor direção (usar matriz inversa transposta)
     Matriz normal_transform = Matriz::transposta(Matriz::inversa(transformacao));
     n = n.aplicarTransformacao(normal_transform).normalizado();
 }

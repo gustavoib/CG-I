@@ -14,7 +14,7 @@ class Esfera : public ObjetoAbstrato {
         Esfera(float raio, Ponto& centro, Cor& ke, Cor& kd, Cor& ka, float m);
         
         bool intersecao(Raio& raio, float& t) override;
-        Cor calcularIluminacao(Ponto& Pi, Vetor& direcao_raio, FonteIluminacao& fonte) override;
+        Vetor calcularNormal(Ponto& Pi, Vetor& direcao_raio) override;
         
         Ponto calcularCentro();
         void aplicarTransformacao(const Matriz& transformacao);
