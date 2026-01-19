@@ -28,6 +28,19 @@ public:
 
     // transformar um ponto do mundo para espaço de câmera
     Vetor worldToCamera(Ponto ponto) const;
+
+    // setter e getter para eye
+    void setEye(const Ponto& newEye) { eye = newEye; }
+    Ponto getEye() const { return eye; }
+
+    // setter e getter para at
+    void setAt(const Ponto& newAt) { at = newAt; }
+    Ponto getAt() const { return at; }
+
+    // setter e getter para up
+    void setUp(const Vetor& newUp) { up = newUp; }
+    Vetor getUp() const { return up; }
+    
 };
 
 #endif

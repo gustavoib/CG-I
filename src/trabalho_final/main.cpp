@@ -11,12 +11,16 @@
 #include "../trabalho_final/include/Cubo.h"
 #include "../trabalho_final/include/Textura.h"
 #include "../trabalho_final/include/Matriz.h"
+#include "../trabalho_final/include/Menu.h"
 #include <fstream>
 #include <sstream>
 #include <iostream>
 #include <cmath>
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
+#include "../../../include/imgui/imgui.h"
+#include "../../../include/imgui/imgui_impl_glfw.h"
+#include "../../../include/imgui/imgui_impl_opengl3.h"
 
 static void mouse_button_callback(GLFWwindow* window, int button, int action, int mods) {
     if (button == GLFW_MOUSE_BUTTON_LEFT && action == GLFW_PRESS) {
@@ -588,8 +592,29 @@ int main() {
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 
+    IMGUI_CHECKVERSION();
+    ImGui::CreateContext();
+    ImGui_ImplGlfw_InitForOpenGL(window, true);
+    ImGui_ImplOpenGL3_Init("#version 330");
+
+    Menu menu;
+    menu.setCamera(camera);
+
     // manter janela aberta até o usuário fechá-la
     while (!glfwWindowShouldClose(window)) {
+        ImGui_ImplOpenGL3_NewFrame();
+        ImGui_ImplGlfw_NewFrame();
+        ImGui::NewFrame();
+        
+        menu.renderizar();  // Chamada do seu menu
+
+        if (menu.needsRerender()) {
+            cenario.render();
+            glBindTexture(GL_TEXTURE_2D, texture);
+            glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, cenario.n_col, cenario.n_lin, GL_RGB, GL_UNSIGNED_BYTE, cenario.canvas.data());
+            menu.clearRerenderFlag();
+        }
+
         // processar entrada
         if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
             glfwSetWindowShouldClose(window, true);
@@ -600,6 +625,9 @@ int main() {
         glBindTexture(GL_TEXTURE_2D, texture);
         glBindVertexArray(VAO);
         glDrawArrays(GL_TRIANGLES, 0, 6);
+
+        ImGui::Render();
+        ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 
         glfwSwapBuffers(window);
         glfwPollEvents();
