@@ -26,18 +26,18 @@ class Malha : public ObjetoAbstrato {
 
         void aplicarTransformacao(const Matriz& m_pontos, const Matriz& m_normais);
         Ponto calcularCentro();
-        void escalar(float sx, float sy, float sz);
-        void transladar(float tx, float ty, float tz);
-        void rotacionarX(float angulo);
-        void rotacionarY(float angulo);
-        void rotacionarZ(float angulo);
+        void escalar(float sx, float sy, float sz) override;
+        void transladar(float tx, float ty, float tz) override;
+        void rotacionarX(float angulo) override;
+        void rotacionarY(float angulo) override;
+        void rotacionarZ(float angulo) override;
         void rotacionarArbitrario(const Vetor& eixo, float angulo);
         void espelharXY();
         void espelharXZ();
         void espelharYZ();
-        void cisalharXY(float shx, float shy);
-        void cisalharXZ(float shx, float shz);
-        void cisalharYZ(float shy, float shz);
+        void cisalharXY(float shx, float shy) override;
+        void cisalharXZ(float shx, float shz) override;
+        void cisalharYZ(float shy, float shz) override;
 
         bool intersecao(Raio& raio, float& t) override;
         Vetor calcularNormal(Ponto& Pi, Vetor& direcao_raio) override;

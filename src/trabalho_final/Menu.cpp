@@ -1,4 +1,6 @@
 #include "include/Menu.h"
+#include "include/Cenario.h"
+#include "include/Vetor.h"
 
 Menu::Menu() : m_mostrar(true), camera(nullptr), rerenderRequested(false), buffersInitialized(false) {
 }
@@ -11,7 +13,7 @@ void Menu::renderizar() {
     
     ImGui::Begin("Configurações");
 
-    // Inicializar buffers a partir da câmera apenas uma vez
+    // inicializar buffers a partir da câmera apenas uma vez
     if (!buffersInitialized) {
         Ponto eyeInit = camera->getEye();
         Ponto atInit  = camera->getAt();
@@ -19,18 +21,158 @@ void Menu::renderizar() {
         eyeBuf[0] = eyeInit.x; eyeBuf[1] = eyeInit.y; eyeBuf[2] = eyeInit.z;
         atBuf [0] = atInit.x;  atBuf [1] = atInit.y;  atBuf [2] = atInit.z;
         upBuf [0] = upInit.x;  upBuf [1] = upInit.y;  upBuf [2] = upInit.z;
+        dBuf = camera->getD();
+        xminBuf = camera->getXmin();
+        xmaxBuf = camera->getXmax();
+        yminBuf = camera->getYmin();
+        ymaxBuf = camera->getYmax();
+        
+        if (fonteIluminacao) {
+            Ponto fontePos = fonteIluminacao->getPosicao();
+            fontePosicaoBuf[0] = fontePos.x;
+            fontePosicaoBuf[1] = fontePos.y;
+            fontePosicaoBuf[2] = fontePos.z;
+        }
+        
         buffersInitialized = true;
     }
 
-    ImGui::InputFloat3("Eye", eyeBuf, "%.2f");
-    ImGui::InputFloat3("At",  atBuf,  "%.2f");
-    ImGui::InputFloat3("Up",  upBuf,  "%.2f");
+    if (ImGui::CollapsingHeader("Câmera")) {
+        ImGui::InputFloat3("Eye", eyeBuf, "%.2f");
+        ImGui::InputFloat3("At",  atBuf,  "%.2f");
+        ImGui::InputFloat3("Up",  upBuf,  "%.2f");
+    }
+
+    if (ImGui::CollapsingHeader("Projeção")) {
+        ImGui::InputFloat("D", &dBuf, 0.0f, 0.0f, "%.2f");
+        ImGui::InputFloat("Xmin", &xminBuf, 0.0f, 0.0f, "%.2f");
+        ImGui::InputFloat("Xmax", &xmaxBuf, 0.0f, 0.0f, "%.2f");
+        ImGui::InputFloat("Ymin", &yminBuf, 0.0f, 0.0f, "%.2f");
+        ImGui::InputFloat("Ymax", &ymaxBuf, 0.0f, 0.0f, "%.2f");
+    }
+
+    if (ImGui::CollapsingHeader("Iluminação")) {
+        ImGui::InputFloat3("Pontual", fontePosicaoBuf, "%.2f");
+    }
+
+    if (ImGui::CollapsingHeader("Objeto Selecionado")) {
+        if (cenario && cenario->getObjetoSelecionado()) {
+            ObjetoAbstrato* obj = cenario->getObjetoSelecionado();
+            Ponto ponto = cenario->getPontoSelecionado();
+            
+            ImGui::Text("Objeto: %p", (void*)obj);
+            ImGui::Text("Ponto: (%.2f, %.2f, %.2f)", ponto.x, ponto.y, ponto.z);
+            ImGui::TextColored(ImVec4(0.0f, 1.0f, 0.0f, 1.0f), "Objeto selecionado");
+            ImGui::Separator();
+            
+            // Inicializar buffers de cores apenas quando um novo objeto é selecionado
+            if (obj != objetoSelecionadoAnterior) {
+                corKeBuf[0] = obj->Ke.r; corKeBuf[1] = obj->Ke.g; corKeBuf[2] = obj->Ke.b;
+                corKdBuf[0] = obj->Kd.r; corKdBuf[1] = obj->Kd.g; corKdBuf[2] = obj->Kd.b;
+                corKaBuf[0] = obj->Ka.r; corKaBuf[1] = obj->Ka.g; corKaBuf[2] = obj->Ka.b;
+                objetoSelecionadoAnterior = obj;
+            }
+            
+            if (ImGui::CollapsingHeader("Cores")) {
+                ImGui::ColorEdit3("Ke", corKeBuf);
+                ImGui::ColorEdit3("Kd", corKdBuf);
+                ImGui::ColorEdit3("Ka", corKaBuf);
+                if (ImGui::Button("Aplicar Cores")) {
+                    obj->Ke = Cor(corKeBuf[0], corKeBuf[1], corKeBuf[2]);
+                    obj->Kd = Cor(corKdBuf[0], corKdBuf[1], corKdBuf[2]);
+                    obj->Ka = Cor(corKaBuf[0], corKaBuf[1], corKaBuf[2]);
+                    rerenderRequested = true;
+                }
+            }
+            
+            if (ImGui::CollapsingHeader("Transformações")) {
+                translacaoBuf[0] = obj->getCentro().x;
+                translacaoBuf[1] = obj->getCentro().y;
+                translacaoBuf[2] = obj->getCentro().z;
+                
+                // Translação
+                ImGui::InputFloat3("Translação", translacaoBuf, "%.2f");
+                if (ImGui::Button("Aplicar Translação")) {
+                    obj->transladar(translacaoBuf[0], translacaoBuf[1], translacaoBuf[2]);
+                    rerenderRequested = true;
+                }
+                
+                ImGui::Spacing();
+                
+                // escala
+                ImGui::InputFloat3("Escala", escalaBuf, "%.2f");
+                if (ImGui::Button("Aplicar Escala")) {
+                    obj->escalar(escalaBuf[0], escalaBuf[1], escalaBuf[2]);
+                    rerenderRequested = true;
+                }
+                
+                ImGui::Spacing();
+                
+                // rotação
+                const char* eixos[] = { "X", "Y", "Z" };
+                ImGui::Combo("Eixo", &eixoRotacao, eixos, 3);
+                ImGui::InputFloat("Ângulo (graus)", &rotacaoBuf, 0.0f, 0.0f, "%.1f");
+                if (ImGui::Button("Aplicar Rotação")) {
+                    if (eixoRotacao == 0) obj->rotacionarX(rotacaoBuf);
+                    else if (eixoRotacao == 1) obj->rotacionarY(rotacaoBuf);
+                    else obj->rotacionarZ(rotacaoBuf);
+                    rerenderRequested = true;
+                }
+                
+                ImGui::Spacing();
+                
+                // rotação Arbitrária
+                ImGui::Text("Rotação Arbitrária:");
+                ImGui::InputFloat3("Eixo (vetor)", eixoArbitrarioBuf, "%.2f");
+                ImGui::InputFloat("Ângulo (graus)##arb", &anguloArbitrarioBuf, 0.0f, 0.0f, "%.1f");
+                if (ImGui::Button("Aplicar Rotação Arbitrária")) {
+                    Vetor eixo(eixoArbitrarioBuf[0], eixoArbitrarioBuf[1], eixoArbitrarioBuf[2]);
+                    obj->rotacionarArbitrario(eixo, anguloArbitrarioBuf);
+                    rerenderRequested = true;
+                }
+                
+                ImGui::Spacing();
+                
+                // cisalhamento
+                const char* planos[] = { "XY", "XZ", "YZ" };
+                ImGui::Combo("Plano", &planoCisalhamento, planos, 3);
+                ImGui::InputFloat2("Cisalhamento", cisalhamentoBuf, "%.2f");
+                if (ImGui::Button("Aplicar Cisalhamento")) {
+                    if (planoCisalhamento == 0) obj->cisalharXY(cisalhamentoBuf[0], cisalhamentoBuf[1]);
+                    else if (planoCisalhamento == 1) obj->cisalharXZ(cisalhamentoBuf[0], cisalhamentoBuf[1]);
+                    else obj->cisalharYZ(cisalhamentoBuf[0], cisalhamentoBuf[1]);
+                    rerenderRequested = true;
+                }
+            }
+            
+            ImGui::Separator();
+                        if (ImGui::Button("Limpar Seleção")) {
+                cenario->limparSelecao();
+                objetoSelecionadoAnterior = nullptr; // resetar flag de seleção
+            }
+        } else {
+            ImGui::Text("Nenhum objeto selecionado");
+            ImGui::Text("Clique na cena para selecionar");
+        }
+    }
+
+    ImGui::Separator();
 
     if (ImGui::Button("Confirmar")) {
         camera->setEye(Ponto(eyeBuf[0], eyeBuf[1], eyeBuf[2]));
         camera->setAt (Ponto(atBuf[0],  atBuf[1],  atBuf[2]));
         camera->setUp (Vetor(upBuf[0],  upBuf[1],  upBuf[2]));
+        camera->setD(dBuf);
+        camera->setXmin(xminBuf);
+        camera->setXmax(xmaxBuf);
+        camera->setYmin(yminBuf);
+        camera->setYmax(ymaxBuf);
         camera->calcularSistemaCoordenadasCamera(); // recalc n,u,v
+        
+        if (fonteIluminacao) {
+            fonteIluminacao->setPosicao(Ponto(fontePosicaoBuf[0], fontePosicaoBuf[1], fontePosicaoBuf[2]));
+        }
+        
         rerenderRequested = true;
     }
     

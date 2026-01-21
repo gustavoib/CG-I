@@ -23,6 +23,9 @@
 #include "../../../include/imgui/imgui_impl_opengl3.h"
 
 static void mouse_button_callback(GLFWwindow* window, int button, int action, int mods) {
+    // Evita propagar cliques que estão sendo capturados pelo ImGui (painel sobre a cena)
+    if (ImGui::GetIO().WantCaptureMouse) return;
+
     if (button == GLFW_MOUSE_BUTTON_LEFT && action == GLFW_PRESS) {
         double xpos = 0.0, ypos = 0.0;
         glfwGetCursorPos(window, &xpos, &ypos);
@@ -31,11 +34,7 @@ static void mouse_button_callback(GLFWwindow* window, int button, int action, in
             ObjetoAbstrato* obj = nullptr;
             Ponto Pi(0.0f, 0.0f, 0.0f);
             float t = 0.0f;
-            if (c->pick(static_cast<int>(xpos), static_cast<int>(ypos), obj, Pi, t)) {
-                std::cout << "Objeto selecionado: " << obj << std::endl;
-            } else {
-                std::cout << "Nenhum objeto selecionado" << std::endl;
-            }
+            c->pick(static_cast<int>(xpos), static_cast<int>(ypos), obj, Pi, t);
         }
     }
 }
@@ -599,12 +598,16 @@ int main() {
 
     Menu menu;
     menu.setCamera(camera);
+    menu.setFonteIluminacao(&cenario.fonte);
+    menu.setCenario(&cenario);
 
     // manter janela aberta até o usuário fechá-la
     while (!glfwWindowShouldClose(window)) {
         ImGui_ImplOpenGL3_NewFrame();
         ImGui_ImplGlfw_NewFrame();
         ImGui::NewFrame();
+
+        // cenario.render()
         
         menu.renderizar();  // Chamada do seu menu
 
@@ -653,6 +656,8 @@ int main() {
     // delete cone;
     // delete malha;
     delete camera; // quando não usar, apagar daqui
-   
+   // colocar os nomes aqui pra ajudar a memoria a aguentar
+
+
     return 0;
 }

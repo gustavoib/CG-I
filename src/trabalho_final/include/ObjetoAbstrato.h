@@ -22,22 +22,34 @@ public:
     
     virtual bool intersecao(Raio& raio, float& t) = 0;
     
-    // Método virtual para calcular a normal no ponto de interseção
     virtual Vetor calcularNormal(Ponto& Pi, Vetor& direcao_raio) = 0;
     
-    // Método virtual para obter a cor difusa (permite textura)
     virtual Cor obterCorDifusa(Ponto& /*Pi*/) {
         return Kd;
     }
     
-    // Método geral de iluminação (não precisa ser sobrescrito)
     virtual Cor calcularIluminacao(Ponto& Pi, Vetor& direcao_raio, FonteIluminacao& fonte) {
         Vetor normal = calcularNormal(Pi, direcao_raio);
         Vetor observador = direcao_raio.vetorNegativo();
         Cor corDifusa = obterCorDifusa(Pi);
         
-        // Delegar o cálculo para a classe FonteIluminacao
         return fonte.calcularIluminacao(Pi, normal, observador, Ke, corDifusa, Ka, m);
+    }
+    
+    // métodos virtuais de transformação (implementação padrão vazia)
+    virtual void transladar(float /*tx*/, float /*ty*/, float /*tz*/) {}
+    virtual void escalar(float /*sx*/, float /*sy*/, float /*sz*/) {}
+    virtual void rotacionarX(float /*angulo*/) {}
+    virtual void rotacionarY(float /*angulo*/) {}
+    virtual void rotacionarZ(float /*angulo*/) {}
+    virtual void rotacionarArbitrario(const Vetor& /*eixo*/, float /*angulo*/) {}
+    virtual void cisalharXY(float /*shx*/, float /*shy*/) {}
+    virtual void cisalharXZ(float /*shx*/, float /*shz*/) {}
+    virtual void cisalharYZ(float /*shy*/, float /*shz*/) {}
+
+    // método para obter o centro do objeto
+    virtual Ponto getCentro() {
+        return Ponto(0.0f, 0.0f, 0.0f);
     }
 };
 

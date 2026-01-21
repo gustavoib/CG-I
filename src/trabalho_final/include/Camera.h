@@ -40,6 +40,22 @@ public:
     // setter e getter para up
     void setUp(const Vetor& newUp) { up = newUp; }
     Vetor getUp() const { return up; }
+
+    // setter e getter para parâmetros de projeção
+    void setD(float newD) { d = newD; }
+    float getD() const { return d; }
+
+    void setXmin(float newXmin) { xmin = newXmin; }
+    float getXmin() const { return xmin; }
+
+    void setXmax(float newXmax) { xmax = newXmax; }
+    float getXmax() const { return xmax; }
+
+    void setYmin(float newYmin) { ymin = newYmin; }
+    float getYmin() const { return ymin; }
+
+    void setYmax(float newYmax) { ymax = newYmax; }
+    float getYmax() const { return ymax; }
     
 };
 

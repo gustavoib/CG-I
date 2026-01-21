@@ -140,6 +140,8 @@ void Cenario::render() {
     }
 }
 
+
+// importante pra interação no menu
 bool Cenario::pick(int mouseX, int mouseY, ObjetoAbstrato*& selecionado, Ponto& pontoImpacto, float& tHit) {
     selecionado = nullptr;
     tHit = std::numeric_limits<float>::max();
