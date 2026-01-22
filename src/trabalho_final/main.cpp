@@ -81,8 +81,13 @@ int main() {
     Cor I_F(0.65f, 0.65f, 0.65f);
     Cor I_A(0.3f, 0.3f, 0.3f);
     Ponto P_F(200.0f, 500.0f, 250.0f);
-    FonteIluminacao fonte(I_F, P_F, I_A);
+    //FonteIluminacao fonte(I_F, P_F, I_A);
     
+    // Criar spot light
+    Vetor direcao_spot(0.0f, -1.0f, 0.0f);  // Apontando para baixo
+    float theta_spot = 30.0f;  // 30 graus de abertura
+    FonteIluminacao fonte(I_F, P_F, I_A, direcao_spot, theta_spot, true);
+
     Cor cor_background(100.0f/255.0f, 100.0f/255.0f, 100.0f/255.0f);
     
     // com câmera
