@@ -132,6 +132,10 @@ Ponto Cone::calcularCentro() {
     return Cb.somarVetor(nH);
 }
 
+Ponto Cone::getCentro() {
+    return calcularCentro();
+}
+
 void Cone::transladar(float tx, float ty, float tz) {
     Matriz T = Matriz::translacao(tx, ty, tz);
     P = P.aplicarTransformacao(T);

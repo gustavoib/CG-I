@@ -55,7 +55,7 @@ std::string loadShaderSource(const std::string& filepath) {
 
 int main() {   
     // vista padrão
-    Ponto eye(200.0f, 600.0f, 580.0f);
+    Ponto eye(200.0f, 300.0f, 580.0f);
     Ponto at(200.0f, 100.0f, 300.0f);
     Vetor up(0.0f, 1.0f, 0.0f);
     Camera* camera = new Camera(eye, at, up, 400.0f, -200.0f, 200.0f, -200.0f, 200.0f);
@@ -78,20 +78,24 @@ int main() {
     // Vetor up(0.0f, 1.0f, 0.0f);
     // Camera* camera = new Camera(eye, at, up, 400.0f, -200.0f, 200.0f, -200.0f, 200.0f);
 
-    Cor I_F(0.65f, 0.65f, 0.65f);
+    // luz do teto (pontual)
+    Cor I_F(0.55f, 0.55f, 0.55f);
     Cor I_A(0.3f, 0.3f, 0.3f);
-    Ponto P_F(200.0f, 500.0f, 250.0f);
-    //FonteIluminacao fonte(I_F, P_F, I_A);
-    
-    // Criar spot light
-    Vetor direcao_spot(0.0f, -1.0f, 0.0f);  // Apontando para baixo
-    float theta_spot = 30.0f;  // 30 graus de abertura
-    FonteIluminacao fonte(I_F, P_F, I_A, direcao_spot, theta_spot, true);
+    Ponto P_F(200.0f, 400.0f, 250.0f);
+    FonteIluminacao fonte_principal(I_F, P_F, I_A);
 
     Cor cor_background(100.0f/255.0f, 100.0f/255.0f, 100.0f/255.0f);
     
     // com câmera
-    Cenario cenario(camera, fonte, cor_background, 500, 500);
+    Cenario cenario(camera, fonte_principal, cor_background, 500, 500);
+    
+    // luz saindo da tv (spot)
+    Cor I_F_spot(0.2f, 0.2f, 0.2f);
+    Ponto P_F_spot(72.0f, 115.0f, 400.0f);
+    Vetor direcao_spot(1.0f, 0.0f, 0.0f); // apontando para a parede
+    float angulo_spot = 20.0f; // graus
+    FonteIluminacao* luz_spot = new FonteIluminacao(I_F_spot, P_F_spot, Cor(0.0f,0.0f,0.0f), direcao_spot, angulo_spot, true);
+    cenario.adicionarFonte(luz_spot);
     
     // sem câmera
     // Cenario cenario(olho, janela, fonte, cor_background, 500, 500);
@@ -130,12 +134,12 @@ int main() {
     float m_planoc = 100.0f;
 
     // plano do teto (y = 400) - normal apontando para baixo
-    // Ponto P_pit(200.0f, 400.0f, 200.0f);
-    // Vetor n_bart(0.0f, -1.0f, 0.0f); 
-    // Cor kd_planot(0.933f, 0.933f, 0.933f);
-    // Cor ke_planot(0.933f, 0.933f, 0.933f);
-    // Cor ka_planot(0.933f, 0.933f, 0.933f);
-    // float m_planot = 50.0f;
+    Ponto P_pit(200.0f, 500.0f, 200.0f);
+    Vetor n_bart(0.0f, -1.0f, 0.0f); 
+    Cor kd_planot(0.933f, 0.933f, 0.933f);
+    Cor ke_planot(0.933f, 0.933f, 0.933f);
+    Cor ka_planot(0.933f, 0.933f, 0.933f);
+    float m_planot = 50.0f;
 
     // plano de entrada (z = 400) - normal apontando para frente
     Ponto P_pient(200.0f, 200.0f, 600.0f);
@@ -157,8 +161,8 @@ int main() {
     Plano* plano_esquerda = new Plano(n_bare, P_pie, ke_planoe, kd_planoe, ka_planoe, m_planoe);
     cenario.adicionarObjeto(plano_esquerda);
 
-    // Plano* plano_teto = new Plano(n_bart, P_pit, ke_planot, kd_planot, ka_planot, m_planot);
-    // cenario.adicionarObjeto(plano_teto);
+    Plano* plano_teto = new Plano(n_bart, P_pit, ke_planot, kd_planot, ka_planot, m_planot);
+    cenario.adicionarObjeto(plano_teto);
 
     Plano* plano_entrada = new Plano(n_barent, P_pient, ke_planoent, kd_planoent, ka_planoent, m_planoent);
     cenario.adicionarObjeto(plano_entrada);
@@ -603,7 +607,7 @@ int main() {
 
     Menu menu;
     menu.setCamera(camera);
-    menu.setFonteIluminacao(&cenario.fonte);
+    //menu.setFonteIluminacao(&cenario.fonte);
     menu.setCenario(&cenario);
 
     // manter janela aberta até o usuário fechá-la
@@ -661,6 +665,10 @@ int main() {
     // delete cone;
     // delete malha;
     delete camera; // quando não usar, apagar daqui
+    
+    // Liberar fontes de iluminação adicionais
+    delete luz_spot;
+    
    // colocar os nomes aqui pra ajudar a memoria a aguentar
 
 

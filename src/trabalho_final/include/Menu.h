@@ -63,6 +63,16 @@ private:
     float corKdBuf[3] = {0.0f, 0.0f, 0.0f};
     float corKaBuf[3] = {0.0f, 0.0f, 0.0f};
     ObjetoAbstrato* objetoSelecionadoAnterior = nullptr; // para detectar mudança de seleção
+    
+    // buffers para fonte pontual
+    float fontepPosicaoBuf[3] = {0.0f, 0.0f, 0.0f};
+    float fontepIntensidadeBuf[3] = {1.0f, 1.0f, 1.0f};
+    float fontepAmbienteBuf[3] = {0.2f, 0.2f, 0.2f};
+    
+    // buffers para fonte spot
+    float fontespPosicaoBuf[3] = {0.0f, 0.0f, 0.0f};
+    float fontespIntensidadeBuf[3] = {1.0f, 1.0f, 1.0f};
+    float fontespAmbienteBuf[3] = {0.2f, 0.2f, 0.2f};
 };
 
 #endif

@@ -26,6 +26,7 @@ class Malha : public ObjetoAbstrato {
 
         void aplicarTransformacao(const Matriz& m_pontos, const Matriz& m_normais);
         Ponto calcularCentro();
+        Ponto getCentro() override;
         void escalar(float sx, float sy, float sz) override;
         void transladar(float tx, float ty, float tz) override;
         void rotacionarX(float angulo) override;

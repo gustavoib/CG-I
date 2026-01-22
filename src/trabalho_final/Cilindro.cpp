@@ -170,6 +170,10 @@ Ponto Cilindro::calcularCentro() {
     return B.somarVetor(uH);
 }
 
+Ponto Cilindro::getCentro() {
+    return calcularCentro();
+}
+
 void Cilindro::escalar(float sx, float sy, float sz) {
     Ponto centro = calcularCentro();
     transladar(-centro.x, -centro.y, -centro.z);

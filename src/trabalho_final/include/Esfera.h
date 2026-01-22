@@ -17,6 +17,7 @@ class Esfera : public ObjetoAbstrato {
         Vetor calcularNormal(Ponto& Pi, Vetor& direcao_raio) override;
         
         Ponto calcularCentro();
+        Ponto getCentro() override;
         void aplicarTransformacao(const Matriz& transformacao);
         void transladar(float tx, float ty, float tz) override;
         void escalar(float fator);

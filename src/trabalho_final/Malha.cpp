@@ -173,6 +173,10 @@ Ponto Malha::calcularCentro() {
     return Ponto(somaX / n, somaY / n, somaZ / n);
 }
 
+Ponto Malha::getCentro() {
+    return calcularCentro();
+}
+
 void Malha::transladar(float tx, float ty, float tz) {
     Matriz T = Matriz::translacao(tx, ty, tz);
     Matriz I = Matriz::identidade();

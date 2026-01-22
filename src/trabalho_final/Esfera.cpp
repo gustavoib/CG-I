@@ -37,6 +37,10 @@ Ponto Esfera::calcularCentro() {
     return centro_esfera;
 }
 
+Ponto Esfera::getCentro() {
+    return centro_esfera;
+}
+
 void Esfera::transladar(float tx, float ty, float tz) {
     Matriz trans = Matriz::translacao(tx, ty, tz);
     centro_esfera = trans.multiplicarPonto(centro_esfera);

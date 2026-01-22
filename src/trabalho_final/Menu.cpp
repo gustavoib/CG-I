@@ -52,24 +52,91 @@ void Menu::renderizar() {
     }
 
     if (ImGui::CollapsingHeader("Iluminação")) {
-        ImGui::InputFloat3("Pontual", fontePosicaoBuf, "%.2f");
+        if (cenario && cenario->fontes.size() >= 2) {
+            FonteIluminacao* fontep = cenario->fontes[0];
+            FonteIluminacao* fontesp = cenario->fontes[1];
+            
+            // inicializar buffers na primeira renderização
+            static bool fontepInit = false, fontespInit = false;
+            if (!fontepInit && fontep) {
+                Ponto pos1 = fontep->getPosicao();
+                fontepPosicaoBuf[0] = pos1.x;
+                fontepPosicaoBuf[1] = pos1.y;
+                fontepPosicaoBuf[2] = pos1.z;
+                fontepIntensidadeBuf[0] = fontep->I_F.r;
+                fontepIntensidadeBuf[1] = fontep->I_F.g;
+                fontepIntensidadeBuf[2] = fontep->I_F.b;
+                fontepAmbienteBuf[0] = fontep->I_A.r;
+                fontepAmbienteBuf[1] = fontep->I_A.g;
+                fontepAmbienteBuf[2] = fontep->I_A.b;
+                fontepInit = true;
+            }
+            if (!fontespInit && fontesp) {
+                Ponto pos2 = fontesp->getPosicao();
+                fontespPosicaoBuf[0] = pos2.x;
+                fontespPosicaoBuf[1] = pos2.y;
+                fontespPosicaoBuf[2] = pos2.z;
+                fontespIntensidadeBuf[0] = fontesp->I_F.r;
+                fontespIntensidadeBuf[1] = fontesp->I_F.g;
+                fontespIntensidadeBuf[2] = fontesp->I_F.b;
+                fontespAmbienteBuf[0] = fontesp->I_A.r;
+                fontespAmbienteBuf[1] = fontesp->I_A.g;
+                fontespAmbienteBuf[2] = fontesp->I_A.b;
+                fontespInit = true;
+            }
+            
+            // fonte pontual
+            ImGui::Text("Fonte pontual");
+            ImGui::InputFloat3("Posição##F1", fontepPosicaoBuf, "%.2f");
+            if (ImGui::Button("Aplicar Posição##F1")) {
+                fontep->setPosicao(Ponto(fontepPosicaoBuf[0], fontepPosicaoBuf[1], fontepPosicaoBuf[2]));
+                rerenderRequested = true;
+            }
+            ImGui::InputFloat3("Intensidade##F1", fontepIntensidadeBuf, "%.2f");
+            if (ImGui::Button("Aplicar Intensidade##F1")) {
+                fontep->I_F = Cor(fontepIntensidadeBuf[0], fontepIntensidadeBuf[1], fontepIntensidadeBuf[2]);
+                rerenderRequested = true;
+            }
+            ImGui::InputFloat3("Ambiente##F1", fontepAmbienteBuf, "%.2f");
+            if (ImGui::Button("Aplicar Ambiente##F1")) {
+                fontep->I_A = Cor(fontepAmbienteBuf[0], fontepAmbienteBuf[1], fontepAmbienteBuf[2]);
+                rerenderRequested = true;
+            }
+            
+            ImGui::Separator();
+            
+            // fonte spot
+            ImGui::Text("Fonte spot");
+            ImGui::InputFloat3("Posição##F2", fontespPosicaoBuf, "%.2f");
+            if (ImGui::Button("Aplicar Posição##F2")) {
+                fontesp->setPosicao(Ponto(fontespPosicaoBuf[0], fontespPosicaoBuf[1], fontespPosicaoBuf[2]));
+                rerenderRequested = true;
+            }
+            ImGui::InputFloat3("Intensidade##F2", fontespIntensidadeBuf, "%.2f");
+            if (ImGui::Button("Aplicar Intensidade##F2")) {
+                fontesp->I_F = Cor(fontespIntensidadeBuf[0], fontespIntensidadeBuf[1], fontespIntensidadeBuf[2]);
+                rerenderRequested = true;
+            }
+        }
     }
 
     if (ImGui::CollapsingHeader("Objeto Selecionado")) {
         if (cenario && cenario->getObjetoSelecionado()) {
             ObjetoAbstrato* obj = cenario->getObjetoSelecionado();
-            Ponto ponto = cenario->getPontoSelecionado();
             
             ImGui::Text("Objeto: %p", (void*)obj);
-            ImGui::Text("Ponto: (%.2f, %.2f, %.2f)", ponto.x, ponto.y, ponto.z);
             ImGui::TextColored(ImVec4(0.0f, 1.0f, 0.0f, 1.0f), "Objeto selecionado");
             ImGui::Separator();
             
-            // Inicializar buffers de cores apenas quando um novo objeto é selecionado
+            // inicializar buffers de cores apenas quando um novo objeto é selecionado
             if (obj != objetoSelecionadoAnterior) {
                 corKeBuf[0] = obj->Ke.r; corKeBuf[1] = obj->Ke.g; corKeBuf[2] = obj->Ke.b;
                 corKdBuf[0] = obj->Kd.r; corKdBuf[1] = obj->Kd.g; corKdBuf[2] = obj->Kd.b;
                 corKaBuf[0] = obj->Ka.r; corKaBuf[1] = obj->Ka.g; corKaBuf[2] = obj->Ka.b;
+                // inicializar translação apenas na troca de seleção
+                translacaoBuf[0] = obj->getCentro().x;
+                translacaoBuf[1] = obj->getCentro().y;
+                translacaoBuf[2] = obj->getCentro().z;
                 objetoSelecionadoAnterior = obj;
             }
             
@@ -84,16 +151,35 @@ void Menu::renderizar() {
                     rerenderRequested = true;
                 }
             }
+
             
             if (ImGui::CollapsingHeader("Transformações")) {
-                translacaoBuf[0] = obj->getCentro().x;
-                translacaoBuf[1] = obj->getCentro().y;
-                translacaoBuf[2] = obj->getCentro().z;
-                
-                // Translação
-                ImGui::InputFloat3("Translação", translacaoBuf, "%.2f");
-                if (ImGui::Button("Aplicar Translação")) {
+                // translação comum (com deslocamento relativo)
+                ImGui::InputFloat3("Transladar Rel", translacaoBuf, "%.2f");
+                if (ImGui::Button("Aplicar Translação Relativa")) {
                     obj->transladar(translacaoBuf[0], translacaoBuf[1], translacaoBuf[2]);
+                    // atualizar buffer para nova posição absoluta
+                    Ponto novoCentro = obj->getCentro();
+                    translacaoBuf[0] = novoCentro.x;
+                    translacaoBuf[1] = novoCentro.y;
+                    translacaoBuf[2] = novoCentro.z;
+                    rerenderRequested = true;
+                }
+
+
+                // translação (posição absoluta)
+                ImGui::InputFloat3("Transladar Abs", translacaoBuf, "%.2f");
+                if (ImGui::Button("Aplicar Translação Abs")) {
+                    // calcular deslocamento relativo necessário
+                    Ponto centroAtual = obj->getCentro();
+                    float dx = translacaoBuf[0] - centroAtual.x;
+                    float dy = translacaoBuf[1] - centroAtual.y;
+                    float dz = translacaoBuf[2] - centroAtual.z;
+                    obj->transladar(dx, dy, dz);
+                    Ponto novoCentro = obj->getCentro();
+                    translacaoBuf[0] = novoCentro.x;
+                    translacaoBuf[1] = novoCentro.y;
+                    translacaoBuf[2] = novoCentro.z;
                     rerenderRequested = true;
                 }
                 
