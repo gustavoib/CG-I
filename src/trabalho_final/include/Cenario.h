@@ -16,7 +16,7 @@ class Cenario {
         Janela janela;
         Camera* camera;
         std::vector<ObjetoAbstrato*> objetos;
-        FonteIluminacao fonte;
+        std::vector<FonteIluminacao*> fontes;  // Múltiplas fontes de iluminação
         Cor cor_background;
         int n_col, n_lin;
         std::vector<unsigned char> canvas;
@@ -30,6 +30,8 @@ class Cenario {
         Cenario(Camera* camera, FonteIluminacao& fonte, Cor& background, int n_col, int n_lin);
         
         void adicionarObjeto(ObjetoAbstrato* obj);
+        void adicionarFonte(FonteIluminacao* fonte);
+        void limparFontes();
         void render();
         void salvarPPM(const std::string& filename);
 
@@ -42,11 +44,6 @@ class Cenario {
 
         // limpa todos os objetos e a seleção
         void limparObjetos();
-
-        // setter para a fonte de iluminação
-        void setFonteIluminacao(const FonteIluminacao& novaFonte) {
-            fonte = novaFonte;
-        }
 };
 
 #endif
