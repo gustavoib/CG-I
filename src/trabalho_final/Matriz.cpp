@@ -1,4 +1,4 @@
-#include "Matriz.h"
+#include "../trabalho_final/include/Matriz.h"
 #include <cmath>
 
 #define M_PI 3.14159265358979323846
@@ -128,18 +128,57 @@ Matriz Matriz::rotacaoZ(float angulo) {
     return Matriz(rot);
 }
 
+// Matriz Matriz::rotacaoArbitraria(Vetor eixo, float angulo) {
+//     Vetor n = eixo.normalizado();
+//     float rad = angulo * M_PI / 180.0f;
+//     float c = cos(rad);
+//     float s = sin(rad);
+//     float rot[4][4] = {
+//         {c + n.x*n.x*(1-c), n.x*n.y*(1-c) - n.z*s, n.x*n.z*(1-c) + n.y*s, 0},
+//         {n.y*n.x*(1-c) + n.z*s, c + n.y*n.y*(1-c), n.y*n.z*(1-c) - n.x*s, 0},
+//         {n.z*n.x*(1-c) - n.y*s, n.z*n.y*(1-c) + n.x*s, c + n.z*n.z*(1-c), 0},
+//         {0, 0, 0, 1}
+//     };
+//     return Matriz(rot);
+// }
+
 Matriz Matriz::rotacaoArbitraria(Vetor eixo, float angulo) {
-    Vetor n = eixo.normalizado();
-    float rad = angulo * M_PI / 180.0f;
-    float c = cos(rad);
-    float s = sin(rad);
-    float rot[4][4] = {
-        {c + n.x*n.x*(1-c), n.x*n.y*(1-c) - n.z*s, n.x*n.z*(1-c) + n.y*s, 0},
-        {n.y*n.x*(1-c) + n.z*s, c + n.y*n.y*(1-c), n.y*n.z*(1-c) - n.x*s, 0},
-        {n.z*n.x*(1-c) - n.y*s, n.z*n.y*(1-c) + n.x*s, c + n.z*n.z*(1-c), 0},
+    // normalizar o eixo
+    Vetor eixo_norm = eixo.normalizado();
+    
+    // olha se não é paralelo
+    Vetor temp = Vetor(1, 0, 0);
+    if (fabs(eixo_norm.x) > 0.9f) {
+        temp = Vetor(0, 1, 0);
+    }
+    
+    // x local perpendicular ao eixo
+    Vetor local_x = eixo_norm.produtoVetorial(temp);
+    local_x = local_x.normalizado();
+    
+    // y local perpendicular a ambos
+    Vetor local_y = eixo_norm.produtoVetorial(local_x);
+    local_y = local_y.normalizado();
+    
+    // matriz que transforma mundo → sistema local
+    float M_data[4][4] = {
+        {local_x.x, local_x.y, local_x.z, 0},
+        {local_y.x, local_y.y, local_y.z, 0},
+        {eixo_norm.x, eixo_norm.y, eixo_norm.z, 0},
         {0, 0, 0, 1}
     };
-    return Matriz(rot);
+    Matriz M(M_data);
+    
+    // matriz inversa (para voltar ao mundo)
+    Matriz M_inv = Matriz::transposta(M);
+    
+    // rotação simples em Z (sistema local)
+    Matriz R_z = Matriz::rotacaoZ(angulo);
+    
+    // transformação completa
+    Matriz resultado = M_inv.multiplicar(R_z).multiplicar(M);
+    
+    return resultado;
 }
 
 Matriz Matriz::translacao(float tx, float ty, float tz) {

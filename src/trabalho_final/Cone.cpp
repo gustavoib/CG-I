@@ -193,7 +193,7 @@ void Cone::rotacionarZ(float angulo) {
     transladar(centro.x, centro.y, centro.z);
 }
 
-void Cone::rotacionarEixo(Vetor eixo, float angulo) {
+void Cone::rotacionarArbitrario(const Vetor& eixo, float angulo) {
     Ponto centro = calcularCentro();
     transladar(-centro.x, -centro.y, -centro.z);
     

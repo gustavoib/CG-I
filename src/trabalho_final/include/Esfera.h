@@ -25,7 +25,7 @@ class Esfera : public ObjetoAbstrato {
         void rotacionarX(float angulo) override;
         void rotacionarY(float angulo) override;
         void rotacionarZ(float angulo) override;
-        void rotacionarEixo(Vetor eixo, float angulo);
+        void rotacionarArbitrario(const Vetor& eixo, float angulo) override;
         void espelharXY();
         void espelharXZ();
         void espelharYZ();

@@ -86,7 +86,7 @@ void Esfera::rotacionarZ(float angulo) {
     transladar(centro.x, centro.y, centro.z);
 }
 
-void Esfera::rotacionarEixo(Vetor eixo, float angulo) {
+void Esfera::rotacionarArbitrario(const Vetor& eixo, float angulo) {
     Ponto centro = calcularCentro();
     transladar(-centro.x, -centro.y, -centro.z);
     

@@ -222,7 +222,7 @@ void Cilindro::rotacionarZ(float angulo) {
     transladar(centro.x, centro.y, centro.z);
 }
 
-void Cilindro::rotacionarEixo(Vetor eixo, float angulo) {
+void Cilindro::rotacionarArbitrario(const Vetor& eixo, float angulo) {
     Ponto centro = calcularCentro();
     transladar(-centro.x, -centro.y, -centro.z);
     
