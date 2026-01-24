@@ -55,9 +55,19 @@ void Menu::renderizar() {
             eyeBuf[0] = 200.0f; eyeBuf[1] = 100.0f; eyeBuf[2] = 100.0f;
             atBuf[0] = 200.0f;  atBuf[1] = 100.0f;  atBuf[2] = 600.0f;
             upBuf[0] = 0.0f;    upBuf[1] = 1.0f;    upBuf[2] = 0.0f;
+            dBuf = 300.0f;
+            xminBuf = -200.0f;
+            xmaxBuf = 200.0f;
+            yminBuf = -200.0f;
+            ymaxBuf = 200.0f;
             camera->setEye(Ponto(eyeBuf[0], eyeBuf[1], eyeBuf[2]));
             camera->setAt(Ponto(atBuf[0], atBuf[1], atBuf[2]));
             camera->setUp(Vetor(upBuf[0], upBuf[1], upBuf[2]));
+            camera->setD(300.0f);
+            camera->setXmin(-200.0f);
+            camera->setXmax(200.0f);
+            camera->setYmin(-200.0f);
+            camera->setYmax(200.0f);
             camera->calcularSistemaCoordenadasCamera();
             rerenderRequested = true;
         }
@@ -69,9 +79,19 @@ void Menu::renderizar() {
             eyeBuf[0] = 350.0f; eyeBuf[1] = 150.0f; eyeBuf[2] = 150.0f;
             atBuf[0] = 200.0f;  atBuf[1] = 100.0f;  atBuf[2] = 400.0f;
             upBuf[0] = 0.0f;    upBuf[1] = 1.0f;    upBuf[2] = 0.0f;
+            dBuf = 300.0f;
+            xminBuf = -200.0f;
+            xmaxBuf = 200.0f;
+            yminBuf = -200.0f;
+            ymaxBuf = 200.0f;
             camera->setEye(Ponto(eyeBuf[0], eyeBuf[1], eyeBuf[2]));
             camera->setAt(Ponto(atBuf[0], atBuf[1], atBuf[2]));
             camera->setUp(Vetor(upBuf[0], upBuf[1], upBuf[2]));
+            camera->setD(300.0f);
+            camera->setXmin(-200.0f);
+            camera->setXmax(200.0f);
+            camera->setYmin(-200.0f);
+            camera->setYmax(200.0f);
             camera->calcularSistemaCoordenadasCamera();
             rerenderRequested = true;
         }
@@ -83,9 +103,19 @@ void Menu::renderizar() {
             eyeBuf[0] = 400.0f; eyeBuf[1] = 350.0f; eyeBuf[2] = 200.0f;
             atBuf[0] = 200.0f;  atBuf[1] = 100.0f;  atBuf[2] = 300.0f;
             upBuf[0] = -0.2f;   upBuf[1] = 0.9f;    upBuf[2] = 0.3f;
+            dBuf = 300.0f;
+            xminBuf = -200.0f;
+            xmaxBuf = 200.0f;
+            yminBuf = -200.0f;
+            ymaxBuf = 200.0f;
             camera->setEye(Ponto(eyeBuf[0], eyeBuf[1], eyeBuf[2]));
             camera->setAt(Ponto(atBuf[0], atBuf[1], atBuf[2]));
             camera->setUp(Vetor(upBuf[0], upBuf[1], upBuf[2]));
+            camera->setD(300.0f);
+            camera->setXmin(-200.0f);
+            camera->setXmax(200.0f);
+            camera->setYmin(-200.0f);
+            camera->setYmax(200.0f);
             camera->calcularSistemaCoordenadasCamera();
             rerenderRequested = true;
         }
