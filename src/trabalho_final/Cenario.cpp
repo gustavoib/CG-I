@@ -68,6 +68,13 @@ void Cenario::render() {
                     if (!fontes.empty()) {
                         cor = fontes[0]->I_A.multiComponente(objeto_mais_proximo->Ka);
                     }
+                    
+                    // quando a intensidade estiver zerada, adiciona um Kdzinho pra iluminar
+                    if (fontes[0]->I_F.r == 0 && fontes[0]->I_F.g == 0 && fontes[0]->I_F.b == 0) {
+                        Cor corDifusaBase = objeto_mais_proximo->obterCorDifusa(Pi);
+                        Cor corDifusaReduzida = corDifusaBase.multiEscalar(0.1f);
+                        cor = cor.somarCor(corDifusaReduzida);
+                    }
 
                     // itera sobre todas as fontes de iluminação
                     for (FonteIluminacao* fonte : fontes) {

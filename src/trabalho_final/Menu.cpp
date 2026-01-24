@@ -165,8 +165,7 @@ void Menu::renderizar() {
                     translacaoBuf[2] = novoCentro.z;
                     rerenderRequested = true;
                 }
-
-
+                
                 // translação (posição absoluta)
                 ImGui::InputFloat3("Transladar Abs", translacaoBuf, "%.2f");
                 if (ImGui::Button("Aplicar Translação Abs")) {
