@@ -144,42 +144,43 @@ Matriz Matriz::rotacaoZ(float angulo) {
 
 Matriz Matriz::rotacaoArbitraria(Vetor eixo, float angulo) {
     // normalizar o eixo
-    Vetor eixo_norm = eixo.normalizado();
+    Vetor k = eixo.normalizado();
     
     // olha se não é paralelo
     Vetor temp = Vetor(1, 0, 0);
-    if (fabs(eixo_norm.x) > 0.9f) {
+    if (fabs(k.x) > 0.9f) {
         temp = Vetor(0, 1, 0);
     }
     
     // x local perpendicular ao eixo
-    Vetor local_x = eixo_norm.produtoVetorial(temp);
-    local_x = local_x.normalizado();
+    Vetor i = k.produtoVetorial(temp);
+    i = i.normalizado();
     
     // y local perpendicular a ambos
-    Vetor local_y = eixo_norm.produtoVetorial(local_x);
-    local_y = local_y.normalizado();
+    Vetor j = k.produtoVetorial(i);
+    j = j.normalizado();
     
     // matriz que transforma mundo → sistema local
     float M_data[4][4] = {
-        {local_x.x, local_x.y, local_x.z, 0},
-        {local_y.x, local_y.y, local_y.z, 0},
-        {eixo_norm.x, eixo_norm.y, eixo_norm.z, 0},
+        {i.x, i.y, i.z, 0},
+        {j.x, j.y, j.z, 0},
+        {k.x, k.y, k.z, 0},
         {0, 0, 0, 1}
     };
     Matriz M(M_data);
     
-    // matriz inversa (para voltar ao mundo)
-    Matriz M_inv = Matriz::transposta(M);
+    // para voltar ao mundo
+    Matriz M_linha = Matriz::transposta(M);
     
     // rotação simples em Z (sistema local)
     Matriz R_z = Matriz::rotacaoZ(angulo);
     
     // transformação completa
-    Matriz resultado = M_inv.multiplicar(R_z).multiplicar(M);
+    Matriz resultado = M_linha.multiplicar(R_z).multiplicar(M);
     
     return resultado;
 }
+
 
 Matriz Matriz::translacao(float tx, float ty, float tz) {
     float trans[4][4] = {

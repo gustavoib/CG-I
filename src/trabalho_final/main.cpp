@@ -23,7 +23,7 @@
 #include "../../../include/imgui/imgui_impl_opengl3.h"
 
 static void mouse_button_callback(GLFWwindow* window, int button, int action, int mods) {
-    // Evita propagar cliques que estão sendo capturados pelo ImGui (painel sobre a cena)
+    // evita propagar cliques que estão sendo capturados pelo ImGui (painel sobre a cena)
     if (ImGui::GetIO().WantCaptureMouse) return;
 
     if (button == GLFW_MOUSE_BUTTON_LEFT && action == GLFW_PRESS) {
@@ -39,7 +39,7 @@ static void mouse_button_callback(GLFWwindow* window, int button, int action, in
     }
 }
 
-// Função para carregar código do shader de arquivo
+// função para carregar código do shader de arquivo
 std::string loadShaderSource(const std::string& filepath) {
     std::ifstream file(filepath);
     if (!file.is_open()) {
@@ -55,16 +55,16 @@ std::string loadShaderSource(const std::string& filepath) {
 
 int main() {   
     // vista padrão
-    Ponto eye(200.0f, 300.0f, 580.0f);
-    Ponto at(200.0f, 100.0f, 300.0f);
-    Vetor up(0.0f, 1.0f, 0.0f);
-    Camera* camera = new Camera(eye, at, up, 400.0f, -200.0f, 200.0f, -200.0f, 200.0f);
+    // Ponto eye(200.0f, 300.0f, 580.0f);
+    // Ponto at(200.0f, 100.0f, 300.0f);
+    // Vetor up(0.0f, 1.0f, 0.0f);
+    // Camera* camera = new Camera(eye, at, up, 400.0f, -200.0f, 200.0f, -200.0f, 200.0f);
 
     // vista de cima da cena
-    // Ponto eye(200.0f, 800.0f, 400.0f);
-    // Ponto at(200.0f, 0.0f, 300.0f);
-    // Vetor up(0.0f, 0.0f, -1.0f);
-    // Camera* camera = new Camera(eye, at, up, 300.0f, -200.0f, 200.0f, -200.0f, 200.0f);
+    Ponto eye(200.0f, 480.0f, 400.0f);
+    Ponto at(200.0f, 0.0f, 300.0f);
+    Vetor up(0.0f, 0.0f, -1.0f);
+    Camera* camera = new Camera(eye, at, up, 300.0f, -200.0f, 200.0f, -200.0f, 200.0f);
 
     // vista olhando para a TV
     // Ponto eye(350.0f, 130.0f, 330.0f);

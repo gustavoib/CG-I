@@ -29,7 +29,7 @@ void Cenario::limparFontes() {
 }
 
 void Cenario::render() {
-    // se tiver câmera, usa o sistema de coordenadas da câmera
+    // usa o sistema de coordenadas da câmera
     if (camera != nullptr) {
         float delta_x = (camera->xmax - camera->xmin) / n_col;
         float delta_y = (camera->ymax - camera->ymin) / n_lin;
