@@ -49,6 +49,48 @@ void Menu::renderizar() {
         ImGui::InputFloat("Xmax", &xmaxBuf, 0.0f, 0.0f, "%.2f");
         ImGui::InputFloat("Ymin", &yminBuf, 0.0f, 0.0f, "%.2f");
         ImGui::InputFloat("Ymax", &ymaxBuf, 0.0f, 0.0f, "%.2f");
+
+        // 1 ponto de fuga
+        if (ImGui::Button("1 Ponto de Fuga##1PF", ImVec2(-1, 0))) {
+            eyeBuf[0] = 200.0f; eyeBuf[1] = 100.0f; eyeBuf[2] = 100.0f;
+            atBuf[0] = 200.0f;  atBuf[1] = 100.0f;  atBuf[2] = 600.0f;
+            upBuf[0] = 0.0f;    upBuf[1] = 1.0f;    upBuf[2] = 0.0f;
+            camera->setEye(Ponto(eyeBuf[0], eyeBuf[1], eyeBuf[2]));
+            camera->setAt(Ponto(atBuf[0], atBuf[1], atBuf[2]));
+            camera->setUp(Vetor(upBuf[0], upBuf[1], upBuf[2]));
+            camera->calcularSistemaCoordenadasCamera();
+            rerenderRequested = true;
+        }
+        ImGui::SameLine();
+        ImGui::TextDisabled("(frontal)");
+        
+        // 2 pontos de fuga
+        if (ImGui::Button("2 Pontos de Fuga##2PF", ImVec2(-1, 0))) {
+            eyeBuf[0] = 350.0f; eyeBuf[1] = 150.0f; eyeBuf[2] = 150.0f;
+            atBuf[0] = 200.0f;  atBuf[1] = 100.0f;  atBuf[2] = 400.0f;
+            upBuf[0] = 0.0f;    upBuf[1] = 1.0f;    upBuf[2] = 0.0f;
+            camera->setEye(Ponto(eyeBuf[0], eyeBuf[1], eyeBuf[2]));
+            camera->setAt(Ponto(atBuf[0], atBuf[1], atBuf[2]));
+            camera->setUp(Vetor(upBuf[0], upBuf[1], upBuf[2]));
+            camera->calcularSistemaCoordenadasCamera();
+            rerenderRequested = true;
+        }
+        ImGui::SameLine();
+        ImGui::TextDisabled("(diagonal)");
+        
+        // 3 pontos de fuga
+        if (ImGui::Button("3 Pontos de Fuga##3PF", ImVec2(-1, 0))) {
+            eyeBuf[0] = 400.0f; eyeBuf[1] = 350.0f; eyeBuf[2] = 200.0f;
+            atBuf[0] = 200.0f;  atBuf[1] = 100.0f;  atBuf[2] = 300.0f;
+            upBuf[0] = -0.2f;   upBuf[1] = 0.9f;    upBuf[2] = 0.3f;
+            camera->setEye(Ponto(eyeBuf[0], eyeBuf[1], eyeBuf[2]));
+            camera->setAt(Ponto(atBuf[0], atBuf[1], atBuf[2]));
+            camera->setUp(Vetor(upBuf[0], upBuf[1], upBuf[2]));
+            camera->calcularSistemaCoordenadasCamera();
+            rerenderRequested = true;
+        }
+        ImGui::SameLine();
+        ImGui::TextDisabled("(livre)");
     }
 
     if (ImGui::CollapsingHeader("Iluminação")) {
@@ -242,6 +284,8 @@ void Menu::renderizar() {
     }
 
     ImGui::Separator();
+
+
 
     if (ImGui::Button("Confirmar")) {
         camera->setEye(Ponto(eyeBuf[0], eyeBuf[1], eyeBuf[2]));
