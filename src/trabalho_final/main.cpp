@@ -654,23 +654,58 @@ int main() {
 
 
     // Liberar memória
-    // delete esfera;
+
+    delete camera;
+    delete luz_spot;
+
+    // esferas
+    delete macaneta;
+    delete esfera1;
+    delete esfera2;
+    delete esfera3;
+
+    // malhas
+    delete malha;
+    delete malha_tela;
+    delete malha_braco1;
+    delete malha_braco2;
+    delete malha_assento;
+    delete malha_encosto;
+    delete malha_mesa_parede;
+    delete malha_frigobar;
+    delete malha_mesa;
+    delete malha_estante;
+    delete malha_tv;
+    delete malha_travesseiro;
+
+    // planos
     delete plano_frontal;
     delete plano_chao;
     delete plano_entrada;
     delete plano_direita;
     delete plano_esquerda;
-    // delete plano_teto;
-    // delete cilindro;
-    // delete cone;
-    // delete malha;
-    delete camera; // quando não usar, apagar daqui
-    
-    // Liberar fontes de iluminação adicionais
-    delete luz_spot;
-    
-   // colocar os nomes aqui pra ajudar a memoria a aguentar
+    delete plano_teto;
 
+    // cone
+    delete folhas;
 
+    // cilindros
+    delete pe1;
+    delete pe2;
+    delete pe3;
+    delete pe4;
+    delete pe_mesa1;
+    delete pe_mesa2;
+    delete pe_mesa3;
+    delete pe_mesa4;
+    delete jarro_base;
+    delete abajur_caule;
+    delete lixeira;
+    delete suporte1;
+    delete suporte2;
+    delete suporte3;
+    delete suporte4;
+    delete antena1;
+    delete antena2;
     return 0;
 }
