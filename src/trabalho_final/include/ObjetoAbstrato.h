@@ -43,9 +43,12 @@ public:
     virtual void rotacionarY(float /*angulo*/) {}
     virtual void rotacionarZ(float /*angulo*/) {}
     virtual void rotacionarArbitrario(const Vetor& /*eixo*/, float /*angulo*/) {}
-    virtual void cisalharXY(float /*shx*/, float /*shy*/) {}
-    virtual void cisalharXZ(float /*shx*/, float /*shz*/) {}
-    virtual void cisalharYZ(float /*shy*/, float /*shz*/) {}
+    virtual void cisalharXY(float /*angulo*/) {}
+    virtual void cisalharYX(float /*angulo*/) {}
+    virtual void cisalharXZ(float /*angulo*/) {}
+    virtual void cisalharZX(float /*angulo*/) {}
+    virtual void cisalharYZ(float /*angulo*/) {}
+    virtual void cisalharZY(float /*angulo*/) {}
 
     // método para obter o centro do objeto
     virtual Ponto getCentro() {

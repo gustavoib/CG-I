@@ -268,7 +268,7 @@ void Menu::renderizar() {
                 // rotação
                 const char* eixos[] = { "X", "Y", "Z" };
                 ImGui::Combo("Eixo", &eixoRotacao, eixos, 3);
-                ImGui::InputFloat("Ângulo (graus)", &rotacaoBuf, 0.0f, 0.0f, "%.1f");
+                ImGui::InputFloat("Ângulo (graus)##rot", &rotacaoBuf, 0.0f, 0.0f, "%.1f");
                 if (ImGui::Button("Aplicar Rotação")) {
                     if (eixoRotacao == 0) obj->rotacionarX(rotacaoBuf);
                     else if (eixoRotacao == 1) obj->rotacionarY(rotacaoBuf);
@@ -291,13 +291,16 @@ void Menu::renderizar() {
                 ImGui::Spacing();
                 
                 // cisalhamento
-                const char* planos[] = { "XY", "XZ", "YZ" };
-                ImGui::Combo("Plano", &planoCisalhamento, planos, 3);
-                ImGui::InputFloat2("Cisalhamento", cisalhamentoBuf, "%.2f");
+                const char* planosShear[] = { "XY", "YX", "XZ", "ZX", "YZ", "ZY" };
+                ImGui::Combo("Plano", &planoCisalhamento, planosShear, 6);
+                ImGui::InputFloat("Ângulo (graus)##shear", &cisalhamentoBuf, 0.0f, 0.0f, "%.1f");
                 if (ImGui::Button("Aplicar Cisalhamento")) {
-                    if (planoCisalhamento == 0) obj->cisalharXY(cisalhamentoBuf[0], cisalhamentoBuf[1]);
-                    else if (planoCisalhamento == 1) obj->cisalharXZ(cisalhamentoBuf[0], cisalhamentoBuf[1]);
-                    else obj->cisalharYZ(cisalhamentoBuf[0], cisalhamentoBuf[1]);
+                    if (planoCisalhamento == 0) obj->cisalharXY(cisalhamentoBuf);
+                    else if (planoCisalhamento == 1) obj->cisalharYX(cisalhamentoBuf);
+                    else if (planoCisalhamento == 2) obj->cisalharXZ(cisalhamentoBuf);
+                    else if (planoCisalhamento == 3) obj->cisalharZX(cisalhamentoBuf);
+                    else if (planoCisalhamento == 4) obj->cisalharYZ(cisalhamentoBuf);
+                    else if (planoCisalhamento == 5) obj->cisalharZY(cisalhamentoBuf);
                     rerenderRequested = true;
                 }
             }
@@ -314,8 +317,6 @@ void Menu::renderizar() {
     }
 
     ImGui::Separator();
-
-
 
     if (ImGui::Button("Confirmar")) {
         camera->setEye(Ponto(eyeBuf[0], eyeBuf[1], eyeBuf[2]));

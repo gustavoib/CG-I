@@ -23,9 +23,12 @@ public:
     static Matriz espelhamentoXY();
     static Matriz espelhamentoXZ();
     static Matriz espelhamentoYZ();
-    static Matriz cisalhamentoXY(float shx, float shy);
-    static Matriz cisalhamentoXZ(float shx, float shz);
-    static Matriz cisalhamentoYZ(float shy, float shz);
+    static Matriz cisalhamentoXY(float angulo);
+    static Matriz cisalhamentoYX(float angulo);
+    static Matriz cisalhamentoXZ(float angulo);
+    static Matriz cisalhamentoZX(float angulo);
+    static Matriz cisalhamentoYZ(float angulo);
+    static Matriz cisalhamentoZY(float angulo);
 
     Matriz multiplicar(const Matriz& outra) const;
     Vetor multiplicarVetor(const Vetor& v) const;

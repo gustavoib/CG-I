@@ -1,5 +1,5 @@
 #include "../trabalho_final/include/Esfera.h"
-#include "Matriz.h"
+#include "../trabalho_final/include/Matriz.h"
 #include <cmath>
 #include <algorithm>
 #include <iostream>
@@ -96,31 +96,61 @@ void Esfera::rotacionarArbitrario(const Vetor& eixo, float angulo) {
     transladar(centro.x, centro.y, centro.z);
 }
 
-void Esfera::cisalharXY(float shx, float shy) {
+void Esfera::cisalharXY(float angulo) {
     Ponto centro = calcularCentro();
     transladar(-centro.x, -centro.y, -centro.z);
     
-    Matriz cis = Matriz::cisalhamentoXY(shx, shy);
+    Matriz cis = Matriz::cisalhamentoXY(angulo);
     centro_esfera = cis.multiplicarPonto(centro_esfera);
     
     transladar(centro.x, centro.y, centro.z);
 }
 
-void Esfera::cisalharXZ(float shx, float shz) {
+void Esfera::cisalharYX(float angulo) {
     Ponto centro = calcularCentro();
     transladar(-centro.x, -centro.y, -centro.z);
     
-    Matriz cis = Matriz::cisalhamentoXZ(shx, shz);
+    Matriz cis = Matriz::cisalhamentoYX(angulo);
     centro_esfera = cis.multiplicarPonto(centro_esfera);
     
     transladar(centro.x, centro.y, centro.z);
 }
 
-void Esfera::cisalharYZ(float shy, float shz) {
+void Esfera::cisalharXZ(float angulo) {
     Ponto centro = calcularCentro();
     transladar(-centro.x, -centro.y, -centro.z);
     
-    Matriz cis = Matriz::cisalhamentoYZ(shy, shz);
+    Matriz cis = Matriz::cisalhamentoXZ(angulo);
+    centro_esfera = cis.multiplicarPonto(centro_esfera);
+    
+    transladar(centro.x, centro.y, centro.z);
+}
+
+void Esfera::cisalharZX(float angulo) {
+    Ponto centro = calcularCentro();
+    transladar(-centro.x, -centro.y, -centro.z);
+    
+    Matriz cis = Matriz::cisalhamentoZX(angulo);
+    centro_esfera = cis.multiplicarPonto(centro_esfera);
+    
+    transladar(centro.x, centro.y, centro.z);
+}
+
+void Esfera::cisalharYZ(float angulo) {
+    Ponto centro = calcularCentro();
+    transladar(-centro.x, -centro.y, -centro.z);
+    
+    Matriz cis = Matriz::cisalhamentoYZ(angulo);
+    centro_esfera = cis.multiplicarPonto(centro_esfera);
+    
+    transladar(centro.x, centro.y, centro.z);
+}
+
+void Esfera::cisalharZY(float angulo) {
+    Ponto centro = calcularCentro();
+    transladar(-centro.x, -centro.y, -centro.z);
+    
+    Matriz cis = Matriz::cisalhamentoZY(angulo);
     centro_esfera = cis.multiplicarPonto(centro_esfera);
     
     transladar(centro.x, centro.y, centro.z);

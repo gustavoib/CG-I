@@ -232,31 +232,61 @@ void Cilindro::rotacionarArbitrario(const Vetor& eixo, float angulo) {
     transladar(centro.x, centro.y, centro.z);
 }
 
-void Cilindro::cisalharXY(float shx, float shy) {
+void Cilindro::cisalharXY(float angulo) {
     Ponto centro = calcularCentro();
     transladar(-centro.x, -centro.y, -centro.z);
     
-    Matriz C = Matriz::cisalhamentoXY(shx, shy);
+    Matriz C = Matriz::cisalhamentoXY(angulo);
     aplicarTransformacao(C);
     
     transladar(centro.x, centro.y, centro.z);
 }
 
-void Cilindro::cisalharXZ(float shx, float shz) {
+void Cilindro::cisalharYX(float angulo) {
     Ponto centro = calcularCentro();
     transladar(-centro.x, -centro.y, -centro.z);
     
-    Matriz C = Matriz::cisalhamentoXZ(shx, shz);
+    Matriz C = Matriz::cisalhamentoYX(angulo);
     aplicarTransformacao(C);
     
     transladar(centro.x, centro.y, centro.z);
 }
 
-void Cilindro::cisalharYZ(float shy, float shz) {
+void Cilindro::cisalharXZ(float angulo) {
     Ponto centro = calcularCentro();
     transladar(-centro.x, -centro.y, -centro.z);
     
-    Matriz C = Matriz::cisalhamentoYZ(shy, shz);
+    Matriz C = Matriz::cisalhamentoXZ(angulo);
+    aplicarTransformacao(C);
+    
+    transladar(centro.x, centro.y, centro.z);
+}
+
+void Cilindro::cisalharZX(float angulo) {
+    Ponto centro = calcularCentro();
+    transladar(-centro.x, -centro.y, -centro.z);
+    
+    Matriz C = Matriz::cisalhamentoZX(angulo);
+    aplicarTransformacao(C);
+    
+    transladar(centro.x, centro.y, centro.z);
+}
+
+void Cilindro::cisalharYZ(float angulo) {
+    Ponto centro = calcularCentro();
+    transladar(-centro.x, -centro.y, -centro.z);
+    
+    Matriz C = Matriz::cisalhamentoYZ(angulo);
+    aplicarTransformacao(C);
+    
+    transladar(centro.x, centro.y, centro.z);
+}
+
+void Cilindro::cisalharZY(float angulo) {
+    Ponto centro = calcularCentro();
+    transladar(-centro.x, -centro.y, -centro.z);
+    
+    Matriz C = Matriz::cisalhamentoZY(angulo);
     aplicarTransformacao(C);
     
     transladar(centro.x, centro.y, centro.z);

@@ -203,31 +203,61 @@ void Cone::rotacionarArbitrario(const Vetor& eixo, float angulo) {
     transladar(centro.x, centro.y, centro.z);
 }
 
-void Cone::cisalharXY(float shx, float shy) {
+void Cone::cisalharXY(float angulo) {
     Ponto centro = calcularCentro();
     transladar(-centro.x, -centro.y, -centro.z);
     
-    Matriz C = Matriz::cisalhamentoXY(shx, shy);
+    Matriz C = Matriz::cisalhamentoXY(angulo);
     aplicarTransformacao(C);
     
     transladar(centro.x, centro.y, centro.z);
 }
 
-void Cone::cisalharXZ(float shx, float shz) {
+void Cone::cisalharYX(float angulo) {
     Ponto centro = calcularCentro();
     transladar(-centro.x, -centro.y, -centro.z);
     
-    Matriz C = Matriz::cisalhamentoXZ(shx, shz);
+    Matriz C = Matriz::cisalhamentoYX(angulo);
     aplicarTransformacao(C);
     
     transladar(centro.x, centro.y, centro.z);
 }
 
-void Cone::cisalharYZ(float shy, float shz) {
+void Cone::cisalharXZ(float angulo) {
     Ponto centro = calcularCentro();
     transladar(-centro.x, -centro.y, -centro.z);
     
-    Matriz C = Matriz::cisalhamentoYZ(shy, shz);
+    Matriz C = Matriz::cisalhamentoXZ(angulo);
+    aplicarTransformacao(C);
+    
+    transladar(centro.x, centro.y, centro.z);
+}
+
+void Cone::cisalharZX(float angulo) {
+    Ponto centro = calcularCentro();
+    transladar(-centro.x, -centro.y, -centro.z);
+    
+    Matriz C = Matriz::cisalhamentoZX(angulo);
+    aplicarTransformacao(C);
+    
+    transladar(centro.x, centro.y, centro.z);
+}
+
+void Cone::cisalharYZ(float angulo) {
+    Ponto centro = calcularCentro();
+    transladar(-centro.x, -centro.y, -centro.z);
+    
+    Matriz C = Matriz::cisalhamentoYZ(angulo);
+    aplicarTransformacao(C);
+    
+    transladar(centro.x, centro.y, centro.z);
+}
+
+void Cone::cisalharZY(float angulo) {
+    Ponto centro = calcularCentro();
+    transladar(-centro.x, -centro.y, -centro.z);
+    
+    Matriz C = Matriz::cisalhamentoZY(angulo);
     aplicarTransformacao(C);
     
     transladar(centro.x, centro.y, centro.z);

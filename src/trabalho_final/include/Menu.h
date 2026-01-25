@@ -55,8 +55,8 @@ private:
     int eixoRotacao = 0; // 0=X, 1=Y, 2=Z
     float eixoArbitrarioBuf[3] = {0.0f, 1.0f, 0.0f}; // vetor eixo arbitrário
     float anguloArbitrarioBuf = 0.0f;
-    float cisalhamentoBuf[2] = {0.0f, 0.0f};
-    int planoCisalhamento = 0; // 0=XY, 1=XZ, 2=YZ
+    float cisalhamentoBuf = 0.0f;
+    int planoCisalhamento = 0; // 0=XY, 1=YX, 2=XZ, 3=ZX, 4=YZ, 5=ZY
     
     // buffers para cores
     float corKeBuf[3] = {0.0f, 0.0f, 0.0f}; 

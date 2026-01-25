@@ -232,31 +232,67 @@ Matriz Matriz::espelhamentoYZ() {
     return Matriz(esp);
 }
 
-Matriz Matriz::cisalhamentoXY(float shx, float shy) {
+Matriz Matriz::cisalhamentoYX(float angulo) {
+    float a = tan(angulo * M_PI / 180.0f);
     float cis[4][4] = {
-        {1, shx, 0, 0},
-        {shy, 1, 0, 0},
+        {1, a, 0, 0},
+        {0, 1, 0, 0},
         {0, 0, 1, 0},
         {0, 0, 0, 1}
     };
     return Matriz(cis);
 }
 
-Matriz Matriz::cisalhamentoXZ(float shx, float shz) {
+Matriz Matriz::cisalhamentoXY(float angulo) {
+    float a = tan(angulo * M_PI / 180.0f);
     float cis[4][4] = {
-        {1, 0, shx, 0},
-        {0, 1, 0, 0},
-        {shz, 0, 1, 0},
+        {1, 0, 0, 0},
+        {a, 1, 0, 0},
+        {0, 0, 1, 0},
         {0, 0, 0, 1}
     };
     return Matriz(cis);
 }
 
-Matriz Matriz::cisalhamentoYZ(float shy, float shz) {
+Matriz Matriz::cisalhamentoYZ(float angulo) {
+    float a = tan(angulo * M_PI / 180.0f);
     float cis[4][4] = {
         {1, 0, 0, 0},
-        {0, 1, shy, 0},
-        {0, shz, 1, 0},
+        {0, 1, 0, 0},
+        {0, a, 1, 0},
+        {0, 0, 0, 1}
+    };
+    return Matriz(cis);
+}
+
+Matriz Matriz::cisalhamentoZY(float angulo) {
+    float a = tan(angulo * M_PI / 180.0f);
+    float cis[4][4] = {
+        {1, 0, 0, 0},
+        {0, 1, a, 0},
+        {0, 0, 1, 0},
+        {0, 0, 0, 1}
+    };
+    return Matriz(cis);
+}
+
+Matriz Matriz::cisalhamentoXZ(float angulo) {
+    float a = tan(angulo * M_PI / 180.0f);
+    float cis[4][4] = {
+        {1, 0, 0, 0},
+        {0, 1, 0, 0},
+        {a, 0, 1, 0},
+        {0, 0, 0, 1}
+    };
+    return Matriz(cis);
+}
+
+Matriz Matriz::cisalhamentoZX(float angulo) {
+    float a = tan(angulo * M_PI / 180.0f);
+    float cis[4][4] = {
+        {1, 0, a, 0},
+        {0, 1, 0, 0},
+        {0, 0, 1, 0},
         {0, 0, 0, 1}
     };
     return Matriz(cis);

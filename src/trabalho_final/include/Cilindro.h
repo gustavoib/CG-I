@@ -34,9 +34,12 @@ class Cilindro: public ObjetoAbstrato {
         void espelharXY();
         void espelharXZ();
         void espelharYZ();
-        void cisalharXY(float shx, float shy) override;
-        void cisalharXZ(float shx, float shz) override;
-        void cisalharYZ(float shy, float shz) override;
+        void cisalharXY(float angulo) override;
+        void cisalharYX(float angulo) override;
+        void cisalharXZ(float angulo) override;
+        void cisalharZX(float angulo) override;
+        void cisalharYZ(float angulo) override;
+        void cisalharZY(float angulo) override;
 };
 
 #endif

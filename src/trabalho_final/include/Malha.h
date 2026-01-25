@@ -32,13 +32,16 @@ class Malha : public ObjetoAbstrato {
         void rotacionarX(float angulo) override;
         void rotacionarY(float angulo) override;
         void rotacionarZ(float angulo) override;
-        void rotacionarArbitrario(const Vetor& eixo, float angulo);
+        void rotacionarArbitrario(const Vetor& eixo, float angulo) override;
         void espelharXY();
         void espelharXZ();
         void espelharYZ();
-        void cisalharXY(float shx, float shy) override;
-        void cisalharXZ(float shx, float shz) override;
-        void cisalharYZ(float shy, float shz) override;
+        void cisalharXY(float angulo) override;
+        void cisalharYX(float angulo) override;
+        void cisalharXZ(float angulo) override;
+        void cisalharZX(float angulo) override;
+        void cisalharYZ(float angulo) override;
+        void cisalharZY(float angulo) override;
 
         bool intersecao(Raio& raio, float& t) override;
         Vetor calcularNormal(Ponto& Pi, Vetor& direcao_raio) override;

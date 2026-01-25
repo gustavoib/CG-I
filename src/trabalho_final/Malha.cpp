@@ -234,33 +234,66 @@ void Malha::rotacionarArbitrario(const Vetor& eixo, float angulo) {
     transladar(centro.x, centro.y, centro.z);
 }
 
-void Malha::cisalharXY(float shx, float shy) {
+void Malha::cisalharXY(float angulo) {
     Ponto centro = calcularCentro();
     transladar(-centro.x, -centro.y, -centro.z);
     
-    Matriz Sh = Matriz::cisalhamentoXY(shx, shy);
+    Matriz Sh = Matriz::cisalhamentoXY(angulo);
     Matriz N = Matriz::inversa(Matriz::transposta(Sh));
     aplicarTransformacao(Sh, N);
     
     transladar(centro.x, centro.y, centro.z);
 }
 
-void Malha::cisalharXZ(float shx, float shz) {
+void Malha::cisalharYX(float angulo) {
     Ponto centro = calcularCentro();
     transladar(-centro.x, -centro.y, -centro.z);
     
-    Matriz Sh = Matriz::cisalhamentoXZ(shx, shz);
+    Matriz Sh = Matriz::cisalhamentoYX(angulo);
     Matriz N = Matriz::inversa(Matriz::transposta(Sh));
     aplicarTransformacao(Sh, N);
     
     transladar(centro.x, centro.y, centro.z);
 }
 
-void Malha::cisalharYZ(float shy, float shz) {
+void Malha::cisalharXZ(float angulo) {
     Ponto centro = calcularCentro();
     transladar(-centro.x, -centro.y, -centro.z);
     
-    Matriz Sh = Matriz::cisalhamentoYZ(shy, shz);
+    Matriz Sh = Matriz::cisalhamentoXZ(angulo);
+    Matriz N = Matriz::inversa(Matriz::transposta(Sh));
+    aplicarTransformacao(Sh, N);
+    
+    transladar(centro.x, centro.y, centro.z);
+}
+
+void Malha::cisalharZX(float angulo) {
+    Ponto centro = calcularCentro();
+    transladar(-centro.x, -centro.y, -centro.z);
+    
+    Matriz Sh = Matriz::cisalhamentoZX(angulo);
+    Matriz N = Matriz::inversa(Matriz::transposta(Sh));
+    aplicarTransformacao(Sh, N);
+    
+    transladar(centro.x, centro.y, centro.z);
+}
+
+void Malha::cisalharYZ(float angulo) {
+    Ponto centro = calcularCentro();
+    transladar(-centro.x, -centro.y, -centro.z);
+    
+    Matriz Sh = Matriz::cisalhamentoYZ(angulo);
+    Matriz N = Matriz::inversa(Matriz::transposta(Sh));
+    aplicarTransformacao(Sh, N);
+    
+    transladar(centro.x, centro.y, centro.z);
+}
+
+void Malha::cisalharZY(float angulo) {
+    Ponto centro = calcularCentro();
+    transladar(-centro.x, -centro.y, -centro.z);
+    
+    Matriz Sh = Matriz::cisalhamentoZY(angulo);
     Matriz N = Matriz::inversa(Matriz::transposta(Sh));
     aplicarTransformacao(Sh, N);
     
